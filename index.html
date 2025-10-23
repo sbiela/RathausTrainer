@@ -2549,10 +2549,8 @@
                 regieRoomControls.style.display = 'block';
                 candidateRoomControls.style.display = 'none';
                 
-                // Generate and show room ID immediately for Regie
-                const roomId = generateRoomId();
-                currentRoomId = roomId;
-                console.log('Generated room ID for Regie:', roomId);
+                // Use existing roomId (already generated above)
+                console.log('Using existing room ID for Regie:', roomId);
                 
                 // Update Regie button text to show room ID
                 const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
