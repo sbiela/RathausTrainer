@@ -2663,6 +2663,28 @@
                     }
                 }
             // Auto-refresh disabled for static deployment
+            } else if (singleplayerRadio.checked) {
+                currentRole = 'singleplayer';
+                // Hide room connection for SinglePlayer
+                roomConnection.style.setProperty('display', 'none', 'important');
+                // Show game settings for SinglePlayer
+                gameSettings.style.setProperty('display', 'block', 'important');
+                selectionArea.style.setProperty('display', 'block', 'important');
+                // Hide regie and candidate controls
+                regieControls.style.display = 'none';
+                candidateControls.style.display = 'none';
+                // Show startBtn for SinglePlayer
+                const startBtn = document.getElementById('startBtn');
+                if (startBtn) {
+                    startBtn.style.setProperty('display', 'inline-block', 'important');
+                    startBtn.textContent = '🚀 Spiel starten';
+                }
+                // Hide regieStartBtn for SinglePlayer
+                const regieStartBtn = document.getElementById('regieStartBtn');
+                if (regieStartBtn) {
+                    regieStartBtn.style.setProperty('display', 'none', 'important');
+                }
+                console.log('SinglePlayer mode configured');
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
                 // Generate room ID immediately for Regie mode
