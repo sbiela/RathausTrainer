@@ -2801,9 +2801,12 @@
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                // Show regie room controls for Regie
+                // Hide regie room controls for Regie (they already see room ID in their main controls)
                 if (regieRoomControls) {
-                    regieRoomControls.style.display = 'block';
+                    regieRoomControls.style.setProperty('display', 'none', 'important');
+                    regieRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    regieRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Hidden regie room controls for Regie - redundant with main controls');
                 }
                 // Hide candidate room controls for Regie (they contain available rooms)
                 if (candidateRoomControls) {
