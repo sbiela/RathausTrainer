@@ -1927,7 +1927,10 @@
         }
         
         function selectRoom(roomId) {
-            document.getElementById('roomId').value = roomId;
+            const roomIdElement = document.getElementById('roomId');
+            if (roomIdElement) {
+                roomIdElement.value = roomId;
+            }
             
             // Remove selection from other rooms
             document.querySelectorAll('.room-item').forEach(item => {
@@ -2075,7 +2078,8 @@
         }
         
         function joinRoom() {
-            const roomId = document.getElementById('roomId').value.trim().toUpperCase();
+            const roomIdElement = document.getElementById('roomId');
+            const roomId = roomIdElement ? roomIdElement.value.trim().toUpperCase() : '';
             if (!roomId) {
                 // Only show alert for candidates, not for regie
                 if (currentRole === 'candidate') {
@@ -2319,7 +2323,12 @@
                 socket.on('room-created', (data) => {
                     console.log('Room created:', data);
                     currentRoomId = data.roomId;
-                    document.getElementById('roomId').value = data.roomId;
+                    
+                    // Only set roomId value if element exists (not hidden for candidates)
+                    const roomIdElement = document.getElementById('roomId');
+                    if (roomIdElement) {
+                        roomIdElement.value = data.roomId;
+                    }
                     
                     // Update Regie button text to show room ID
                     const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
