@@ -1027,7 +1027,7 @@
             const totalShown = currentIndex + 1; // +1 because currentIndex is 0-based
             
             // Show end image and results
-            rathausImageEl.src = './giphy.gif';
+            rathausImageEl.src = './ende.gif';
             rathausImageEl.alt = 'Training beendet!';
             rathausImageEl.style.display = 'block';
             resultsEl.style.display = 'block';
@@ -1059,7 +1059,7 @@
             
             // Show applauding giphy in the image area
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = './giphy.gif';
+            rathausImageEl.src = './ende.gif';
             rathausImageEl.alt = 'Applaus!';
             
             // Hide city name
@@ -1092,7 +1092,7 @@
             
             // Show start image when restarting
             if (loadedRathausData.length > 0) {
-                rathausImageEl.src = './unknown.jpeg';
+                rathausImageEl.src = './start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             } else {
                 rathausImageEl.src = '';
@@ -1328,7 +1328,7 @@
         async function loadRathausImages() {
             try {
                 // Test if the first image exists to verify the folder is accessible
-                const testImageUrl = './001_Rathaus_Seite_1.webp';
+                const testImageUrl = './webp_images/001_Rathaus_Seite_1.webp';
                 const testResponse = await fetch(testImageUrl);
                 if (!testResponse.ok) {
                     console.log('Compressed images not found, trying original folder');
@@ -1484,7 +1484,7 @@
                 };
                 
                 loadedRathausData = imageFiles.map((filename, index) => {
-                    const imageUrl = `./${filename}`;
+                    const imageUrl = `./webp_images/${filename}`;
                     const sourceKey = filename;
                     const cityName = manualCityMapping[filename] || cityNames[index] || `Rathaus ${index + 1}`;
                     const baseName = cityName;
@@ -1495,7 +1495,7 @@
                 console.log(`Auto-loaded ${loadedRathausData.length} Rathaus images`);
                 cityNameEl.textContent = `Los geht's!`;
                 // Show start image
-                rathausImageEl.src = './unknown.jpeg';
+                rathausImageEl.src = './start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
                 
                 // IMPORTANT: Set the loaded data as the active data
