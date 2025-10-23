@@ -2433,6 +2433,11 @@
                 }
                 // Show city name directly for candidate
                 cityName.style.display = 'block';
+                // Show available rooms for candidate
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                if (availableRoomsDiv) {
+                    availableRoomsDiv.style.display = 'block';
+                }
                 // Load available rooms
                 loadAvailableRooms();
             // Auto-refresh disabled for static deployment
