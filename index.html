@@ -2114,14 +2114,10 @@
                 socket.disconnect();
             }
             
-            // Only connect to Socket.io for Regie/Kandidat modes
-            if (currentRole === 'regie' || currentRole === 'candidate') {
-                // Connect to Socket.io server (local for development, external for production)
-                const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaus-trainer-socket.railway.app';
-                socket = io(socketUrl);
-            } else {
-                console.log('SinglePlayer mode - no Socket.io connection needed');
-            }
+            // Socket.io temporarily disabled for Regie/Kandidat modes
+            // TODO: Set up proper Socket.io server for multi-user functionality
+            console.log('Socket.io disabled - using SinglePlayer mode for all roles');
+            console.log('Regie/Kandidat modes will work in SinglePlayer mode until Socket.io server is set up');
             
             socket.on('connect', () => {
                 console.log('Connected to server');
