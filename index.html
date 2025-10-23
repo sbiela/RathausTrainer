@@ -970,9 +970,49 @@
             console.log("Default data:", defaultRathausData.length, "items");
         }
 
-        // Start game
+        // Countdown function
+        function startCountdown(callback) {
+            let countdown = 5;
+            const countdownEl = document.createElement('div');
+            countdownEl.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 4rem;
+                font-weight: bold;
+                color: #ffd93d;
+                background: rgba(0, 0, 0, 0.8);
+                padding: 2rem;
+                border-radius: 20px;
+                z-index: 1000;
+                text-align: center;
+                box-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+            `;
+            document.body.appendChild(countdownEl);
+            
+            const countdownInterval = setInterval(() => {
+                countdownEl.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    document.body.removeChild(countdownEl);
+                    callback();
+                }
+                countdown--;
+            }, 1000);
+        }
+
+        // Start game with countdown
         function startGame() {
-            console.log('startGame called');
+            console.log('startGame called - starting countdown');
+            startCountdown(() => {
+                startGameLogic();
+            });
+        }
+
+        // Actual game start logic (called after countdown)
+        function startGameLogic() {
+            console.log('Starting game logic');
             gameActive = true;
             timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
             currentIndex = 0;
@@ -1252,8 +1292,8 @@
             // Set total shown Rathäuser
             document.getElementById('totalShown').value = totalShown;
             
-            // Calculate and set error count (total shown - correct answers)
-            const errorCount = totalShown - recognizedCount;
+            // Calculate and set error count (total shown - correct answers, minimum 0)
+            const errorCount = Math.max(0, totalShown - recognizedCount);
             document.getElementById('wrongInput').value = errorCount;
             
             // Update buttons
