@@ -845,12 +845,14 @@
                         <label for="randomOrder">Zufällige Reihenfolge:</label>
                         <input type="checkbox" id="randomOrder" checked>
                     </div>
+                    <div class="selection-group">
+                        <button class="btn" id="applySelection">Auswahl anwenden</button>
+                    </div>
                 </div>
             </div>
             <div class="selection-info" id="selectionInfo">
                 <p>Alle 90 Rathäuser verfügbar</p>
             </div>
-            <button class="btn" id="applySelection">Auswahl anwenden</button>
         </div>
 
     <div class="history-area" id="historyArea">
@@ -1938,7 +1940,10 @@
             });
             
             // Add selection to clicked room
-            event.target.closest('.room-item').classList.add('selected');
+            const clickedRoom = document.querySelector(`[onclick="selectRoom('${roomId}')"]`);
+            if (clickedRoom) {
+                clickedRoom.classList.add('selected');
+            }
             
             // Auto-join room
             joinRoom();
@@ -2334,12 +2339,6 @@
                     const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
                     if (regieLabel) {
                         regieLabel.textContent = `🎛️ Regie (${data.roomId})`;
-                    }
-                    
-                    // Also update the Regie start button text
-                    const regieStartBtn = document.getElementById('regieStartBtn');
-                    if (regieStartBtn) {
-                        regieStartBtn.textContent = `🚀 Spiel starten (${data.roomId})`;
                     }
                     
                     // Don't start game automatically - Regie should click "Spiel starten" button
