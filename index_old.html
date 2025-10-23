@@ -1326,7 +1326,7 @@
         async function loadRathausImages() {
             try {
                 // Test if the first image exists to verify the folder is accessible
-                const testImageUrl = './001_Rathaus_Seite_1.webp';
+                const testImageUrl = './export_rathaeuser_compressed/001_Rathaus_Seite_1.jpg';
                 const testResponse = await fetch(testImageUrl);
                 if (!testResponse.ok) {
                     console.log('Compressed images not found, trying original folder');
@@ -1341,36 +1341,36 @@
                 
                 // Get list of compressed image files (JPG format)
                 const imageFiles = [
-                    '001_Rathaus_Seite_1.webp', '002_Rathaus_Seite_2.webp', '003_Rathaus_Seite_3.webp',
-                    '004_Rathaus_Seite_4.webp', '005_Rathaus_Seite_5.webp', '006_Rathaus_Seite_6.webp',
-                    '007_Rathaus_Seite_7.webp', '008_Rathaus_Seite_8.webp', '009_Rathaus_Seite_9.webp',
-                    '010_Rathaus_Seite_10.webp', '011_Rathaus_Seite_11.webp', '012_Rathaus_Seite_12.webp',
-                    '013_Rathaus_Seite_13.webp', '014_Rathaus_Seite_14.webp', '015_Rathaus_Seite_15.webp',
-                    '016_Rathaus_Seite_16.webp', '017_Rathaus_Seite_17.webp', '018_Rathaus_Seite_18.webp',
-                    '019_Rathaus_Seite_19.webp', '020_Rathaus_Seite_20.webp', '021_Rathaus_Seite_21.webp',
-                    '022_Rathaus_Seite_22.webp', '023_Rathaus_Seite_23.webp', '024_Rathaus_Seite_24.webp',
-                    '025_Rathaus_Seite_25.webp', '026_Rathaus_Seite_26.webp', '027_Rathaus_Seite_27.webp',
-                    '028_Rathaus_Seite_28.webp', '029_Rathaus_Seite_29.webp', '030_Rathaus_Seite_30.webp',
-                    '031_Rathaus_Seite_31.webp', '032_Rathaus_Seite_32.webp', '033_Rathaus_Seite_33.webp',
-                    '034_Rathaus_Seite_34.webp', '035_Rathaus_Seite_35.webp', '036_Rathaus_Seite_36.webp',
-                    '037_Rathaus_Seite_37.webp', '038_Rathaus_Seite_38.webp', '039_Rathaus_Seite_39.webp',
-                    '040_Rathaus_Seite_40.webp', '041_Rathaus_Seite_41.webp', '042_Rathaus_Seite_42.webp',
-                    '043_Rathaus_Seite_43.webp', '044_Rathaus_Seite_44.webp', '045_Rathaus_Seite_45.webp',
-                    '046_Rathaus_Seite_46.webp', '047_Rathaus_Seite_47.webp', '048_Rathaus_Seite_48.webp',
-                    '049_Rathaus_Seite_49.webp', '050_Rathaus_Seite_50.webp', '051_Rathaus_Seite_51.webp',
-                    '052_Rathaus_Seite_52.webp', '053_Rathaus_Seite_53.webp', '054_Rathaus_Seite_54.webp',
-                    '055_Rathaus_Seite_55.webp', '056_Rathaus_Seite_56.webp', '057_Rathaus_Seite_57.webp',
-                    '058_Rathaus_Seite_58.webp', '059_Rathaus_Seite_59.webp', '060_Rathaus_Seite_60.webp',
-                    '061_Rathaus_Seite_61.webp', '062_Rathaus_Seite_62.webp', '063_Rathaus_Seite_63.webp',
-                    '064_Rathaus_Seite_64.webp', '065_Rathaus_Seite_65.webp', '066_Rathaus_Seite_66.webp',
-                    '067_Rathaus_Seite_67.webp', '068_Rathaus_Seite_68.webp', '069_Rathaus_Seite_69.webp',
-                    '070_Rathaus_Seite_70.webp', '071_Rathaus_Seite_71.webp', '072_Rathaus_Seite_72.webp',
-                    '073_Rathaus_Seite_73.webp', '074_Rathaus_Seite_74.webp', '075_Rathaus_Seite_75.webp',
-                    '076_Rathaus_Seite_76.webp', '077_Rathaus_Seite_77.webp', '078_Rathaus_Seite_78.webp',
-                    '079_Rathaus_Seite_79.webp', '080_Rathaus_Seite_80.webp', '081_Rathaus_Seite_81.webp',
-                    '082_Rathaus_Seite_82.webp', '083_Rathaus_Seite_83.webp', '084_Rathaus_Seite_84.webp',
-                    '085_Rathaus_Seite_85.webp', '086_Rathaus_Seite_86.webp', '087_Rathaus_Seite_87.webp',
-                    '088_Rathaus_Seite_88.webp', '089_Rathaus_Seite_89.webp', '090_Rathaus_Seite_90.webp'
+                    '001_Rathaus_Seite_1.jpg', '002_Rathaus_Seite_2.jpg', '003_Rathaus_Seite_3.jpg',
+                    '004_Rathaus_Seite_4.jpg', '005_Rathaus_Seite_5.jpg', '006_Rathaus_Seite_6.jpg',
+                    '007_Rathaus_Seite_7.jpg', '008_Rathaus_Seite_8.jpg', '009_Rathaus_Seite_9.jpg',
+                    '010_Rathaus_Seite_10.jpg', '011_Rathaus_Seite_11.jpg', '012_Rathaus_Seite_12.jpg',
+                    '013_Rathaus_Seite_13.jpg', '014_Rathaus_Seite_14.jpg', '015_Rathaus_Seite_15.jpg',
+                    '016_Rathaus_Seite_16.jpg', '017_Rathaus_Seite_17.jpg', '018_Rathaus_Seite_18.jpg',
+                    '019_Rathaus_Seite_19.jpg', '020_Rathaus_Seite_20.jpg', '021_Rathaus_Seite_21.jpg',
+                    '022_Rathaus_Seite_22.jpg', '023_Rathaus_Seite_23.jpg', '024_Rathaus_Seite_24.jpg',
+                    '025_Rathaus_Seite_25.jpg', '026_Rathaus_Seite_26.jpg', '027_Rathaus_Seite_27.jpg',
+                    '028_Rathaus_Seite_28.jpg', '029_Rathaus_Seite_29.jpg', '030_Rathaus_Seite_30.jpg',
+                    '031_Rathaus_Seite_31.jpg', '032_Rathaus_Seite_32.jpg', '033_Rathaus_Seite_33.jpg',
+                    '034_Rathaus_Seite_34.jpg', '035_Rathaus_Seite_35.jpg', '036_Rathaus_Seite_36.jpg',
+                    '037_Rathaus_Seite_37.jpg', '038_Rathaus_Seite_38.jpg', '039_Rathaus_Seite_39.jpg',
+                    '040_Rathaus_Seite_40.jpg', '041_Rathaus_Seite_41.jpg', '042_Rathaus_Seite_42.jpg',
+                    '043_Rathaus_Seite_43.jpg', '044_Rathaus_Seite_44.jpg', '045_Rathaus_Seite_45.jpg',
+                    '046_Rathaus_Seite_46.jpg', '047_Rathaus_Seite_47.jpg', '048_Rathaus_Seite_48.jpg',
+                    '049_Rathaus_Seite_49.jpg', '050_Rathaus_Seite_50.jpg', '051_Rathaus_Seite_51.jpg',
+                    '052_Rathaus_Seite_52.jpg', '053_Rathaus_Seite_53.jpg', '054_Rathaus_Seite_54.jpg',
+                    '055_Rathaus_Seite_55.jpg', '056_Rathaus_Seite_56.jpg', '057_Rathaus_Seite_57.jpg',
+                    '058_Rathaus_Seite_58.jpg', '059_Rathaus_Seite_59.jpg', '060_Rathaus_Seite_60.jpg',
+                    '061_Rathaus_Seite_61.jpg', '062_Rathaus_Seite_62.jpg', '063_Rathaus_Seite_63.jpg',
+                    '064_Rathaus_Seite_64.jpg', '065_Rathaus_Seite_65.jpg', '066_Rathaus_Seite_66.jpg',
+                    '067_Rathaus_Seite_67.jpg', '068_Rathaus_Seite_68.jpg', '069_Rathaus_Seite_69.jpg',
+                    '070_Rathaus_Seite_70.jpg', '071_Rathaus_Seite_71.jpg', '072_Rathaus_Seite_72.jpg',
+                    '073_Rathaus_Seite_73.jpg', '074_Rathaus_Seite_74.jpg', '075_Rathaus_Seite_75.jpg',
+                    '076_Rathaus_Seite_76.jpg', '077_Rathaus_Seite_77.jpg', '078_Rathaus_Seite_78.jpg',
+                    '079_Rathaus_Seite_79.jpg', '080_Rathaus_Seite_80.jpg', '081_Rathaus_Seite_81.jpg',
+                    '082_Rathaus_Seite_82.jpg', '083_Rathaus_Seite_83.jpg', '084_Rathaus_Seite_84.jpg',
+                    '085_Rathaus_Seite_85.jpg', '086_Rathaus_Seite_86.jpg', '087_Rathaus_Seite_87.jpg',
+                    '088_Rathaus_Seite_88.jpg', '089_Rathaus_Seite_89.jpg', '090_Rathaus_Seite_90.jpg'
                 ];
                 
                 // Predefined city names for the 90 Rathäuser (based on the actual PDF order)
@@ -1482,7 +1482,7 @@
                 };
                 
                 loadedRathausData = imageFiles.map((filename, index) => {
-                    const imageUrl = `./${filename}`;
+                    const imageUrl = `./export_rathaeuser_compressed/${filename}`;
                     const sourceKey = filename;
                     const cityName = manualCityMapping[filename] || cityNames[index] || `Rathaus ${index + 1}`;
                     const baseName = cityName;
