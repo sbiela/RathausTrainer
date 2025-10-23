@@ -2411,13 +2411,6 @@
             const gameSettings = document.getElementById('gameSettings');
             const selectionArea = document.getElementById('selectionArea');
             
-            console.log('Elements found:', {
-                candidateRadio: !!candidateRadio,
-                regieRadio: !!regieRadio,
-                singlePlayerRadio: !!singlePlayerRadio,
-                gameSettings: !!gameSettings,
-                selectionArea: !!selectionArea
-            });
             const regieControls = document.getElementById('regieControls');
             const candidateControls = document.getElementById('candidateControls');
             const cityName = document.getElementById('cityName');
@@ -2425,6 +2418,17 @@
             const regieRoomControls = document.getElementById('regieRoomControls');
             const candidateRoomControls = document.getElementById('candidateRoomControls');
             const roomIdInput = document.getElementById('roomId');
+            
+            console.log('Elements found:', {
+                candidateRadio: !!candidateRadio,
+                regieRadio: !!regieRadio,
+                singlePlayerRadio: !!singlePlayerRadio,
+                gameSettings: !!gameSettings,
+                selectionArea: !!selectionArea,
+                regieControls: !!regieControls,
+                candidateControls: !!candidateControls,
+                candidateRoomControls: !!candidateRoomControls
+            });
             
             if (candidateRadio.checked) {
                 currentRole = 'candidate';
@@ -2495,19 +2499,17 @@
                 candidateRoomControls.style.display = 'none';
                 
                 // Update Regie button text to show room ID if available
-                if (currentRoomId) {
-                    const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
-                    if (regieLabel) {
+                const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
+                if (regieLabel) {
+                    if (currentRoomId) {
                         regieLabel.textContent = `🎛️ Regie (${currentRoomId})`;
                         console.log('Updated Regie label with room ID:', currentRoomId);
+                    } else {
+                        regieLabel.textContent = '🎛️ Regie';
+                        console.log('Reset Regie label to default - no room ID yet');
                     }
                 } else {
-                    // Reset to default if no room ID
-                    const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
-                    if (regieLabel) {
-                        regieLabel.textContent = '🎛️ Regie';
-                        console.log('Reset Regie label to default');
-                    }
+                    console.log('Regie label not found');
                 }
                 // Hide normal controls for regie
                 document.querySelector('.controls').style.display = 'none';
