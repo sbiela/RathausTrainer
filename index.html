@@ -543,12 +543,7 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            display: none; /* Hidden by default */
-        }
-        
-        /* Show available rooms for candidate mode */
-        .candidate-mode .available-rooms {
-            display: block !important;
+            display: block; /* Always visible for debugging */
         }
         
         .available-rooms h5 {
@@ -2467,11 +2462,21 @@
                 if (cityName) {
                     cityName.style.display = 'block';
                 }
-                // Show available rooms for candidate using CSS class
-                if (candidateRoomControls) {
-                    candidateRoomControls.classList.add('candidate-mode');
-                    console.log('Added candidate-mode class for room list visibility');
+                // Show available rooms for candidate - force display
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                if (availableRoomsDiv) {
+                    availableRoomsDiv.style.display = 'block';
+                    availableRoomsDiv.style.visibility = 'visible';
+                    availableRoomsDiv.style.opacity = '1';
+                    console.log('Force showing available rooms div for candidate');
                 }
+                // Show test room list immediately for debugging
+                const roomList = document.getElementById('roomList');
+                if (roomList) {
+                    roomList.innerHTML = '<div class="room-item">🔍 Test-Raum (DEBUG123)<br><small>Debug: Raumliste wird angezeigt</small></div>';
+                    console.log('Added test room to room list for debugging');
+                }
+                
                 // Load available rooms after Socket.io connection
                 if (socket && socket.connected) {
                     loadAvailableRooms();
