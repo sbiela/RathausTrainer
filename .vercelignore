@@ -1,0 +1,3 @@
+# Force Vercel to rebuild everything
+node_modules/
+.git/

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathaus-Trainer für Max</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .image-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-item h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .image-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .error {
+            color: #e74c3c;
+            background: #fdf2f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ Rathaus-Trainer für Max</h1>
+        <div id="loading" class="loading">
+            <p>🔄 Lade Bilder...</p>
+        </div>
+        <div id="error" class="error" style="display: none;">
+            <p>❌ Fehler beim Laden der Bilder. Bitte überprüfe, ob die Bilddateien im gleichen Ordner wie diese HTML-Datei liegen.</p>
+        </div>
+        <div id="imageGrid" class="image-grid" style="display: none;">
+            <!-- Bilder werden hier dynamisch eingefügt -->
+        </div>
+    </div>
+
+    <script>
+        // Liste aller Rathaus-Bilder (90 Bilder) - WebP Format
+        const imageFiles = [
+            '001_Rathaus_Seite_1.webp', '002_Rathaus_Seite_2.webp', '003_Rathaus_Seite_3.webp',
+            '004_Rathaus_Seite_4.webp', '005_Rathaus_Seite_5.webp', '006_Rathaus_Seite_6.webp',
+            '007_Rathaus_Seite_7.webp', '008_Rathaus_Seite_8.webp', '009_Rathaus_Seite_9.webp',
+            '010_Rathaus_Seite_10.webp', '011_Rathaus_Seite_11.webp', '012_Rathaus_Seite_12.webp',
+            '013_Rathaus_Seite_13.webp', '014_Rathaus_Seite_14.webp', '015_Rathaus_Seite_15.webp',
+            '016_Rathaus_Seite_16.webp', '017_Rathaus_Seite_17.webp', '018_Rathaus_Seite_18.webp',
+            '019_Rathaus_Seite_19.webp', '020_Rathaus_Seite_20.webp', '021_Rathaus_Seite_21.webp',
+            '022_Rathaus_Seite_22.webp', '023_Rathaus_Seite_23.webp', '024_Rathaus_Seite_24.webp',
+            '025_Rathaus_Seite_25.webp', '026_Rathaus_Seite_26.webp', '027_Rathaus_Seite_27.webp',
+            '028_Rathaus_Seite_28.webp', '029_Rathaus_Seite_29.webp', '030_Rathaus_Seite_30.webp',
+            '031_Rathaus_Seite_31.webp', '032_Rathaus_Seite_32.webp', '033_Rathaus_Seite_33.webp',
+            '034_Rathaus_Seite_34.webp', '035_Rathaus_Seite_35.webp', '036_Rathaus_Seite_36.webp',
+            '037_Rathaus_Seite_37.webp', '038_Rathaus_Seite_38.webp', '039_Rathaus_Seite_39.webp',
+            '040_Rathaus_Seite_40.webp', '041_Rathaus_Seite_41.webp', '042_Rathaus_Seite_42.webp',
+            '043_Rathaus_Seite_43.webp', '044_Rathaus_Seite_44.webp', '045_Rathaus_Seite_45.webp',
+            '046_Rathaus_Seite_46.webp', '047_Rathaus_Seite_47.webp', '048_Rathaus_Seite_48.webp',
+            '049_Rathaus_Seite_49.webp', '050_Rathaus_Seite_50.webp', '051_Rathaus_Seite_51.webp',
+            '052_Rathaus_Seite_52.webp', '053_Rathaus_Seite_53.webp', '054_Rathaus_Seite_54.webp',
+            '055_Rathaus_Seite_55.webp', '056_Rathaus_Seite_56.webp', '057_Rathaus_Seite_57.webp',
+            '058_Rathaus_Seite_58.webp', '059_Rathaus_Seite_59.webp', '060_Rathaus_Seite_60.webp',
+            '061_Rathaus_Seite_61.webp', '062_Rathaus_Seite_62.webp', '063_Rathaus_Seite_63.webp',
+            '064_Rathaus_Seite_64.webp', '065_Rathaus_Seite_65.webp', '066_Rathaus_Seite_66.webp',
+            '067_Rathaus_Seite_67.webp', '068_Rathaus_Seite_68.webp', '069_Rathaus_Seite_69.webp',
+            '070_Rathaus_Seite_70.webp', '071_Rathaus_Seite_71.webp', '072_Rathaus_Seite_72.webp',
+            '073_Rathaus_Seite_73.webp', '074_Rathaus_Seite_74.webp', '075_Rathaus_Seite_75.webp',
+            '076_Rathaus_Seite_76.webp', '077_Rathaus_Seite_77.webp', '078_Rathaus_Seite_78.webp',
+            '079_Rathaus_Seite_79.webp', '080_Rathaus_Seite_80.webp', '081_Rathaus_Seite_81.webp',
+            '082_Rathaus_Seite_82.webp', '083_Rathaus_Seite_83.webp', '084_Rathaus_Seite_84.webp',
+            '085_Rathaus_Seite_85.webp', '086_Rathaus_Seite_86.webp', '087_Rathaus_Seite_87.webp',
+            '088_Rathaus_Seite_88.webp', '089_Rathaus_Seite_89.webp', '090_Rathaus_Seite_90.webp'
+        ];
+
+        // Städtenamen für die 90 Rathäuser
+        const cityNames = [
+            'München', 'Berlin', 'Hamburg', 'Köln', 'Frankfurt am Main', 'Stuttgart', 'Düsseldorf', 'Dortmund', 'Essen', 'Leipzig',
+            'Bremen', 'Dresden', 'Hannover', 'Nürnberg', 'Duisburg', 'Bochum', 'Wuppertal', 'Bielefeld', 'Bonn', 'Münster',
+            'Karlsruhe', 'Mannheim', 'Augsburg', 'Wiesbaden', 'Gelsenkirchen', 'Mönchengladbach', 'Braunschweig', 'Chemnitz', 'Kiel', 'Aachen',
+            'Halle', 'Magdeburg', 'Freiburg im Breisgau', 'Krefeld', 'Lübeck', 'Oberhausen', 'Erfurt', 'Mainz', 'Rostock', 'Kassel',
+            'Hagen', 'Hamm', 'Saarbrücken', 'Mülheim an der Ruhr', 'Potsdam', 'Ludwigshafen am Rhein', 'Oldenburg', 'Leverkusen', 'Osnabrück', 'Solingen',
+            'Heidelberg', 'Herne', 'Neuss', 'Darmstadt', 'Paderborn', 'Regensburg', 'Ingolstadt', 'Würzburg', 'Fürth', 'Wolfsburg',
+            'Offenbach am Main', 'Ulm', 'Heilbronn', 'Pforzheim', 'Göttingen', 'Bottrop', 'Trier', 'Recklinghausen', 'Reutlingen', 'Bremerhaven',
+            'Koblenz', 'Bergisch Gladbach', 'Jena', 'Remscheid', 'Erlangen', 'Moers', 'Siegen', 'Hildesheim', 'Salzgitter', 'Cottbus',
+            'Kaiserslautern', 'Gütersloh', 'Witten', 'Iserlohn', 'Düren', 'Esslingen am Neckar', 'Hanau', 'Schwerin', 'Ludwigsburg', 'Gera',
+            'Flensburg', 'Cottbus', 'Wilhelmshaven', 'Tübingen', 'Minden', 'Lüneburg', 'Villingen-Schwenningen', 'Konstanz', 'Worms', 'Neumünster'
+        ];
+
+        async function loadImages() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const imageGrid = document.getElementById('imageGrid');
+            
+            let loadedCount = 0;
+            let totalCount = imageFiles.length;
+            
+            for (let i = 0; i < imageFiles.length; i++) {
+                const filename = imageFiles[i];
+                const cityName = cityNames[i] || `Rathaus ${i + 1}`;
+                
+                try {
+                // Teste ob das Bild existiert (versuche verschiedene Pfade)
+                let response = await fetch(filename);
+                if (!response.ok) {
+                    // Versuche webp_images Ordner
+                    response = await fetch(`webp_images/${filename}`);
+                }
+                if (!response.ok) {
+                    // Versuche Unterordner
+                    response = await fetch(`images/${filename}`);
+                }
+                if (!response.ok) {
+                    // Versuche export_rathaeuser_compressed
+                    response = await fetch(`export_rathaeuser_compressed/${filename}`);
+                }
+                    if (response.ok) {
+                        const imageItem = document.createElement('div');
+                        imageItem.className = 'image-item';
+                        imageItem.innerHTML = `
+                            <img src="${filename}" alt="${cityName}" onerror="this.style.display='none'">
+                            <h3>${cityName}</h3>
+                            <p>Bild ${i + 1} von ${totalCount}</p>
+                        `;
+                        imageGrid.appendChild(imageItem);
+                        loadedCount++;
+                    }
+                } catch (e) {
+                    console.log(`Bild ${filename} nicht gefunden:`, e);
+                }
+            }
+            
+            // Verstecke Loading und zeige Ergebnisse
+            loading.style.display = 'none';
+            
+            if (loadedCount === 0) {
+                error.style.display = 'block';
+                error.innerHTML = `
+                    <p>❌ Keine Bilder gefunden!</p>
+                    <p>Bitte stelle sicher, dass die Bilddateien im gleichen Ordner wie diese HTML-Datei liegen.</p>
+                    <p>Erwartete Dateien: ${imageFiles.slice(0, 5).join(', ')}...</p>
+                `;
+            } else {
+                imageGrid.style.display = 'grid';
+                document.querySelector('h1').innerHTML = `🏛️ Rathaus-Trainer für Max (${loadedCount} Bilder geladen)`;
+            }
+        }
+
+        // Starte das Laden der Bilder
+        loadImages();
+    </script>
+</body>
+</html>
