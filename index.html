@@ -2142,7 +2142,7 @@
             // Only connect to Socket.io for Regie/Kandidat modes
             if (currentRole === 'regie' || currentRole === 'candidate') {
                 // Connect to Socket.io server
-                const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaus-trainer-socket.railway.app';
+                const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaustrainer-production.up.railway.app';
                 socket = io(socketUrl, {
                     transports: ['websocket', 'polling'],
                     timeout: 20000,
