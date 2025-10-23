@@ -544,7 +544,11 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            display: block; /* Always visible for debugging */
+            display: none; /* Hidden by default, shown by JavaScript */
+        }
+        
+        .candidate-mode .available-rooms {
+            display: block !important; /* Force show for candidates */
         }
         
         .available-rooms h5 {
@@ -2477,17 +2481,35 @@
                 }
                 if (candidateRoomControls) {
                     candidateRoomControls.style.display = 'block';
+                    candidateRoomControls.classList.add('candidate-mode');
+                    console.log('Added candidate-mode class to candidateRoomControls');
                 }
                 // Hide all controls for candidate
-                document.querySelector('.controls').style.display = 'none';
+                const controlsElement = document.querySelector('.controls');
+                if (controlsElement) {
+                    controlsElement.style.display = 'none';
+                    console.log('Hidden controls for candidate');
+                }
                 const keyHint = document.querySelector('.key-hint');
                 if (keyHint) {
                     keyHint.style.display = 'none';
+                    console.log('Hidden key hint for candidate');
                 }
                 // Hide apply selection button for candidate
                 const applySelectionBtn = document.getElementById('applySelection');
                 if (applySelectionBtn) {
                     applySelectionBtn.style.display = 'none';
+                    console.log('Hidden apply selection button for candidate');
+                }
+                // Hide game settings for candidate
+                if (gameSettings) {
+                    gameSettings.style.display = 'none';
+                    console.log('Hidden game settings for candidate');
+                }
+                // Hide selection area for candidate
+                if (selectionArea) {
+                    selectionArea.style.display = 'none';
+                    console.log('Hidden selection area for candidate');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
@@ -2509,11 +2531,11 @@
                     availableRoomsDiv.style.opacity = '1';
                     console.log('Force showing available rooms div for candidate');
                 }
-                // Show test room list immediately for debugging
+                // Show test room list immediately for debugging (will be replaced by real rooms)
                 const roomList = document.getElementById('roomList');
                 if (roomList) {
-                    roomList.innerHTML = '<div class="room-item">🔍 Test-Raum (DEBUG123)<br><small>Debug: Raumliste wird angezeigt</small></div>';
-                    console.log('Added test room to room list for debugging');
+                    roomList.innerHTML = '<div class="room-item">🔍 Lade Räume...<br><small>Verbinde mit Server...</small></div>';
+                    console.log('Added loading message to room list for debugging');
                 }
                 
                 // Load available rooms after Socket.io connection
