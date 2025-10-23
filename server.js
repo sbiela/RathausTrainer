@@ -79,7 +79,14 @@ setInterval(() => {
   }
 }, 300000);
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Open http://localhost:${PORT} in your browser`);
-});
+// For Vercel deployment
+if (process.env.NODE_ENV === 'production') {
+  // Export for Vercel
+  module.exports = app;
+} else {
+  // Local development
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Open http://localhost:${PORT} in your browser`);
+  });
+}
