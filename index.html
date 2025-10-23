@@ -77,13 +77,15 @@
             flex-shrink: 0;
         }
         
-        /* Start and end images should be same size as rathaus images */
+        /* Start and end images should fill the container better */
         .rathaus-image[src*="start.jpeg"],
         .rathaus-image[src*="ende.gif"] {
             max-width: 100%;
             max-height: 100%;
             width: auto;
             height: auto;
+            min-width: 400px;
+            min-height: 300px;
         }
         
 
@@ -1311,6 +1313,11 @@
             
             if (total === 0) {
                 alert('Keine Rathäuser angezeigt!');
+                return;
+            }
+            
+            if (wrong < 0) {
+                alert('Fehler können nicht negativ sein!');
                 return;
             }
             
