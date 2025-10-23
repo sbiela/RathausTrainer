@@ -58,21 +58,22 @@
             height: 600px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
+            text-align: center;
             overflow: hidden;
         }
         
         .rathaus-image {
             max-width: 100%;
-            max-height: 100%;
+            max-height: 600px;
             width: auto;
             height: auto;
             object-fit: contain;
             object-position: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
+            display: block;
+            margin: 0 auto;
         }
         
         /* Start and end images should fill the container better */
@@ -157,6 +158,10 @@
             
             .image-container {
                 height: 400px;
+            }
+            
+            .rathaus-image {
+                max-height: 400px;
             }
         }
 
@@ -266,6 +271,10 @@
         @media (max-width: 480px) {
             .image-container {
                 height: 300px;
+            }
+            
+            .rathaus-image {
+                max-height: 300px;
             }
             
             .timer {
