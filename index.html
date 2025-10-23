@@ -543,6 +543,12 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
+            display: none; /* Hidden by default */
+        }
+        
+        /* Show available rooms for candidate mode */
+        .candidate-mode .available-rooms {
+            display: block !important;
         }
         
         .available-rooms h5 {
@@ -817,7 +823,7 @@
                         </div>
                         
                         <!-- Available Rooms -->
-                        <div class="available-rooms" id="availableRooms" style="display: none;">
+                        <div class="available-rooms" id="availableRooms">
                             <h6>📋 Verfügbare Räume:</h6>
                             <div class="room-list" id="roomList"></div>
                         </div>
@@ -2451,12 +2457,11 @@
                 }
                 // Show city name directly for candidate
                 cityName.style.display = 'block';
-                // Show available rooms for candidate
-                const availableRoomsDiv = document.getElementById('availableRooms');
-                if (availableRoomsDiv) {
-                    availableRoomsDiv.style.display = 'block !important';
-                    availableRoomsDiv.style.setProperty('display', 'block', 'important');
-                    console.log('Available rooms div shown for candidate');
+                // Show available rooms for candidate using CSS class
+                const candidateRoomControls = document.getElementById('candidateRoomControls');
+                if (candidateRoomControls) {
+                    candidateRoomControls.classList.add('candidate-mode');
+                    console.log('Added candidate-mode class for room list visibility');
                 }
                 // Load available rooms after Socket.io connection
                 if (socket && socket.connected) {
