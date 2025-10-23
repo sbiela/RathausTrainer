@@ -2468,7 +2468,6 @@
                     applySelectionBtn.style.display = 'block';
                 }
                 // Hide room ID input for Regie (they create rooms, don't need to enter room ID)
-                const roomIdInput = document.getElementById('roomId');
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
                 }
@@ -2505,10 +2504,9 @@
                 if (applySelectionBtn) {
                     applySelectionBtn.style.display = 'block';
                 }
-                // Show room ID input for singleplayer
-                const roomIdInput = document.getElementById('roomId');
+                // Hide room ID input for singleplayer (no room needed for solo play)
                 if (roomIdInput) {
-                    roomIdInput.style.display = 'block';
+                    roomIdInput.style.display = 'none';
                 }
                 const keyHint = document.querySelector('.key-hint');
                 if (keyHint) {
