@@ -2469,7 +2469,8 @@
                     console.log('Game ended:', data);
                     if (currentRole === 'candidate') {
                         gameActive = false;
-                        showEndImage();
+                        // Call full endGame function for candidates too
+                        endGame();
                     }
                 });
                 
