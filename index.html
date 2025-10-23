@@ -539,6 +539,10 @@
             display: none; /* Hidden by default */
         }
         
+        .candidate-mode .candidate-room-controls {
+            display: block !important; /* Force show for candidates */
+        }
+        
         .available-rooms {
             margin-top: 1rem;
             padding: 1rem;
@@ -2483,6 +2487,12 @@
                     candidateRoomControls.style.display = 'block';
                     candidateRoomControls.classList.add('candidate-mode');
                     console.log('Added candidate-mode class to candidateRoomControls');
+                }
+                // Also add candidate-mode class to the main container
+                const mainContainer = document.querySelector('.main-container');
+                if (mainContainer) {
+                    mainContainer.classList.add('candidate-mode');
+                    console.log('Added candidate-mode class to main container');
                 }
                 // Hide all controls for candidate
                 const controlsElement = document.querySelector('.controls');
