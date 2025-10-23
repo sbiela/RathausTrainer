@@ -2106,8 +2106,9 @@
                 socket.disconnect();
             }
             
-            // Connect to Socket.io server
-            socket = io();
+            // Connect to external Socket.io server
+            const socketUrl = 'https://rathaus-trainer-socket.railway.app';
+            socket = io(socketUrl);
             
             socket.on('connect', () => {
                 console.log('Connected to server');
