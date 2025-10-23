@@ -62,6 +62,16 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
         }
+        
+        /* Force proper image scaling - prevent stretching */
+        .image-container img {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+        }
 
         .rathaus-image {
             max-width: 100%;
@@ -75,6 +85,8 @@
             display: block;
             margin: 0 auto;
             flex-shrink: 0;
+            /* Force aspect ratio preservation */
+            image-rendering: auto;
         }
         
         /* Start and end images should fill the container better */
