@@ -947,13 +947,14 @@
             const randomOrder = document.getElementById('randomOrder').checked;
             
             // Get active dataset
-            const activeData = getActiveDataset();
+            let activeData = getActiveDataset();
             console.log("Active dataset:", activeData.length, "items");
             
             if (activeData.length === 0) {
                 console.error("No data available for game!");
-                alert("Keine Rathaus-Daten verfügbar! Bitte lade die Seite neu.");
-                return;
+                console.log("Using default data instead");
+                // Use default data if no loaded data
+                activeData = defaultRathausData;
             }
             
             // Shuffle rathaus data only if random order is enabled
