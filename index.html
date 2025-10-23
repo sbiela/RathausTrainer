@@ -2345,6 +2345,9 @@
                     const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
                     if (regieLabel) {
                         regieLabel.textContent = `🎛️ Regie (${data.roomId})`;
+                        console.log('Updated Regie label with room ID from room-created event:', data.roomId);
+                    } else {
+                        console.log('Regie label not found');
                     }
                     
                     // Don't start game automatically - Regie should click "Spiel starten" button
@@ -2452,6 +2455,7 @@
                 const availableRoomsDiv = document.getElementById('availableRooms');
                 if (availableRoomsDiv) {
                     availableRoomsDiv.style.display = 'block';
+                    console.log('Available rooms div shown for candidate');
                 }
                 // Load available rooms after Socket.io connection
                 if (socket && socket.connected) {
@@ -2487,6 +2491,14 @@
                     const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
                     if (regieLabel) {
                         regieLabel.textContent = `🎛️ Regie (${currentRoomId})`;
+                        console.log('Updated Regie label with room ID:', currentRoomId);
+                    }
+                } else {
+                    // Reset to default if no room ID
+                    const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
+                    if (regieLabel) {
+                        regieLabel.textContent = '🎛️ Regie';
+                        console.log('Reset Regie label to default');
                     }
                 }
                 // Hide normal controls for regie
