@@ -54,6 +54,11 @@
         .image-container {
             margin: 2rem 0;
             position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         .rathaus-image {
@@ -62,11 +67,14 @@
             width: auto;
             height: auto;
             object-fit: contain;
+            object-position: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
             display: block;
             margin: 0 auto;
+            flex-shrink: 0;
         }
+        
 
         .rathaus-image:hover {
             transform: scale(1.02);
@@ -246,6 +254,10 @@
         
         /* Extra small screens (phones in portrait) */
         @media (max-width: 480px) {
+            .image-container {
+                min-height: 300px;
+            }
+            
             .rathaus-image {
                 max-height: 50vh;
                 width: auto;
@@ -687,7 +699,6 @@
                 <button class="btn" id="startBtn">Trainer starten</button>
                 <button class="btn" id="showCityBtn" disabled>Stadt anzeigen (Enter)</button>
                 <button class="btn" id="nextBtn" disabled>Nächstes Rathaus (Leertaste)</button>
-                <button class="btn" id="editNameBtn" disabled>Namen setzen (N)</button>
             </div>
             
             <!-- Regie Controls (only visible in Regie mode) -->
@@ -870,7 +881,6 @@
         const nextBtn = document.getElementById('nextBtn');
         const resultsEl = document.getElementById('results');
         const restartBtn = document.getElementById('restartBtn');
-        const editNameBtn = document.getElementById('editNameBtn');
 
         // Shuffle array function
         function shuffleArray(array) {
@@ -943,7 +953,6 @@
             startBtn.disabled = true;
             showCityBtn.disabled = false;
             nextBtn.disabled = false;
-            editNameBtn.disabled = false;
             resultsEl.style.display = 'none';
             cityNameEl.textContent = '?';
         }
@@ -1042,7 +1051,6 @@
             startBtn.disabled = false;
             showCityBtn.disabled = true;
             nextBtn.disabled = true;
-            editNameBtn.disabled = true;
             
             // Reset regie buttons
             if (currentRole === 'regie') {
@@ -1104,7 +1112,6 @@
             startBtn.disabled = false;
             showCityBtn.disabled = true;
             nextBtn.disabled = true;
-            editNameBtn.disabled = true;
         }
 
         // Label storage in localStorage
@@ -1149,28 +1156,12 @@
             return displayName;
         }
 
-        function promptSetNameForCurrent() {
-            if (!gameActive || !shuffledData.length) return;
-            const current = shuffledData[currentIndex % shuffledData.length];
-            const currentName = getDisplayName(current);
-            const newName = prompt('Stadtnamen setzen/ändern:', currentName);
-            if (newName && newName.trim()) {
-                const final = newName.trim();
-                if (current.sourceKey) {
-                    nameMap[current.sourceKey] = final;
-                    saveNameMap(nameMap);
-                }
-                cityNameEl.textContent = final;
-                cityNameVisible = true;
-            }
-        }
 
         // Event Listeners
         startBtn.addEventListener('click', startGame);
         showCityBtn.addEventListener('click', toggleCityName);
         nextBtn.addEventListener('click', nextRathaus);
         restartBtn.addEventListener('click', restartGame);
-        editNameBtn.addEventListener('click', promptSetNameForCurrent);
 
         // Selection functionality
         let selectedRathausData = [];
