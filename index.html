@@ -857,6 +857,7 @@
         <button class="btn" id="clearHistory">Bestenliste löschen</button>
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script>
         // Rathaus-Daten (Beispieldaten; können durch geladene Bilder ersetzt werden)
         const defaultRathausData = [
@@ -2024,7 +2025,11 @@
         }
         
         function updateRoomData(data) {
-            if (!currentRoomId) return;
+            // Only update room data if we're in a room (Regie/Kandidat mode)
+            if (!currentRoomId) {
+                console.log('No room ID - skipping room data update (SinglePlayer mode)');
+                return;
+            }
             
             try {
                 // Add timestamp to data
@@ -2090,10 +2095,36 @@
         let socket = null;
         
         function connectSocket() {
-            console.log('Socket.io temporarily disabled for static deployment');
-            // Socket.io connection temporarily disabled
-            // Will be re-enabled when we have a proper Socket.io server
-        }
+            if (socket) {
+                socket.disconnect();
+            }
+            
+            // Connect to Socket.io server
+            socket = io();
+            
+            socket.on('connect', () => {
+                console.log('Connected to server');
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('Disconnected from server');
+            });
+            
+            socket.on('room-state', (data) => {
+                console.log('Received room state:', data);
+                if (currentRole === 'candidate') {
+                    // Update game state for candidate
+                    if (data.gameActive && data.currentIndex !== undefined) {
+                        gameActive = data.gameActive;
+                        currentIndex = data.currentIndex;
+                        recognizedCount = data.recognizedCount || 0;
+                        
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
+                        }
+                    }
+                }
+            });
             
             socket.on('room-update', (data) => {
                 console.log('Room updated:', data);
@@ -2112,12 +2143,8 @@
             });
             
             socket.on('room-list', (rooms) => {
-                console.log('Available rooms:', rooms);
+                console.log('Received room list:', rooms);
                 updateRoomList(rooms);
-            });
-            
-            socket.on('disconnect', () => {
-                console.log('Disconnected from server');
             });
         }
 
