@@ -1094,6 +1094,11 @@
             
             // Update UI
             startBtn.disabled = true;
+            startBtn.style.display = 'none';
+            showCityBtn.disabled = false;
+            nextBtn.disabled = false;
+            showCityBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'inline-block';
             
             // Hide game settings during game
             const gameSettings = document.getElementById('gameSettings');
