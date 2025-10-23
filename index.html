@@ -63,6 +63,18 @@
             overflow: hidden;
         }
         
+        /* CRITICAL FIX: Force proper image scaling */
+        .image-container img {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            display: block !important;
+            margin: 0 auto !important;
+        }
+        
         .rathaus-image {
             max-width: 100%;
             max-height: 100%;
@@ -157,9 +169,12 @@
                 margin: 5px 0;
             }
             
-            .rathaus-image {
-                height: 300px;
-                max-height: 50vh;
+            .image-container {
+                height: 400px;
+            }
+            
+            .image-container img {
+                max-height: 100% !important;
             }
         }
 
@@ -268,12 +283,12 @@
         /* Extra small screens (phones in portrait) */
         @media (max-width: 480px) {
             .image-container {
-                min-height: 300px;
+                height: 300px;
                 padding: 10px;
             }
             
             .image-container img {
-                max-height: 60vh !important;
+                max-height: 100% !important;
             }
             
             .timer {
@@ -708,9 +723,9 @@
             </div>
             
             <div class="controls">
-                <button class="btn" id="startBtn">Trainer starten</button>
-                <button class="btn" id="showCityBtn" disabled>Stadt anzeigen (Enter)</button>
-                <button class="btn" id="nextBtn" disabled>Nächstes Rathaus (Leertaste)</button>
+                <button class="btn" id="startBtn">Training starten</button>
+                <button class="btn" id="showCityBtn" disabled style="display: none;">Stadt anzeigen (Enter)</button>
+                <button class="btn" id="nextBtn" disabled style="display: none;">Nächstes Rathaus (Leertaste)</button>
             </div>
             
             <!-- Regie Controls (only visible in Regie mode) -->
@@ -729,7 +744,6 @@
                 <h3>📋 Anleitung:</h3>
                 <p><strong>Leertaste:</strong> Nächstes Rathaus anzeigen</p>
                 <p><strong>Enter-Taste:</strong> Stadtnamen anzeigen/verstecken</p>
-                <p><strong>N-Taste:</strong> Stadtnamen ändern</p>
                 <p><strong>Ziel:</strong> So viele Rathäuser wie möglich in 90 Sekunden erkennen!</p>
             </div>
         </div>
@@ -754,9 +768,6 @@
         </div>
     </div>
     
-    <div class="key-hint">
-        Leertaste = Weiter | Enter = Stadt
-    </div>
 
     <!-- Room ID (only visible for Regie/Candidate) -->
     <div class="room-settings" id="roomSettings" style="display: block;">
@@ -965,6 +976,8 @@
             startBtn.disabled = true;
             showCityBtn.disabled = false;
             nextBtn.disabled = false;
+            showCityBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'inline-block';
             resultsEl.style.display = 'none';
             cityNameEl.textContent = '?';
         }
@@ -1114,7 +1127,7 @@
             resultsEl.style.display = 'none';
             rathausImageEl.style.display = 'block';
             timerEl.textContent = 'Rathaus-Duell';
-            cityNameEl.textContent = 'Los geht\'s!';
+            cityNameEl.textContent = 'Viel Erfolg!';
             
             // Show start image when restarting
             if (loadedRathausData.length > 0) {
@@ -1528,7 +1541,7 @@
                 rathausData = loadedRathausData;
             } catch (error) {
                 console.log('Could not auto-load images:', error);
-                cityNameEl.textContent = 'Los geht\'s!';
+                cityNameEl.textContent = 'Viel Erfolg!';
             }
         }
 
