@@ -1712,13 +1712,20 @@
         function loadAvailableRooms() {
             console.log('Loading available rooms...');
             
-            // Socket.io server not available - show fallback message
-            const roomList = document.getElementById('roomList');
-            const availableRoomsDiv = document.getElementById('availableRooms');
-            
-            if (roomList && availableRoomsDiv) {
-                roomList.innerHTML = '<div class="room-item">Socket.io Server nicht verfügbar<br><small>Regie/Kandidat Modi funktionieren im SinglePlayer-Modus</small></div>';
-                availableRoomsDiv.style.display = 'block';
+            // Check if Socket.io is connected
+            if (socket && socket.connected) {
+                console.log('Requesting room list from server...');
+                socket.emit('get-rooms');
+            } else {
+                console.log('Socket.io not connected, showing fallback message');
+                // Socket.io server not available - show fallback message
+                const roomList = document.getElementById('roomList');
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                
+                if (roomList && availableRoomsDiv) {
+                    roomList.innerHTML = '<div class="room-item">Socket.io Server nicht verfügbar<br><small>Regie/Kandidat Modi funktionieren im SinglePlayer-Modus</small></div>';
+                    availableRoomsDiv.style.display = 'block';
+                }
             }
         }
         
