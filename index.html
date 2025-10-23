@@ -1011,6 +1011,15 @@
         // Start game with countdown
         function startGame() {
             console.log('startGame called - starting countdown');
+            
+            // Send countdown start event to server for candidates
+            if (socket && currentRoomId) {
+                socket.emit('countdown-start', { 
+                    roomId: currentRoomId,
+                    timeLeft: parseInt(document.getElementById('gameTime').value) || 90
+                });
+            }
+            
             startCountdown(() => {
                 startGameLogic();
             });
@@ -2450,32 +2459,40 @@
                     currentRoomId = data.roomId;
                 });
                 
+                socket.on('countdown-start', (data) => {
+                    console.log('Countdown start received:', data);
+                    if (currentRole === 'candidate') {
+                        // Start countdown for candidates
+                        startCountdown(() => {
+                            console.log('Countdown finished for candidate, waiting for game start');
+                        });
+                    }
+                });
+                
                 socket.on('game-started', (data) => {
                     console.log('Game started:', data);
                     if (currentRole === 'candidate') {
-                        // Start countdown for candidates too
-                        startCountdown(() => {
-                            console.log('Countdown finished for candidate, starting game');
-                            gameActive = data.roomData.gameActive;
-                            currentIndex = data.roomData.currentIndex;
-                            recognizedCount = data.roomData.recognizedCount;
-                            timeLeft = data.roomData.timeLeft || 90;
-                            
-                            // Add game-active class for candidates too
-                            document.body.classList.add('game-active');
-                            console.log('Added game-active class for candidate');
-                            
-                            // Update timer display for candidate
-                            timerEl.textContent = timeLeft;
-                            
-                            // Start timer for candidate
-                            timerInterval = setInterval(updateTimer, 1000);
-                            console.log('Started timer for candidate');
-                            
-                            if (data.currentRathaus) {
-                                showRathaus(data.currentRathaus);
-                            }
-                        });
+                        // Start game immediately for candidates (countdown already done)
+                        console.log('Starting game immediately for candidate');
+                        gameActive = data.roomData.gameActive;
+                        currentIndex = data.roomData.currentIndex;
+                        recognizedCount = data.roomData.recognizedCount;
+                        timeLeft = data.roomData.timeLeft || 90;
+                        
+                        // Add game-active class for candidates too
+                        document.body.classList.add('game-active');
+                        console.log('Added game-active class for candidate');
+                        
+                        // Update timer display for candidate
+                        timerEl.textContent = timeLeft;
+                        
+                        // Start timer for candidate
+                        timerInterval = setInterval(updateTimer, 1000);
+                        console.log('Started timer for candidate');
+                        
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
+                        }
                     }
                 });
                 

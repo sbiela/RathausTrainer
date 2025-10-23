@@ -86,6 +86,21 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Countdown starten (Regie)
+    socket.on('countdown-start', (data) => {
+        const roomId = data.roomId;
+        const room = rooms.get(roomId);
+        
+        if (room && room.regie === socket.id) {
+            // Alle Teilnehmer über Countdown-Start informieren
+            io.to(roomId).emit('countdown-start', { 
+                timeLeft: data.timeLeft || 90
+            });
+            
+            console.log('Countdown started in room:', roomId);
+        }
+    });
+
     // Spiel starten (Regie)
     socket.on('start-game', (data) => {
         const roomId = data.roomId;
