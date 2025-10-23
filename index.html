@@ -2503,16 +2503,16 @@
                 regieRoomControls.style.display = 'block';
                 candidateRoomControls.style.display = 'none';
                 
-                // Update Regie button text to show room ID if available
+                // Generate and show room ID immediately for Regie
+                const roomId = generateRoomId();
+                currentRoomId = roomId;
+                console.log('Generated room ID for Regie:', roomId);
+                
+                // Update Regie button text to show room ID
                 const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
                 if (regieLabel) {
-                    if (currentRoomId) {
-                        regieLabel.textContent = `🎛️ Regie (${currentRoomId})`;
-                        console.log('Updated Regie label with room ID:', currentRoomId);
-                    } else {
-                        regieLabel.textContent = '🎛️ Regie';
-                        console.log('Reset Regie label to default - no room ID yet');
-                    }
+                    regieLabel.textContent = `🎛️ Regie (${roomId})`;
+                    console.log('Updated Regie label with room ID:', roomId);
                 } else {
                     console.log('Regie label not found');
                 }
