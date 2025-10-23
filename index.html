@@ -1410,6 +1410,8 @@
             if (currentRole === 'singleplayer') {
                 startBtn.style.display = 'inline-block';
                 startBtn.textContent = '🚀 Spiel starten';
+                // Hide regieStartBtn for SinglePlayer
+                regieStartBtn.style.display = 'none';
             } else {
                 startBtn.style.display = 'none';
             }
@@ -2445,13 +2447,25 @@
                 socket.on('game-started', (data) => {
                     console.log('Game started:', data);
                     if (currentRole === 'candidate') {
-                        gameActive = data.roomData.gameActive;
-                        currentIndex = data.roomData.currentIndex;
-                        recognizedCount = data.roomData.recognizedCount;
-                        
-                        if (data.currentRathaus) {
-                            showRathaus(data.currentRathaus);
-                        }
+                        // Start countdown for candidates
+                        startCountdown(() => {
+                            console.log('Countdown finished for candidate, starting game');
+                            gameActive = data.roomData.gameActive;
+                            currentIndex = data.roomData.currentIndex;
+                            recognizedCount = data.roomData.recognizedCount;
+                            timeLeft = data.roomData.timeLeft || 90;
+                            
+                            // Add game-active class for candidates too
+                            document.body.classList.add('game-active');
+                            console.log('Added game-active class for candidate');
+                            
+                            // Update timer display for candidate
+                            timerEl.textContent = timeLeft;
+                            
+                            if (data.currentRathaus) {
+                                showRathaus(data.currentRathaus);
+                            }
+                        });
                     }
                 });
                 
@@ -2459,6 +2473,11 @@
                     console.log('Rathaus updated:', data);
                     if (currentRole === 'candidate') {
                         currentIndex = data.roomData.currentIndex;
+                        timeLeft = data.roomData.timeLeft || timeLeft;
+                        
+                        // Update timer display for candidate
+                        timerEl.textContent = timeLeft;
+                        
                         if (data.currentRathaus) {
                             showRathaus(data.currentRathaus);
                         }
