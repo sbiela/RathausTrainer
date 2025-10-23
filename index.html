@@ -2542,9 +2542,11 @@
                     regieRoomControls.style.display = 'none';
                 }
                 if (candidateRoomControls) {
-                    candidateRoomControls.style.display = 'block';
+                    candidateRoomControls.style.setProperty('display', 'block', 'important');
+                    candidateRoomControls.style.setProperty('visibility', 'visible', 'important');
+                    candidateRoomControls.style.setProperty('opacity', '1', 'important');
                     candidateRoomControls.classList.add('candidate-mode');
-                    console.log('Added candidate-mode class to candidateRoomControls');
+                    console.log('Force showing candidateRoomControls with !important');
                 }
                 // Also add candidate-mode class to the main container
                 const mainContainer = document.querySelector('.main-container');
