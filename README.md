@@ -1,29 +1,28 @@
-# Maxis Rathaus-Trainer 🏛️
+# Rathaus Trainer
 
-Ein interaktives Spiel zum Erlernen deutscher Rathäuser mit verschiedenen Spielmodi.
+Ein interaktives Spiel zum Erlernen deutscher Rathäuser mit 90 WebP-optimierten Bildern.
 
-## 🎮 Spielmodi
+## Features
 
-- **SinglePlayer**: Einzelspieler-Modus
-- **Regie**: Regisseur-Modus mit Kontrolle über das Spiel
-- **Kandidat**: Kandidaten-Modus (nur Bilder sichtbar)
+- 🏛️ 90 deutsche Rathäuser mit Städtenamen
+- 📱 Responsive Design für alle Geräte
+- ⚡ WebP-optimierte Bilder für schnelle Ladezeiten
+- 🎮 SinglePlayer, Regie und Kandidat Modi
+- 🔄 Echtzeit-Synchronisation zwischen Geräten
 
-## 🚀 Features
+## Technologie
 
-- Echtzeit-Synchronisation zwischen Geräten
-- Verschiedene Schwierigkeitsgrade
-- Bestenliste
-- Responsive Design für Mobile und Desktop
+- HTML5, CSS3, JavaScript
+- WebP-Bilder für optimale Performance
+- Responsive Design
+- Vercel Deployment
 
-## 🛠️ Technologie
+## Installation
 
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Backend**: Node.js, Express, Socket.io
-- **Hosting**: Vercel
+1. Repository klonen
+2. `npm install` (optional)
+3. `npm start` für lokale Entwicklung
 
-## 📱 Verwendung
+## Deployment
 
-1. Öffne die App in deinem Browser
-2. Wähle einen Spielmodus
-3. Für Multiplayer: Regie erstellt Raum, Kandidat tritt bei
-4. Viel Spaß beim Lernen! 🎯
+Automatisches Deployment auf Vercel bei GitHub Push.
