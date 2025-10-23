@@ -2704,12 +2704,27 @@
                 if (startBtn) {
                     startBtn.style.setProperty('display', 'inline-block', 'important');
                     startBtn.textContent = '🚀 Spiel starten';
+                    startBtn.disabled = false;
+                    console.log('Showing startBtn for SinglePlayer with !important');
                 }
                 // Hide regieStartBtn for SinglePlayer
                 const regieStartBtn = document.getElementById('regieStartBtn');
                 if (regieStartBtn) {
                     regieStartBtn.style.setProperty('display', 'none', 'important');
                 }
+                
+                // Hide game buttons for SinglePlayer (they should only show during gameplay)
+                const showCityBtn = document.getElementById('showCityBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                if (showCityBtn) {
+                    showCityBtn.style.setProperty('display', 'none', 'important');
+                    showCityBtn.disabled = true;
+                }
+                if (nextBtn) {
+                    nextBtn.style.setProperty('display', 'none', 'important');
+                    nextBtn.disabled = true;
+                }
+                
                 console.log('SinglePlayer mode configured');
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
