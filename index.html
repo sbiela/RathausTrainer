@@ -726,7 +726,7 @@
             </div>
             
             <div class="controls">
-                <button class="btn" id="startBtn">🚀 Spiel starten</button>
+                <button class="btn regie-btn start" id="startBtn">🚀 Spiel starten</button>
                 <button class="btn" id="showCityBtn" disabled style="display: none;">Stadt anzeigen (Enter)</button>
                 <button class="btn" id="nextBtn" disabled style="display: none;">Nächstes Rathaus (Leertaste)</button>
             </div>
@@ -2438,8 +2438,19 @@
                 if (availableRoomsDiv) {
                     availableRoomsDiv.style.display = 'block';
                 }
-                // Load available rooms
-                loadAvailableRooms();
+                // Load available rooms after Socket.io connection
+                if (socket && socket.connected) {
+                    loadAvailableRooms();
+                } else {
+                    // Wait for Socket.io connection
+                    if (socket) {
+                        socket.once('connect', () => {
+                            loadAvailableRooms();
+                        });
+                    } else {
+                        loadAvailableRooms(); // Will show fallback message
+                    }
+                }
             // Auto-refresh disabled for static deployment
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
