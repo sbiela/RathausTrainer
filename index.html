@@ -54,7 +54,7 @@
         .image-container {
             margin: 2rem 0;
             width: 100%;
-            min-height: 600px;
+            height: 600px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             display: flex;
@@ -65,7 +65,9 @@
         }
         
         .rathaus-image {
-            height: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
             width: auto;
             object-fit: contain;
             object-position: center;
@@ -76,7 +78,9 @@
         /* Start and end images use same rules as other images */
         .rathaus-image[src*="start.jpeg"],
         .rathaus-image[src*="ende.gif"] {
-            height: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
             width: auto;
             object-fit: contain;
             object-position: center;
@@ -152,11 +156,13 @@
             }
             
             .image-container {
-                min-height: 400px;
+                height: 400px;
             }
             
             .rathaus-image {
-                height: 100%;
+                max-height: 100%;
+                max-width: 100%;
+                height: auto;
                 width: auto;
             }
         }
@@ -266,11 +272,13 @@
         /* Extra small screens (phones in portrait) */
         @media (max-width: 480px) {
             .image-container {
-                min-height: 300px;
+                height: 300px;
             }
             
             .rathaus-image {
-                height: 100%;
+                max-height: 100%;
+                max-width: 100%;
+                height: auto;
                 width: auto;
             }
             
