@@ -1414,8 +1414,8 @@
             };
             
             gameHistory.unshift(result);
-            if (gameHistory.length > 10) {
-                gameHistory = gameHistory.slice(0, 10); // Keep only last 10 results
+            if (gameHistory.length > 100) {
+                gameHistory = gameHistory.slice(0, 100); // Keep last 100 results (much more than 10)
             }
             
             localStorage.setItem('rathausHistory', JSON.stringify(gameHistory));
@@ -1731,6 +1731,7 @@
         document.getElementById('correctBtn').addEventListener('click', () => {
             if (currentRole === 'regie' && gameActive) {
                 recognizedCount++;
+                console.log('Regie marked as correct, recognizedCount:', recognizedCount);
                 nextRathaus();
             }
         });
@@ -2363,6 +2364,11 @@
                 if (applySelectionBtn) {
                     applySelectionBtn.style.display = 'none';
                 }
+                // Hide room ID input for candidate (they select from list)
+                const roomIdInput = document.getElementById('roomId');
+                if (roomIdInput) {
+                    roomIdInput.style.display = 'none';
+                }
                 // Show city name directly for candidate
                 cityName.style.display = 'block';
                 // Load available rooms
@@ -2388,6 +2394,11 @@
                 const applySelectionBtn = document.getElementById('applySelection');
                 if (applySelectionBtn) {
                     applySelectionBtn.style.display = 'block';
+                }
+                // Show room ID input for regie
+                const roomIdInput = document.getElementById('roomId');
+                if (roomIdInput) {
+                    roomIdInput.style.display = 'block';
                 }
                 
                 // Create room immediately for Regie
@@ -2421,6 +2432,11 @@
                 const applySelectionBtn = document.getElementById('applySelection');
                 if (applySelectionBtn) {
                     applySelectionBtn.style.display = 'block';
+                }
+                // Show room ID input for singleplayer
+                const roomIdInput = document.getElementById('roomId');
+                if (roomIdInput) {
+                    roomIdInput.style.display = 'block';
                 }
                 const keyHint = document.querySelector('.key-hint');
                 if (keyHint) {

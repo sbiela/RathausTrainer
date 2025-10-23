@@ -29,6 +29,9 @@ app.use(cors());
 // Raum-Management
 const rooms = new Map();
 
+// Bestenliste-Management
+const leaderboard = [];
+
 // Socket.io Events
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
@@ -157,6 +160,38 @@ io.on('connection', (socket) => {
         }));
         
         socket.emit('room-list', roomList);
+    });
+
+    // Bestenliste-Events
+    socket.on('save-result', (data) => {
+        const result = {
+            ...data,
+            timestamp: Date.now(),
+            id: Math.random().toString(36).substring(2, 15)
+        };
+        
+        leaderboard.push(result);
+        
+        // Keep only last 1000 results
+        if (leaderboard.length > 1000) {
+            leaderboard.splice(0, leaderboard.length - 1000);
+        }
+        
+        // Sort by score (correct/total ratio)
+        leaderboard.sort((a, b) => {
+            const scoreA = a.correct / a.total;
+            const scoreB = b.correct / b.total;
+            return scoreB - scoreA;
+        });
+        
+        console.log('Result saved to leaderboard:', result);
+        
+        // Broadcast updated leaderboard to all clients
+        io.emit('leaderboard-updated', leaderboard.slice(0, 100)); // Send top 100
+    });
+    
+    socket.on('get-leaderboard', () => {
+        socket.emit('leaderboard-data', leaderboard.slice(0, 100)); // Send top 100
     });
 
     // Verbindung trennen
