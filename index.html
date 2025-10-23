@@ -65,12 +65,23 @@
         }
         
         .rathaus-image {
-            height: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
             width: auto;
             object-fit: contain;
             object-position: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
+        }
+        
+        /* Force portrait images to be narrower by limiting width */
+        .rathaus-image[src*="027_Rathaus_Seite_27.webp"],
+        .rathaus-image[src*="029_Rathaus_Seite_29.webp"],
+        .rathaus-image[src*="030_Rathaus_Seite_30.webp"],
+        .rathaus-image[src*="031_Rathaus_Seite_31.webp"] {
+            max-width: 40% !important;
+            height: auto !important;
         }
         
 
@@ -147,8 +158,17 @@
             }
             
             .rathaus-image {
-                height: 100%;
+                max-height: 100%;
+                max-width: 100%;
+                height: auto;
                 width: auto;
+            }
+            
+            .rathaus-image[src*="027_Rathaus_Seite_27.webp"],
+            .rathaus-image[src*="029_Rathaus_Seite_29.webp"],
+            .rathaus-image[src*="030_Rathaus_Seite_30.webp"],
+            .rathaus-image[src*="031_Rathaus_Seite_31.webp"] {
+                max-width: 50% !important;
             }
         }
 
@@ -261,8 +281,17 @@
             }
             
             .rathaus-image {
-                height: 100%;
+                max-height: 100%;
+                max-width: 100%;
+                height: auto;
                 width: auto;
+            }
+            
+            .rathaus-image[src*="027_Rathaus_Seite_27.webp"],
+            .rathaus-image[src*="029_Rathaus_Seite_29.webp"],
+            .rathaus-image[src*="030_Rathaus_Seite_30.webp"],
+            .rathaus-image[src*="031_Rathaus_Seite_31.webp"] {
+                max-width: 50% !important;
             }
             
             .timer {
