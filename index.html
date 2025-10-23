@@ -2119,15 +2119,15 @@
             console.log('Socket.io disabled - using SinglePlayer mode for all roles');
             console.log('Regie/Kandidat modes will work in SinglePlayer mode until Socket.io server is set up');
             
-            socket.on('connect', () => {
+            // socket.on('connect', () => {
                 console.log('Connected to server');
             });
             
-            socket.on('disconnect', () => {
+            // socket.on('disconnect', () => {
                 console.log('Disconnected from server');
             });
             
-            socket.on('room-state', (data) => {
+            // socket.on('room-state', (data) => {
                 console.log('Received room state:', data);
                 if (currentRole === 'candidate') {
                     // Update game state for candidate
@@ -2143,7 +2143,7 @@
                 }
             });
             
-            socket.on('room-update', (data) => {
+            // socket.on('room-update', (data) => {
                 console.log('Room updated:', data);
                 if (currentRole === 'candidate') {
                     // Update game state for candidate
@@ -2159,7 +2159,7 @@
                 }
             });
             
-            socket.on('room-list', (rooms) => {
+            // socket.on('room-list', (rooms) => {
                 console.log('Received room list:', rooms);
                 updateRoomList(rooms);
             });
