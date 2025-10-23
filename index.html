@@ -2367,11 +2367,21 @@
                     
                     // Update Regie button text to show room ID
                     const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
+                    console.log('Looking for Regie label in room-created event, found:', regieLabel);
                     if (regieLabel) {
                         regieLabel.textContent = `🎛️ Regie (${data.roomId})`;
                         console.log('Updated Regie label with room ID from room-created event:', data.roomId);
                     } else {
-                        console.log('Regie label not found');
+                        console.log('Regie label not found in room-created event, trying alternative selector');
+                        // Try alternative selector
+                        const regieLabelAlt = document.querySelector('#roleRegie + .role-label');
+                        console.log('Alternative selector found in room-created event:', regieLabelAlt);
+                        if (regieLabelAlt) {
+                            regieLabelAlt.textContent = `🎛️ Regie (${data.roomId})`;
+                            console.log('Updated Regie label with alternative selector in room-created event:', data.roomId);
+                        } else {
+                            console.log('No Regie label found with any selector in room-created event');
+                        }
                     }
                     
                     // Don't start game automatically - Regie should click "Spiel starten" button
@@ -2586,11 +2596,21 @@
                 
                 // Update Regie button text to show room ID
                 const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
+                console.log('Looking for Regie label, found:', regieLabel);
                 if (regieLabel) {
                     regieLabel.textContent = `🎛️ Regie (${roomId})`;
                     console.log('Updated Regie label with room ID:', roomId);
                 } else {
-                    console.log('Regie label not found');
+                    console.log('Regie label not found, trying alternative selector');
+                    // Try alternative selector
+                    const regieLabelAlt = document.querySelector('#roleRegie + .role-label');
+                    console.log('Alternative selector found:', regieLabelAlt);
+                    if (regieLabelAlt) {
+                        regieLabelAlt.textContent = `🎛️ Regie (${roomId})`;
+                        console.log('Updated Regie label with alternative selector:', roomId);
+                    } else {
+                        console.log('No Regie label found with any selector');
+                    }
                 }
                 // Hide normal controls for regie
                 document.querySelector('.controls').style.display = 'none';
