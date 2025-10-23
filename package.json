@@ -1,7 +1,7 @@
 {
   "name": "rathaus-trainer",
   "version": "1.0.0",
-  "description": "Rathaus Trainer - Interactive German Town Hall Learning Game",
+  "description": "Rathaus Trainer with Socket.io",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,9 +9,13 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "cors": "^2.8.5"
   },
-  "keywords": ["rathaus", "germany", "learning", "game", "webp"],
-  "author": "Simon Biela",
-  "license": "MIT"
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

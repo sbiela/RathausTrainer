@@ -972,6 +972,14 @@
             console.log("Showing rathaus:", shuffledData[currentIndex]);
             showRathaus(shuffledData[currentIndex]);
             
+            // Send start game event to server
+            if (socket && currentRoomId) {
+                socket.emit('start-game', { 
+                    roomId: currentRoomId,
+                    shuffledData: shuffledData 
+                });
+            }
+            
             // Update room data
             updateRoomData({
                 gameActive: true,
@@ -1070,6 +1078,15 @@
             
             currentIndex++;
             showRathaus(shuffledData[currentIndex % shuffledData.length]);
+            
+            // Send next rathaus event to server
+            if (socket && currentRoomId) {
+                socket.emit('next-rathaus', { 
+                    roomId: currentRoomId,
+                    currentIndex: currentIndex,
+                    currentRathaus: shuffledData[currentIndex]
+                });
+            }
             
             // Update room data
             updateRoomData({
@@ -1936,7 +1953,7 @@
             
             // Join Socket.io room
             if (socket) {
-                socket.emit('join-room', roomId, currentRole);
+                socket.emit('join-room', { roomId: roomId, role: currentRole });
             }
             
             // Update URL for cross-device sharing
@@ -2124,10 +2141,14 @@
             
             // Only connect to Socket.io for Regie/Kandidat modes
             if (currentRole === 'regie' || currentRole === 'candidate') {
-                // For now, use fallback mode since Vercel doesn't have Socket.io server
-                console.log('Socket.io server not available on Vercel - using fallback mode');
-                console.log('Regie/Kandidat modes will work in SinglePlayer mode');
-                socket = null; // Disable socket connection
+                // Connect to Socket.io server
+                const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaus-trainer-socket.railway.app';
+                socket = io(socketUrl, {
+                    transports: ['websocket', 'polling'],
+                    timeout: 20000,
+                    forceNew: true
+                });
+                console.log('Connecting to Socket.io server:', socketUrl);
             } else {
                 console.log('SinglePlayer mode - no Socket.io connection needed');
             }
@@ -2142,35 +2163,45 @@
                     console.log('Disconnected from server');
                 });
                 
-                socket.on('room-state', (data) => {
-                    console.log('Received room state:', data);
+                socket.on('room-created', (data) => {
+                    console.log('Room created:', data);
+                    currentRoomId = data.roomId;
+                    document.getElementById('roomId').value = data.roomId;
+                });
+                
+                socket.on('room-joined', (data) => {
+                    console.log('Joined room:', data);
+                    currentRoomId = data.roomId;
+                });
+                
+                socket.on('game-started', (data) => {
+                    console.log('Game started:', data);
                     if (currentRole === 'candidate') {
-                        // Update game state for candidate
-                        if (data.gameActive && data.currentIndex !== undefined) {
-                            gameActive = data.gameActive;
-                            currentIndex = data.currentIndex;
-                            recognizedCount = data.recognizedCount || 0;
-                            
-                            if (data.currentRathaus) {
-                                showRathaus(data.currentRathaus);
-                            }
+                        gameActive = data.roomData.gameActive;
+                        currentIndex = data.roomData.currentIndex;
+                        recognizedCount = data.roomData.recognizedCount;
+                        
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
                         }
                     }
                 });
                 
-                socket.on('room-update', (data) => {
-                    console.log('Room updated:', data);
+                socket.on('rathaus-updated', (data) => {
+                    console.log('Rathaus updated:', data);
                     if (currentRole === 'candidate') {
-                        // Update game state for candidate
-                        if (data.gameActive && data.currentIndex !== undefined) {
-                            gameActive = data.gameActive;
-                            currentIndex = data.currentIndex;
-                            recognizedCount = data.recognizedCount || 0;
-                            
-                            if (data.currentRathaus) {
-                                showRathaus(data.currentRathaus);
-                            }
+                        currentIndex = data.roomData.currentIndex;
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
                         }
+                    }
+                });
+                
+                socket.on('game-ended', (data) => {
+                    console.log('Game ended:', data);
+                    if (currentRole === 'candidate') {
+                        gameActive = false;
+                        showEndImage();
                     }
                 });
                 
