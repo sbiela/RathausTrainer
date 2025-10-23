@@ -101,3 +101,6 @@ if (process.env.VERCEL) {
     console.log(`Open http://localhost:${PORT} in your browser`);
   });
 }
+
+// Also export the server for Socket.io
+module.exports = { app, server };
