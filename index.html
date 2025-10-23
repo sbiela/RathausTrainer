@@ -1859,10 +1859,15 @@
         }
         
         function updateRoomList(rooms) {
+            console.log('updateRoomList called with rooms:', rooms);
             const roomList = document.getElementById('roomList');
             const availableRoomsDiv = document.getElementById('availableRooms');
             
+            console.log('roomList element:', roomList);
+            console.log('availableRoomsDiv element:', availableRoomsDiv);
+            
             if (rooms && rooms.length > 0) {
+                console.log('Updating room list with', rooms.length, 'rooms');
                 roomList.innerHTML = rooms.map(room => `
                     <div class="room-item" onclick="selectRoom('${room.id}')">
                         <span class="room-id">${room.id}</span>
@@ -1870,7 +1875,9 @@
                     </div>
                 `).join('');
                 availableRoomsDiv.style.display = 'block';
+                console.log('Room list updated and displayed');
             } else {
+                console.log('No rooms available, showing fallback message');
                 roomList.innerHTML = '<div class="room-item">Keine Räume verfügbar<br><small>Regie muss zuerst einen Raum erstellen</small></div>';
                 availableRoomsDiv.style.display = 'block';
             }
@@ -1937,10 +1944,11 @@
         }
         
         function selectRoom(roomId) {
-            const roomIdElement = document.getElementById('roomId');
-            if (roomIdElement) {
-                roomIdElement.value = roomId;
-            }
+            console.log('selectRoom called with roomId:', roomId);
+            
+            // Set current room ID
+            currentRoomId = roomId;
+            console.log('Set currentRoomId to:', roomId);
             
             // Remove selection from other rooms
             document.querySelectorAll('.room-item').forEach(item => {
@@ -1951,10 +1959,16 @@
             const clickedRoom = document.querySelector(`[onclick="selectRoom('${roomId}')"]`);
             if (clickedRoom) {
                 clickedRoom.classList.add('selected');
+                console.log('Added selected class to room:', roomId);
             }
             
-            // Auto-join room
-            joinRoom();
+            // Join room directly via Socket.io
+            if (socket) {
+                console.log('Joining room via Socket.io:', roomId);
+                socket.emit('join-room', { roomId: roomId, role: 'candidate' });
+            } else {
+                console.log('Socket not available for room join');
+            }
         }
         
         // URL-based functions for cross-device communication
@@ -2518,8 +2532,10 @@
             // Auto-refresh disabled for static deployment
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
-                // Reset room ID when switching to Regie mode
-                currentRoomId = null;
+                // Generate room ID immediately for Regie mode
+                const roomId = generateRoomId();
+                currentRoomId = roomId;
+                console.log('Generated room ID for Regie:', roomId);
                 gameSettings.style.display = 'block';
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'flex';
