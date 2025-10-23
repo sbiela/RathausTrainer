@@ -46,29 +46,11 @@
         }
         
         .test-image {
-            max-height: 100%;
-            max-width: 100%;
-            height: auto;
+            height: 100%;
             width: auto;
             object-fit: contain;
             object-position: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        /* Force portrait images to be narrower */
-        .test-image[src*="027_Rathaus_Seite_27.webp"],
-        .test-image[src*="029_Rathaus_Seite_29.webp"],
-        .test-image[src*="030_Rathaus_Seite_30.webp"],
-        .test-image[src*="031_Rathaus_Seite_31.webp"] {
-            max-width: 50% !important;
-            height: auto !important;
-        }
-        
-        /* Force start and end images to be larger */
-        .test-image[src*="start.jpeg"],
-        .test-image[src*="ende.gif"] {
-            max-width: 80% !important;
-            height: auto !important;
         }
 
         .image-info {
