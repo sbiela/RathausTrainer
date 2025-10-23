@@ -2541,6 +2541,13 @@
                     startBtn.textContent = '🚀 Spiel starten';
                     startBtn.disabled = false;
                     console.log('Ensuring startBtn is visible for SinglePlayer');
+                    
+                    // Also ensure the controls container is visible
+                    const controlsElement = document.querySelector('.controls');
+                    if (controlsElement) {
+                        controlsElement.style.setProperty('display', 'flex', 'important');
+                        console.log('Ensuring controls container is visible for SinglePlayer');
+                    }
                 }
             }
         }
@@ -2585,14 +2592,14 @@
             
             if (candidateRadio.checked) {
                 currentRole = 'candidate';
-                // Keep game settings visible for candidates (they need to see them)
+                // Hide game settings for candidates (they should not be able to choose settings)
                 if (gameSettings) {
-                    gameSettings.style.setProperty('display', 'block', 'important');
-                    console.log('Keeping gameSettings visible for candidate');
+                    gameSettings.style.setProperty('display', 'none', 'important');
+                    console.log('Hiding gameSettings for candidate');
                 }
                 if (selectionArea) {
-                    selectionArea.style.setProperty('display', 'block', 'important');
-                    console.log('Keeping selectionArea visible for candidate');
+                    selectionArea.style.setProperty('display', 'none', 'important');
+                    console.log('Hiding selectionArea for candidate');
                 }
                 if (regieControls) {
                     regieControls.style.display = 'none';
@@ -2719,6 +2726,13 @@
                     startBtn.textContent = '🚀 Spiel starten';
                     startBtn.disabled = false;
                     console.log('Showing startBtn for SinglePlayer with !important');
+                }
+                
+                // Ensure controls container is visible for SinglePlayer
+                const controlsElement = document.querySelector('.controls');
+                if (controlsElement) {
+                    controlsElement.style.setProperty('display', 'flex', 'important');
+                    console.log('Showing controls container for SinglePlayer with !important');
                 }
                 // Hide regieStartBtn for SinglePlayer
                 const regieStartBtn = document.getElementById('regieStartBtn');
@@ -2854,6 +2868,13 @@
                     console.log('Force showing startBtn for SinglePlayer in second location');
                 }
                 
+                // Ensure controls container is visible for SinglePlayer
+                const controlsElement = document.querySelector('.controls');
+                if (controlsElement) {
+                    controlsElement.style.setProperty('display', 'flex', 'important');
+                    console.log('Force showing controls container for SinglePlayer in second location');
+                }
+                
                 // Hide game buttons for SinglePlayer (they should only show during gameplay)
                 const showCityBtn = document.getElementById('showCityBtn');
                 const nextBtn = document.getElementById('nextBtn');
@@ -2881,6 +2902,7 @@
             
             // Ensure start button is visible after role change
             setTimeout(ensureStartButtonVisible, 100);
+            setTimeout(ensureStartButtonVisible, 500); // Double-check after longer delay
         }
         
         // URL Sync functions
