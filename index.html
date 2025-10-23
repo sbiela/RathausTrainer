@@ -2597,9 +2597,10 @@
                     gameSettings.style.setProperty('display', 'none', 'important');
                     console.log('Hiding gameSettings for candidate');
                 }
+                // Keep selection area visible for candidate (they need room selection)
                 if (selectionArea) {
-                    selectionArea.style.setProperty('display', 'none', 'important');
-                    console.log('Hiding selectionArea for candidate');
+                    selectionArea.style.setProperty('display', 'block', 'important');
+                    console.log('Keeping selectionArea visible for candidate (room selection needed)');
                 }
                 if (regieControls) {
                     regieControls.style.display = 'none';
@@ -2657,10 +2658,10 @@
                     gameSettings.style.setProperty('display', 'none', 'important');
                     console.log('Hiding gameSettings for candidate in second location');
                 }
-                // Hide selection area for candidate (they should not be able to choose settings)
+                // Keep selection area visible for candidate (they need room selection)
                 if (selectionArea) {
-                    selectionArea.style.setProperty('display', 'none', 'important');
-                    console.log('Hiding selectionArea for candidate in second location');
+                    selectionArea.style.setProperty('display', 'block', 'important');
+                    console.log('Keeping selectionArea visible for candidate (room selection needed)');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
