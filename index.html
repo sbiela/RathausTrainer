@@ -2311,7 +2311,7 @@
                     console.log('Connected to server');
                     
                     // Create room for Regie if not already created
-                    if (currentRole === 'regie' && !currentRoomId) {
+                    if (currentRole === 'regie') {
                         const roomId = generateRoomId();
                         console.log('Creating room for Regie after connection:', roomId);
                         // Use default data if shuffledData is empty
@@ -2473,6 +2473,8 @@
             // Auto-refresh disabled for static deployment
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
+                // Reset room ID when switching to Regie mode
+                currentRoomId = null;
                 gameSettings.style.display = 'block';
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'flex';
@@ -2517,7 +2519,7 @@
                     roomIdInput.style.display = 'none';
                 }
                 
-                // Create room immediately for Regie
+                // Create room for Regie (wait for connection if needed)
                 if (socket && socket.connected) {
                     const roomId = generateRoomId();
                     console.log('Creating room for Regie:', roomId);
@@ -2530,6 +2532,21 @@
                     });
                 } else {
                     console.log('Socket not connected yet, will create room when connected');
+                    // Wait for Socket.io connection and then create room
+                    if (socket) {
+                        socket.once('connect', () => {
+                            console.log('Socket connected, now creating room for Regie');
+                            const roomId = generateRoomId();
+                            console.log('Creating room for Regie after connection:', roomId);
+                            // Use default data if shuffledData is empty
+                            const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
+                            console.log('Sending create-room event with data:', { roomId, dataLength: dataToSend.length });
+                            socket.emit('create-room', { 
+                                roomId: roomId, 
+                                shuffledData: dataToSend 
+                            });
+                        });
+                    }
                 }
                 // Show city name directly for regie
                 cityName.style.display = 'block';
