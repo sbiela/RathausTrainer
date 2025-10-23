@@ -539,20 +539,12 @@
             display: none; /* Hidden by default */
         }
         
-        .candidate-mode .candidate-room-controls {
-            display: block !important; /* Force show for candidates */
-        }
-        
         .available-rooms {
             margin-top: 1rem;
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             display: none; /* Hidden by default, shown by JavaScript */
-        }
-        
-        .candidate-mode .available-rooms {
-            display: block !important; /* Force show for candidates */
         }
         
         .available-rooms h5 {
@@ -2521,15 +2513,15 @@
                     applySelectionBtn.style.display = 'none';
                     console.log('Hidden apply selection button for candidate');
                 }
-                // Hide game settings for candidate
+                // Hide game settings for candidate - force with !important
                 if (gameSettings) {
-                    gameSettings.style.display = 'none';
-                    console.log('Hidden game settings for candidate');
+                    gameSettings.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden game settings for candidate with !important');
                 }
-                // Hide selection area for candidate
+                // Hide selection area for candidate - force with !important
                 if (selectionArea) {
-                    selectionArea.style.display = 'none';
-                    console.log('Hidden selection area for candidate');
+                    selectionArea.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden selection area for candidate with !important');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
@@ -2543,13 +2535,18 @@
                 if (cityName) {
                     cityName.style.display = 'block';
                 }
-                // Show available rooms for candidate - force display
+                // Show available rooms for candidate - force display with !important
                 const availableRoomsDiv = document.getElementById('availableRooms');
                 if (availableRoomsDiv) {
-                    availableRoomsDiv.style.display = 'block';
-                    availableRoomsDiv.style.visibility = 'visible';
-                    availableRoomsDiv.style.opacity = '1';
-                    console.log('Force showing available rooms div for candidate');
+                    availableRoomsDiv.style.setProperty('display', 'block', 'important');
+                    availableRoomsDiv.style.setProperty('visibility', 'visible', 'important');
+                    availableRoomsDiv.style.setProperty('opacity', '1', 'important');
+                    console.log('Force showing available rooms div for candidate with !important');
+                }
+                // Also force show the parent candidate-room-controls
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.setProperty('display', 'block', 'important');
+                    console.log('Force showing candidate-room-controls with !important');
                 }
                 // Show test room list immediately for debugging (will be replaced by real rooms)
                 const roomList = document.getElementById('roomList');
