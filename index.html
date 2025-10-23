@@ -2805,9 +2805,12 @@
                 if (regieRoomControls) {
                     regieRoomControls.style.display = 'block';
                 }
-                // Hide candidate room controls for Regie
+                // Hide candidate room controls for Regie (they contain available rooms)
                 if (candidateRoomControls) {
-                    candidateRoomControls.style.display = 'none';
+                    candidateRoomControls.style.setProperty('display', 'none', 'important');
+                    candidateRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    candidateRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Hidden candidate room controls for Regie with multiple properties');
                 }
                 
                 // Show regieStartBtn for Regie mode
@@ -2820,7 +2823,9 @@
                 const availableRoomsDiv = document.getElementById('availableRooms');
                 if (availableRoomsDiv) {
                     availableRoomsDiv.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden available rooms for Regie');
+                    availableRoomsDiv.style.setProperty('visibility', 'hidden', 'important');
+                    availableRoomsDiv.style.setProperty('opacity', '0', 'important');
+                    console.log('Hidden available rooms for Regie with multiple properties');
                 }
                 console.log('Force showing gameSettings and selectionArea for Regie with !important');
                 // Hide room ID input for Regie (they create rooms, don't join them)
