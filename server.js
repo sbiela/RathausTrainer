@@ -23,6 +23,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Force all routes to go through Node.js server
+app.get('*', (req, res) => {
+  console.log('GET * request received:', req.path);
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -101,6 +107,3 @@ if (process.env.VERCEL) {
     console.log(`Open http://localhost:${PORT} in your browser`);
   });
 }
-
-// Also export the server for Socket.io
-module.exports = { app, server };
