@@ -1425,17 +1425,11 @@
         async function loadRathausImages() {
             try {
                 // Test if the first image exists to verify the folder is accessible
-                const testImageUrl = './webp_images/001_Rathaus_Seite_1.webp';
+                const testImageUrl = './extracted_images/001_Rathaus_Seite_1.jpg';
                 const testResponse = await fetch(testImageUrl);
                 if (!testResponse.ok) {
-                    console.log('Compressed images not found, trying original folder');
-                    // Fallback to original folder
-                    const fallbackTestUrl = './extracted_images/001_Rathaus_Seite_1.jpg';
-                    const fallbackTestResponse = await fetch(fallbackTestUrl);
-                    if (!fallbackTestResponse.ok) {
-                        console.log('Export folder not found, using default data');
-                        return;
-                    }
+                    console.log('Extracted images not found, using default data');
+                    return;
                 }
                 
                 // Get list of original image files (JPG format)
