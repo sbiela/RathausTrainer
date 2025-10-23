@@ -2427,11 +2427,24 @@
             
             if (candidateRadio.checked) {
                 currentRole = 'candidate';
-                gameSettings.style.display = 'none';
-                selectionArea.style.display = 'none'; // Hide selection area for candidate (no game settings needed)
-                regieControls.style.display = 'none';
-                candidateControls.style.display = 'flex';
-                roomConnection.style.display = 'none'; // Hide room connection UI for Candidate
+                if (gameSettings) {
+                    gameSettings.style.display = 'none';
+                }
+                if (selectionArea) {
+                    selectionArea.style.display = 'none'; // Hide selection area for candidate (no game settings needed)
+                    console.log('Hidden selection area for candidate');
+                } else {
+                    console.log('Selection area not found');
+                }
+                if (regieControls) {
+                    regieControls.style.display = 'none';
+                }
+                if (candidateControls) {
+                    candidateControls.style.display = 'flex';
+                }
+                if (roomConnection) {
+                    roomConnection.style.display = 'none'; // Hide room connection UI for Candidate
+                }
                 connectSocket();
                 if (regieRoomControls) {
                     regieRoomControls.style.display = 'none';
