@@ -18,6 +18,16 @@ const io = socketIo(server, {
 // Statische Dateien servieren
 app.use(express.static('.'));
 
+// Root route für Railway
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Rathaus Trainer Socket.io Server',
+        status: 'running',
+        socketio: 'available',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // CORS für Express
 app.use(cors());
 
