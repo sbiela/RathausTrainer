@@ -556,7 +556,12 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            display: block !important; /* Always visible - never hide */
+            display: none; /* Hidden by default */
+        }
+        
+        /* Show room list only for candidates */
+        .candidate-mode .available-rooms {
+            display: block !important;
         }
         
         .available-rooms h5 {
@@ -874,9 +879,6 @@
                     <div class="selection-group">
                         <label for="randomOrder">Zufällige Reihenfolge:</label>
                         <input type="checkbox" id="randomOrder" checked>
-                    </div>
-                    <div class="selection-group">
-                        <button class="btn" id="applySelection">Auswahl anwenden</button>
                     </div>
                 </div>
             </div>
@@ -1440,53 +1442,6 @@
             }
         }
         
-        function applySelection() {
-            const fromNumber = parseInt(document.getElementById('fromNumber').value) || 1;
-            const toNumber = parseInt(document.getElementById('toNumber').value) || 90;
-            
-            if (!loadedRathausData || loadedRathausData.length === 0) {
-                alert('Bitte warte, bis die Bilder geladen sind!');
-                return;
-            }
-            
-            // Validate range
-            if (fromNumber > toNumber) {
-                alert('"Von" muss kleiner oder gleich "Bis" sein!');
-                return;
-            }
-            
-            if (fromNumber < 1 || toNumber > loadedRathausData.length) {
-                alert(`Bitte wähle zwischen 1 und ${loadedRathausData.length}!`);
-                return;
-            }
-            
-            // Get selected range
-            const selectedRange = loadedRathausData.slice(fromNumber - 1, toNumber);
-            
-            // Check if random order is enabled
-            const randomOrder = document.getElementById('randomOrder').checked;
-            
-            // Shuffle the selected range if random order is enabled
-            if (randomOrder) {
-                selectedRathausData = [...selectedRange].sort(() => Math.random() - 0.5);
-            } else {
-                selectedRathausData = [...selectedRange];
-            }
-            
-            // Update the main data
-            rathausData = selectedRathausData;
-            
-            // Update UI
-            cityNameEl.textContent = `Viel Erfolg!`;
-            
-            // Update selection info to show confirmation
-            const gameTime = parseInt(document.getElementById('gameTime').value) || 90;
-            const orderText = randomOrder ? 'Zufällige Reihenfolge' : 'Aufsteigende Reihenfolge';
-            const infoEl = document.getElementById('selectionInfo');
-            infoEl.innerHTML = `<p>✅ ${selectedRathausData.length} Rathäuser ausgewählt (${fromNumber}-${toNumber}) • ${gameTime} Sekunden Spielzeit • ${orderText}</p>`;
-            
-            console.log(`Selected ${selectedRathausData.length} Rathäuser from ${fromNumber} to ${toNumber}`);
-        }
         
         function addToHistory(score, total, gameTime) {
             const timestamp = new Date().toLocaleString('de-DE');
@@ -1797,7 +1752,6 @@
         document.getElementById('toNumber').addEventListener('input', updateSelectionInfo);
         document.getElementById('gameTime').addEventListener('input', updateSelectionInfo);
         document.getElementById('randomOrder').addEventListener('change', updateSelectionInfo);
-        document.getElementById('applySelection').addEventListener('click', applySelection);
         
         // Regie button event listeners
         const regieStartBtn = document.getElementById('regieStartBtn');
@@ -2560,12 +2514,6 @@
                     keyHint.style.display = 'none';
                     console.log('Hidden key hint for candidate');
                 }
-                // Hide apply selection button for candidate
-                const applySelectionBtn = document.getElementById('applySelection');
-                if (applySelectionBtn) {
-                    applySelectionBtn.style.display = 'none';
-                    console.log('Hidden apply selection button for candidate');
-                }
                 // Keep game settings visible for candidate (for debugging)
                 if (gameSettings) {
                     gameSettings.style.setProperty('display', 'block', 'important');
@@ -2670,11 +2618,6 @@
                 if (keyHint) {
                     keyHint.style.display = 'none';
                 }
-                // Show apply selection button for regie
-                const applySelectionBtn = document.getElementById('applySelection');
-                if (applySelectionBtn) {
-                    applySelectionBtn.style.display = 'block';
-                }
                 // Hide room ID input for Regie (they create rooms, don't need to enter room ID)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
@@ -2720,11 +2663,6 @@
                 roomConnection.style.display = 'none'; // Hide room connection UI for SinglePlayer (no room needed)
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
-                // Show apply selection button for singleplayer
-                const applySelectionBtn = document.getElementById('applySelection');
-                if (applySelectionBtn) {
-                    applySelectionBtn.style.display = 'block';
-                }
                 // Hide room ID input for singleplayer (no room needed for solo play)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
