@@ -77,6 +77,15 @@
             flex-shrink: 0;
         }
         
+        /* Start and end images should be same size as rathaus images */
+        .rathaus-image[src*="start.jpeg"],
+        .rathaus-image[src*="ende.gif"] {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+        
 
         .rathaus-image:hover {
             transform: scale(1.02);
