@@ -50,6 +50,14 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         socket.emit('room-created', { roomId, roomData });
         
+        // Broadcast room list to all connected clients
+        const roomList = Array.from(rooms.values()).map(room => ({
+            id: room.id,
+            candidateCount: room.candidates.length,
+            gameActive: room.gameActive
+        }));
+        io.emit('room-list', roomList);
+        
         console.log('Room created:', roomId);
     });
 
