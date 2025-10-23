@@ -1551,7 +1551,7 @@
                 };
                 
                 loadedRathausData = imageFiles.map((filename, index) => {
-                    const imageUrl = `./extracted_images/${filename}`;
+                    const imageUrl = `/extracted_images/${filename}`;
                     const sourceKey = filename;
                     const cityName = manualCityMapping[filename] || cityNames[index] || `Rathaus ${index + 1}`;
                     const baseName = cityName;
