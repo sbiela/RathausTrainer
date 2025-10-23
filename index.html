@@ -75,15 +75,21 @@
             transition: transform 0.3s ease;
         }
         
+        /* FORCE portrait images to be narrower */
+        .rathaus-image[src*="webp"] {
+            max-width: 60% !important;
+            max-height: 80vh !important;
+        }
+        
         /* Start and end images should fill the container better */
         .rathaus-image[src*="start.jpeg"],
         .rathaus-image[src*="ende.gif"] {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            min-width: 400px;
-            min-height: 300px;
+            max-width: 100% !important;
+            max-height: 80vh !important;
+            width: auto !important;
+            height: auto !important;
+            min-width: 400px !important;
+            min-height: 300px !important;
         }
         
 
@@ -161,6 +167,10 @@
             
             .rathaus-image {
                 max-height: 60vh;
+            }
+            
+            .rathaus-image[src*="webp"] {
+                max-width: 70% !important;
             }
         }
 
@@ -274,6 +284,10 @@
             
             .rathaus-image {
                 max-height: 50vh;
+            }
+            
+            .rathaus-image[src*="webp"] {
+                max-width: 80% !important;
             }
             
             .timer {
