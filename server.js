@@ -15,8 +15,10 @@ const io = socketIo(server, {
     }
 });
 
-// Statische Dateien servieren
-app.use(express.static('.'));
+// Statische Dateien servieren (nur für Entwicklung)
+if (process.env.NODE_ENV !== 'production') {
+    app.use(express.static('.'));
+}
 
 // Root route für Railway
 app.get('/', (req, res) => {
