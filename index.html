@@ -2203,7 +2203,10 @@
                 candidateRoomControls.style.display = 'block';
                 // Hide all controls for candidate
                 document.querySelector('.controls').style.display = 'none';
-                document.querySelector('.key-hint').style.display = 'none';
+                const keyHint = document.querySelector('.key-hint');
+                if (keyHint) {
+                    keyHint.style.display = 'none';
+                }
                 // Show city name directly for candidate
                 cityName.style.display = 'block';
                 // Load available rooms
@@ -2221,7 +2224,10 @@
                 candidateRoomControls.style.display = 'none';
                 // Hide normal controls for regie
                 document.querySelector('.controls').style.display = 'none';
-                document.querySelector('.key-hint').style.display = 'none';
+                const keyHint = document.querySelector('.key-hint');
+                if (keyHint) {
+                    keyHint.style.display = 'none';
+                }
                 // Show city name directly for regie
                 cityName.style.display = 'block';
                 // Generate room ID for regie
@@ -2236,7 +2242,10 @@
                 roomConnection.style.display = 'none';
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
-                document.querySelector('.key-hint').style.display = 'block';
+                const keyHint = document.querySelector('.key-hint');
+                if (keyHint) {
+                    keyHint.style.display = 'block';
+                }
                 // Hide city name for singleplayer (use toggle)
                 cityName.style.display = 'block';
                 // Polling disabled for static deployment
