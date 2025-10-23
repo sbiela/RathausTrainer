@@ -25,4 +25,4 @@ Ein interaktives Spiel zum Erlernen deutscher Rathäuser mit 90 WebP-optimierten
 
 ## Deployment
 
-Automatisches Deployment auf Vercel bei GitHub Push.
+Automatisches Deployment auf Vercel bei GitHub Push.# Force Vercel deployment
