@@ -717,7 +717,7 @@
             </div>
             
             <div class="city-name" id="cityName">
-                Drücke die Leertaste um zu beginnen!
+                Viel Erfolg!
             </div>
             
             <div class="controls">
@@ -1156,14 +1156,9 @@
             cityNameEl.textContent = 'Viel Erfolg!';
             
             // Show start image when restarting
-            if (loadedRathausData.length > 0) {
-                rathausImageEl.style.display = 'block';
-                rathausImageEl.src = './start.jpeg';
-                rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
-                
-            } else {
-                rathausImageEl.src = '';
-            }
+            rathausImageEl.style.display = 'block';
+            rathausImageEl.src = './start.jpeg';
+            rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             
             startBtn.disabled = false;
             startBtn.style.display = 'inline-block';
