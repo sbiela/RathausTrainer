@@ -986,7 +986,6 @@
             rathausImageEl.src = rathaus.image;
             rathausImageEl.alt = `Rathaus von ${rathaus.name}`;
             
-            
             console.log('showRathaus called with role:', currentRole, 'rathaus:', rathaus.name);
             
             // Show city name directly for regie and candidate
@@ -999,6 +998,18 @@
                 cityNameVisible = false;
                 cityNameEl.textContent = '?';
                 console.log('Hiding city name for singleplayer');
+            }
+            
+            // Update room data for Regie/Kandidat modes
+            if (currentRole === 'regie' || currentRole === 'candidate') {
+                updateRoomData({
+                    gameActive: gameActive,
+                    currentIndex: currentIndex,
+                    currentRathaus: rathaus,
+                    recognizedCount: recognizedCount,
+                    timeLeft: timeLeft,
+                    cityNameVisible: cityNameVisible
+                });
             }
         }
 
@@ -1080,6 +1091,17 @@
             showCityBtn.disabled = true;
             showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
+            
+            // Update room data for Regie/Kandidat modes
+            if (currentRole === 'regie' || currentRole === 'candidate') {
+                updateRoomData({
+                    gameActive: false,
+                    currentIndex: currentIndex,
+                    recognizedCount: recognizedCount,
+                    timeLeft: 0,
+                    cityNameVisible: false
+                });
+            }
             nextBtn.style.display = 'none';
             
             // Reset regie buttons
