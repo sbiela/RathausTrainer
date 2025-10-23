@@ -754,7 +754,7 @@
         </div>
         
         <div class="results" id="results">
-            <h2>🎉 Training beendet!</h2>
+            <h2>🎉 Spiel beendet!</h2>
             
             <div class="score-input">
                 <h3>Ergebnis eingeben:</h3>
@@ -1197,7 +1197,7 @@
             
             // Show end image and results
             rathausImageEl.src = 'https://rathaus-trainer.vercel.app/ende.gif';
-            rathausImageEl.alt = 'Training beendet!';
+            rathausImageEl.alt = 'Spiel beendet!';
             rathausImageEl.style.display = 'block';
             
             
@@ -1213,7 +1213,7 @@
             // Update buttons
             startBtn.disabled = false;
             startBtn.style.display = 'inline-block';
-            startBtn.textContent = 'Training neu starten';
+            startBtn.textContent = 'Spiel neu starten';
             showCityBtn.disabled = true;
             showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
@@ -1232,9 +1232,22 @@
             
             // Reset regie buttons
             if (currentRole === 'regie') {
-                document.getElementById('regieStartBtn').disabled = false;
-                document.getElementById('correctBtn').disabled = true;
-                document.getElementById('incorrectBtn').disabled = true;
+                const regieStartBtn = document.getElementById('regieStartBtn');
+                const correctBtn = document.getElementById('correctBtn');
+                const incorrectBtn = document.getElementById('incorrectBtn');
+                const regieGameControls = document.getElementById('regieGameControls');
+                
+                // Show start button with new text
+                regieStartBtn.disabled = false;
+                regieStartBtn.textContent = '🔄 Spiel neustarten';
+                regieStartBtn.style.display = 'inline-block';
+                
+                // Hide game controls (Richtig/Falsch buttons)
+                if (regieGameControls) {
+                    regieGameControls.style.display = 'none';
+                }
+                correctBtn.disabled = true;
+                incorrectBtn.disabled = true;
             }
             
             // Update room data
@@ -1253,7 +1266,7 @@
             
             
             // Hide city name
-            cityNameEl.textContent = 'Training beendet!';
+            cityNameEl.textContent = 'Spiel beendet!';
             
             // Show result in history area
             const historyList = document.getElementById('historyList');
@@ -1303,7 +1316,7 @@
             
             startBtn.disabled = false;
             startBtn.style.display = 'inline-block';
-            startBtn.textContent = 'Training starten';
+            startBtn.textContent = 'Spiel starten';
             showCityBtn.disabled = true;
             showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
@@ -2251,7 +2264,7 @@
             
             // Show end message
             const cityNameEl = document.getElementById('cityName');
-            cityNameEl.textContent = 'Training beendet!';
+            cityNameEl.textContent = 'Spiel beendet!';
         }
         
         // Role management functions
@@ -2597,7 +2610,7 @@
             
             // Show end message
             const cityNameEl = document.getElementById('cityName');
-            cityNameEl.textContent = 'Training beendet!';
+            cityNameEl.textContent = 'Spiel beendet!';
         }
         
         // Initialize
