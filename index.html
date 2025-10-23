@@ -2290,6 +2290,11 @@
                 if (keyHint) {
                     keyHint.style.display = 'none';
                 }
+                // Hide apply selection button for candidate
+                const applySelectionBtn = document.getElementById('applySelection');
+                if (applySelectionBtn) {
+                    applySelectionBtn.style.display = 'none';
+                }
                 // Show city name directly for candidate
                 cityName.style.display = 'block';
                 // Load available rooms
@@ -2310,6 +2315,11 @@
                 const keyHint = document.querySelector('.key-hint');
                 if (keyHint) {
                     keyHint.style.display = 'none';
+                }
+                // Show apply selection button for regie
+                const applySelectionBtn = document.getElementById('applySelection');
+                if (applySelectionBtn) {
+                    applySelectionBtn.style.display = 'block';
                 }
                 
                 // Create room immediately for Regie
@@ -2339,6 +2349,11 @@
                 roomConnection.style.display = 'none';
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
+                // Show apply selection button for singleplayer
+                const applySelectionBtn = document.getElementById('applySelection');
+                if (applySelectionBtn) {
+                    applySelectionBtn.style.display = 'block';
+                }
                 const keyHint = document.querySelector('.key-hint');
                 if (keyHint) {
                     keyHint.style.display = 'block';
