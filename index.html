@@ -456,19 +456,24 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
         
-        .room-settings {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 2px solid rgba(0, 123, 255, 0.3);
-            display: block !important;
+        .room-connection {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 123, 255, 0.3);
         }
         
-        .room-settings h4 {
+        .room-connection h5 {
             margin: 0 0 1rem 0;
             color: #007bff;
-            font-size: 1.1rem;
+            font-size: 1rem;
+        }
+        
+        .room-connection h6 {
+            margin: 0.5rem 0;
+            color: #007bff;
+            font-size: 0.9rem;
         }
         
         .room-controls {
@@ -762,38 +767,6 @@
     </div>
     
 
-    <!-- Room ID (only visible for Regie/Candidate) -->
-    <div class="room-settings" id="roomSettings" style="display: block;">
-        <h4>🏠 Raum-Verbindung</h4>
-        
-        <!-- Regie Room Controls -->
-        <div class="regie-room-controls" id="regieRoomControls" style="display: none;">
-            <div class="room-info">
-                <p>📡 Dein Raum: <span id="regieRoomId"></span></p>
-                <p>💡 Gib diese ID dem Kandidaten weiter!</p>
-            </div>
-        </div>
-        
-        <!-- Candidate Room Controls -->
-        <div class="candidate-room-controls" id="candidateRoomControls" style="display: none;">
-            <div class="room-group">
-                <label for="roomId">Raum-ID eingeben:</label>
-                <input type="text" id="roomId" placeholder="z.B. ABC123" maxlength="10">
-                <button class="btn room-btn" id="joinRoomBtn">🔗 Raum beitreten</button>
-            </div>
-            <div class="available-rooms" id="availableRooms" style="display: none;">
-                <h5>📋 Verfügbare Räume:</h5>
-                <div class="room-list" id="roomList"></div>
-                <button class="btn room-btn" onclick="clearAllRooms()" style="margin-top: 10px; background-color: #dc3545;">
-                    🗑️ Alle Räume löschen
-                </button>
-            </div>
-        </div>
-        
-        <div class="room-info" id="roomInfo" style="display: none;">
-            <p>📡 Verbunden mit Raum: <span id="currentRoomId"></span></p>
-        </div>
-    </div>
 
         <div class="selection-area" id="selectionArea">
             <h3>🎯 Rollenauswahl & Einstellungen</h3>
@@ -814,6 +787,37 @@
                         <input type="radio" name="role" value="candidate" id="roleCandidate">
                         <span class="role-label">🎤 Kandidat</span>
                     </label>
+                </div>
+                
+                <!-- Room Connection (only visible for Regie/Candidate) -->
+                <div class="room-connection" id="roomConnection" style="display: none;">
+                    <h5>🏠 Raum-Verbindung</h5>
+                    
+                    <!-- Regie Room Controls -->
+                    <div class="regie-room-controls" id="regieRoomControls" style="display: none;">
+                        <div class="room-info">
+                            <p>📡 Dein Raum: <span id="regieRoomId"></span></p>
+                            <p>💡 Gib diese ID dem Kandidaten weiter!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Candidate Room Controls -->
+                    <div class="candidate-room-controls" id="candidateRoomControls" style="display: none;">
+                        <div class="room-input">
+                            <input type="text" id="roomId" placeholder="Raum-ID eingeben" maxlength="6" style="text-transform: uppercase;">
+                            <button class="btn" onclick="joinRoom()">🔗 Beitreten</button>
+                        </div>
+                        
+                        <div class="room-info" id="roomInfo" style="display: none;">
+                            <p>📡 Verbunden mit Raum: <span id="currentRoomId"></span></p>
+                        </div>
+                        
+                        <!-- Available Rooms -->
+                        <div class="available-rooms" id="availableRooms" style="display: none;">
+                            <h6>📋 Verfügbare Räume:</h6>
+                            <div class="room-list" id="roomList"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1622,25 +1626,25 @@
             document.getElementById('roomId').value = roomId; // Set the room ID input
             currentRoomId = roomId;
             
+            // Join room via Socket.io
+            if (socket) {
+                socket.emit('join-room', roomId, 'regie');
+            }
+            
             // Create initial room data
             const initialRoomData = {
                 gameActive: false,
                 currentIndex: 0,
                 timeLeft: 0,
+                recognizedCount: 0,
+                cityNameVisible: true,
                 lastUpdate: Date.now()
             };
             
-            try {
-                localStorage.setItem(`rathausRoom_${roomId}`, JSON.stringify(initialRoomData));
-                console.log('Created room for regie:', roomId, initialRoomData);
-            } catch (e) {
-                console.log('Room creation error:', e);
-            }
+            // Send initial room data
+            updateRoomData(initialRoomData);
             
-            // Update URL for cross-device sharing
-            updateUrlForRegie(roomId);
-            
-            // Auto-join room for regie
+            console.log('Generated room for Regie:', roomId);
             joinRoom();
             console.log('Generated room ID for regie:', roomId);
         }
@@ -1648,30 +1652,27 @@
         function loadAvailableRooms() {
             console.log('Loading available rooms...');
             
-            // For GitHub Pages, we'll use URL-based communication
-            // Check if we have a room in the URL
-            const urlParams = getUrlParams();
-            if (urlParams.room) {
-                console.log('Room found in URL:', urlParams.room);
-                const roomList = document.getElementById('roomList');
-                const availableRoomsDiv = document.getElementById('availableRooms');
-                
-                roomList.innerHTML = `
-                    <div class="room-item" onclick="selectRoom('${urlParams.room}')">
-                        <span class="room-id">${urlParams.room}</span>
-                        <span class="room-status">🟢 Verfügbar</span>
+            // Request room list from server
+            if (socket) {
+                socket.emit('get-rooms');
+            }
+        }
+        
+        function updateRoomList(rooms) {
+            const roomList = document.getElementById('roomList');
+            const availableRoomsDiv = document.getElementById('availableRooms');
+            
+            if (rooms && rooms.length > 0) {
+                roomList.innerHTML = rooms.map(room => `
+                    <div class="room-item" onclick="selectRoom('${room.id}')">
+                        <span class="room-id">${room.id}</span>
+                        <span class="room-status">${room.active ? '🟢 Aktiv' : '⚪ Verfügbar'}</span>
                     </div>
-                `;
+                `).join('');
                 availableRoomsDiv.style.display = 'block';
-                console.log('Displaying room from URL');
             } else {
-                // Show message when no rooms are available
-                const roomList = document.getElementById('roomList');
-                const availableRoomsDiv = document.getElementById('availableRooms');
-                
-                roomList.innerHTML = '<div class="room-item">Keine Räume verfügbar<br><small>Regie muss zuerst einen Raum erstellen und die URL weitergeben</small></div>';
+                roomList.innerHTML = '<div class="room-item">Keine Räume verfügbar<br><small>Regie muss zuerst einen Raum erstellen</small></div>';
                 availableRoomsDiv.style.display = 'block';
-                console.log('No rooms available');
             }
         }
         
@@ -1888,10 +1889,8 @@
             document.getElementById('roomInfo').style.display = 'block';
             
             // Join Socket.io room
-            if (socket && socket.connected) {
-                socket.emit('join-room', roomId);
-                socket.roomId = roomId;
-                socket.role = currentRole;
+            if (socket) {
+                socket.emit('join-room', roomId, currentRole);
             }
             
             // Update URL for cross-device sharing
@@ -2013,17 +2012,8 @@
                 };
                 
                 // Send to server via Socket.io
-                if (socket && socket.connected) {
+                if (socket) {
                     socket.emit('update-room', dataWithTimestamp);
-                }
-                
-                // Update localStorage for immediate sync
-                localStorage.setItem(`rathausRoom_${currentRoomId}`, JSON.stringify(dataWithTimestamp));
-                
-                // For GitHub Pages, we need to use a different approach
-                // We'll use a combination of localStorage and URL parameters
-                if (currentRole === 'regie') {
-                    updateUrlWithGameState(dataWithTimestamp);
                 }
                 
                 console.log('Updated room data:', dataWithTimestamp);
@@ -2075,9 +2065,60 @@
         
         // Role management functions
         // Socket.io connection
+        let socket = null;
+        
         function connectSocket() {
-            // Socket.io disabled for static deployment
-            console.log('Socket.io disabled for static deployment');
+            if (socket) {
+                socket.disconnect();
+            }
+            
+            // Connect to Socket.io server
+            socket = io();
+            
+            socket.on('connect', () => {
+                console.log('Connected to server');
+            });
+            
+            socket.on('room-state', (data) => {
+                console.log('Received room state:', data);
+                if (currentRole === 'candidate') {
+                    // Update game state for candidate
+                    if (data.gameActive && data.currentIndex !== undefined) {
+                        gameActive = data.gameActive;
+                        currentIndex = data.currentIndex;
+                        recognizedCount = data.recognizedCount || 0;
+                        
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
+                        }
+                    }
+                }
+            });
+            
+            socket.on('room-update', (data) => {
+                console.log('Room updated:', data);
+                if (currentRole === 'candidate') {
+                    // Update game state for candidate
+                    if (data.gameActive && data.currentIndex !== undefined) {
+                        gameActive = data.gameActive;
+                        currentIndex = data.currentIndex;
+                        recognizedCount = data.recognizedCount || 0;
+                        
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
+                        }
+                    }
+                }
+            });
+            
+            socket.on('room-list', (rooms) => {
+                console.log('Available rooms:', rooms);
+                updateRoomList(rooms);
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('Disconnected from server');
+            });
         }
 
         function updateRole() {
@@ -2098,7 +2139,7 @@
             const regieControls = document.getElementById('regieControls');
             const candidateControls = document.getElementById('candidateControls');
             const cityName = document.getElementById('cityName');
-            const roomSettings = document.getElementById('roomSettings');
+            const roomConnection = document.getElementById('roomConnection');
             const regieRoomControls = document.getElementById('regieRoomControls');
             const candidateRoomControls = document.getElementById('candidateRoomControls');
             
@@ -2108,7 +2149,7 @@
                 selectionArea.style.display = 'block'; // Keep selection area visible
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'flex';
-                roomSettings.style.display = 'block';
+                roomConnection.style.display = 'block';
                 connectSocket();
                 regieRoomControls.style.display = 'none';
                 candidateRoomControls.style.display = 'block';
@@ -2126,7 +2167,7 @@
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                roomSettings.style.display = 'block';
+                roomConnection.style.display = 'block';
                 connectSocket();
                 regieRoomControls.style.display = 'block';
                 candidateRoomControls.style.display = 'none';
@@ -2144,7 +2185,7 @@
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'none';
-                roomSettings.style.display = 'none';
+                roomConnection.style.display = 'none';
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
                 document.querySelector('.key-hint').style.display = 'block';
@@ -2277,7 +2318,7 @@
         
         // Force visibility of critical elements
         document.getElementById('selectionArea').style.display = 'block';
-        document.getElementById('roomSettings').style.display = 'block';
+        document.getElementById('roomConnection').style.display = 'block';
         document.getElementById('gameSettings').style.display = 'block';
         
         // Force visibility of role selection
