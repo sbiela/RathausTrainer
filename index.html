@@ -535,20 +535,20 @@
         }
         
         .room-connection {
-            display: none; /* Hidden by default, shown by JavaScript */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .regie-controls {
-            display: none; /* Hidden by default, shown by JavaScript */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .candidate-controls {
-            display: none; /* Hidden by default, shown by JavaScript */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .candidate-room-controls {
             text-align: center;
-            display: none; /* Hidden by default, shown by JavaScript */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .available-rooms {
@@ -556,7 +556,7 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            display: none; /* Hidden by default, shown by JavaScript */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .available-rooms h5 {
@@ -2530,6 +2530,12 @@
                 if (roomConnection) {
                     roomConnection.style.setProperty('display', 'block', 'important'); // Show room connection for Candidate
                     console.log('Force showing roomConnection for candidate with !important');
+                }
+                // Also ensure the parent elements are visible
+                const mainContainer = document.querySelector('.main-container');
+                if (mainContainer) {
+                    mainContainer.style.setProperty('display', 'block', 'important');
+                    console.log('Force showing main container for candidate');
                 }
                 connectSocket();
                 if (regieRoomControls) {
