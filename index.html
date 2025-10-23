@@ -1175,6 +1175,16 @@
             rathausImageEl.src = 'https://rathaus-trainer.vercel.app/start.jpeg';
             rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             
+            // Reset Regie UI
+            const regieStartBtn = document.getElementById('regieStartBtn');
+            const regieGameControls = document.getElementById('regieGameControls');
+            if (regieStartBtn) {
+                regieStartBtn.style.display = 'block';
+            }
+            if (regieGameControls) {
+                regieGameControls.style.display = 'none';
+            }
+            
             startBtn.disabled = false;
             startBtn.style.display = 'inline-block';
             startBtn.textContent = 'Training starten';
@@ -1693,9 +1703,13 @@
         function loadAvailableRooms() {
             console.log('Loading available rooms...');
             
-            // Request room list from server
-            if (socket) {
-                socket.emit('get-rooms');
+            // Socket.io disabled - show fallback message
+            const roomList = document.getElementById('roomList');
+            const availableRoomsDiv = document.getElementById('availableRooms');
+            
+            if (roomList && availableRoomsDiv) {
+                roomList.innerHTML = '<div class="room-item">Socket.io deaktiviert<br><small>Regie/Kandidat Modi funktionieren im SinglePlayer-Modus</small></div>';
+                availableRoomsDiv.style.display = 'block';
             }
         }
         
