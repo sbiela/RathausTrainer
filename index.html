@@ -2404,6 +2404,7 @@
             const roomConnection = document.getElementById('roomConnection');
             const regieRoomControls = document.getElementById('regieRoomControls');
             const candidateRoomControls = document.getElementById('candidateRoomControls');
+            const roomIdInput = document.getElementById('roomId');
             
             if (candidateRadio.checked) {
                 currentRole = 'candidate';
@@ -2427,7 +2428,6 @@
                     applySelectionBtn.style.display = 'none';
                 }
                 // Hide room ID input for candidate (they select from list)
-                const roomIdInput = document.getElementById('roomId');
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
                 }
@@ -2449,7 +2449,6 @@
                 candidateControls.style.display = 'none';
                 roomConnection.style.display = 'none'; // Hide room connection UI for Regie
                 // Hide room ID input for Regie (they create rooms, don't join them)
-                const roomIdInput = document.getElementById('roomId');
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
                 }
