@@ -2516,7 +2516,8 @@
                     candidateControls.style.display = 'flex';
                 }
                 if (roomConnection) {
-                    roomConnection.style.display = 'none'; // Hide room connection UI for Candidate
+                    roomConnection.style.setProperty('display', 'block', 'important'); // Show room connection for Candidate
+                    console.log('Force showing roomConnection for candidate with !important');
                 }
                 connectSocket();
                 if (regieRoomControls) {
@@ -2550,17 +2551,15 @@
                     applySelectionBtn.style.display = 'none';
                     console.log('Hidden apply selection button for candidate');
                 }
-                // Hide only the selection controls for candidate, not the entire gameSettings
-                const selectionControls = document.querySelector('.selection-controls');
-                if (selectionControls) {
-                    selectionControls.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden selection controls for candidate with !important');
+                // Hide the entire game settings section for candidate
+                if (gameSettings) {
+                    gameSettings.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden entire gameSettings for candidate with !important');
                 }
-                // Hide only the specific selection area content, not the entire area
-                const selectionContent = document.querySelector('.selection-area .selection-group');
-                if (selectionContent) {
-                    selectionContent.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden selection content for candidate with !important');
+                // Hide the entire selection area for candidate
+                if (selectionArea) {
+                    selectionArea.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden entire selectionArea for candidate with !important');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
@@ -2615,11 +2614,12 @@
                 const roomId = generateRoomId();
                 currentRoomId = roomId;
                 console.log('Generated room ID for Regie:', roomId);
-                gameSettings.style.display = 'block';
-                selectionArea.style.display = 'block';
+                gameSettings.style.setProperty('display', 'block', 'important');
+                selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
                 roomConnection.style.display = 'none'; // Hide room connection UI for Regie
+                console.log('Force showing gameSettings and selectionArea for Regie with !important');
                 // Hide room ID input for Regie (they create rooms, don't join them)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
