@@ -1082,11 +1082,16 @@
             
             console.log('showRathaus called with role:', currentRole, 'rathaus:', rathaus.name);
             
-            // Show city name directly for regie and candidate
-            if (currentRole === 'regie' || currentRole === 'candidate') {
+            // Show city name directly for regie only
+            if (currentRole === 'regie') {
                 cityNameVisible = true;
                 cityNameEl.textContent = rathaus.name;
-                console.log('Showing city name for', currentRole, ':', rathaus.name);
+                console.log('Showing city name for regie:', rathaus.name);
+            } else if (currentRole === 'candidate') {
+                // Hide city name for candidate (they should guess)
+                cityNameVisible = false;
+                cityNameEl.textContent = '?';
+                console.log('Hiding city name for candidate - they should guess');
             } else {
                 // Hide city name for singleplayer (use toggle)
                 cityNameVisible = false;
@@ -2268,11 +2273,8 @@
                     currentRoomId = data.roomId;
                     document.getElementById('roomId').value = data.roomId;
                     
-                    // Start the game after room is created
-                    if (currentRole === 'regie') {
-                        console.log('Starting game after room creation');
-                        startGameAfterRoomCreation();
-                    }
+                    // Don't start game automatically - Regie should click "Spiel starten" button
+                    console.log('Room created successfully, waiting for Regie to start game');
                 });
                 
                 socket.on('room-joined', (data) => {
