@@ -536,7 +536,7 @@
         
         .candidate-room-controls {
             text-align: center;
-            display: none; /* Hidden by default */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .available-rooms {
@@ -544,7 +544,7 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            display: none; /* Hidden by default, shown by JavaScript */
+            /* No default display rule - let JavaScript handle it */
         }
         
         .available-rooms h5 {
@@ -1902,8 +1902,17 @@
                         <span class="room-status">${room.gameActive ? '🟢 Aktiv' : '⚪ Verfügbar'}</span>
                     </div>
                 `).join('');
-                availableRoomsDiv.style.display = 'block';
-                console.log('Room list updated and displayed');
+                availableRoomsDiv.style.setProperty('display', 'block', 'important');
+                availableRoomsDiv.style.setProperty('visibility', 'visible', 'important');
+                availableRoomsDiv.style.setProperty('opacity', '1', 'important');
+                console.log('Room list updated and displayed with !important');
+                console.log('availableRoomsDiv computed styles:', window.getComputedStyle(availableRoomsDiv));
+                
+                // Also check parent elements
+                const candidateRoomControls = document.getElementById('candidateRoomControls');
+                if (candidateRoomControls) {
+                    console.log('candidateRoomControls computed styles:', window.getComputedStyle(candidateRoomControls));
+                }
             } else {
                 console.log('No rooms available, showing fallback message');
                 roomList.innerHTML = '<div class="room-item">Keine Räume verfügbar<br><small>Regie muss zuerst einen Raum erstellen</small></div>';
@@ -2572,7 +2581,12 @@
                 // Also force show the parent candidate-room-controls
                 if (candidateRoomControls) {
                     candidateRoomControls.style.setProperty('display', 'block', 'important');
+                    candidateRoomControls.style.setProperty('visibility', 'visible', 'important');
+                    candidateRoomControls.style.setProperty('opacity', '1', 'important');
+                    candidateRoomControls.style.setProperty('height', 'auto', 'important');
+                    candidateRoomControls.style.setProperty('min-height', '100px', 'important');
                     console.log('Force showing candidate-room-controls with !important');
+                    console.log('candidateRoomControls computed styles:', window.getComputedStyle(candidateRoomControls));
                 }
                 // Show test room list immediately for debugging (will be replaced by real rooms)
                 const roomList = document.getElementById('roomList');
