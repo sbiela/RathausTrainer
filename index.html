@@ -977,7 +977,10 @@
             if (socket && currentRoomId) {
                 socket.emit('start-game', { 
                     roomId: currentRoomId,
-                    shuffledData: shuffledData 
+                    gameActive: true,
+                    currentIndex: currentIndex,
+                    timeLeft: timeLeft,
+                    shuffledData: shuffledData
                 });
             }
             
@@ -2173,9 +2176,11 @@
                     if (currentRole === 'regie' && !currentRoomId) {
                         const roomId = generateRoomId();
                         console.log('Creating room for Regie after connection:', roomId);
+                        // Use default data if shuffledData is empty
+                        const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
                         socket.emit('create-room', { 
                             roomId: roomId, 
-                            shuffledData: shuffledData 
+                            shuffledData: dataToSend 
                         });
                     }
                 });
@@ -2307,9 +2312,11 @@
                 if (socket && socket.connected) {
                     const roomId = generateRoomId();
                     console.log('Creating room for Regie:', roomId);
+                    // Use default data if shuffledData is empty
+                    const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
                     socket.emit('create-room', { 
                         roomId: roomId, 
-                        shuffledData: shuffledData 
+                        shuffledData: dataToSend 
                     });
                 } else {
                     console.log('Socket not connected yet, will create room when connected');

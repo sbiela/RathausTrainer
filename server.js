@@ -93,6 +93,11 @@ io.on('connection', (socket) => {
             room.currentIndex = 0;
             room.recognizedCount = 0;
             
+            // Update room with new shuffled data if provided
+            if (data.shuffledData && data.shuffledData.length > 0) {
+                room.shuffledData = data.shuffledData;
+            }
+            
             // Alle Teilnehmer über Spielstart informieren
             io.to(roomId).emit('game-started', { 
                 roomData: room,
