@@ -1856,7 +1856,7 @@
                 roomList.innerHTML = rooms.map(room => `
                     <div class="room-item" onclick="selectRoom('${room.id}')">
                         <span class="room-id">${room.id}</span>
-                        <span class="room-status">${room.active ? '🟢 Aktiv' : '⚪ Verfügbar'}</span>
+                        <span class="room-status">${room.gameActive ? '🟢 Aktiv' : '⚪ Verfügbar'}</span>
                     </div>
                 `).join('');
                 availableRoomsDiv.style.display = 'block';
@@ -2336,6 +2336,12 @@
                         regieLabel.textContent = `🎛️ Regie (${data.roomId})`;
                     }
                     
+                    // Also update the Regie start button text
+                    const regieStartBtn = document.getElementById('regieStartBtn');
+                    if (regieStartBtn) {
+                        regieStartBtn.textContent = `🚀 Spiel starten (${data.roomId})`;
+                    }
+                    
                     // Don't start game automatically - Regie should click "Spiel starten" button
                     console.log('Room created successfully, waiting for Regie to start game');
                 });
@@ -2430,6 +2436,11 @@
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
+                }
+                // Hide game settings for candidate (they don't need to see Regie settings)
+                const gameSettings = document.getElementById('gameSettings');
+                if (gameSettings) {
+                    gameSettings.style.display = 'none';
                 }
                 // Show city name directly for candidate
                 cityName.style.display = 'block';
