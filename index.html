@@ -988,6 +988,16 @@
             rathausImageEl.src = rathaus.image;
             rathausImageEl.alt = `Rathaus von ${rathaus.name}`;
             
+            // FORCE proper image scaling via JavaScript
+            rathausImageEl.style.maxWidth = '100%';
+            rathausImageEl.style.maxHeight = '80vh';
+            rathausImageEl.style.width = 'auto';
+            rathausImageEl.style.height = 'auto';
+            rathausImageEl.style.objectFit = 'contain';
+            rathausImageEl.style.objectPosition = 'center';
+            rathausImageEl.style.display = 'block';
+            rathausImageEl.style.margin = '0 auto';
+            
             console.log('showRathaus called with role:', currentRole, 'rathaus:', rathaus.name);
             
             // Show city name directly for regie and candidate
@@ -1067,6 +1077,17 @@
             rathausImageEl.src = './ende.gif';
             rathausImageEl.alt = 'Training beendet!';
             rathausImageEl.style.display = 'block';
+            
+            // FORCE proper image scaling via JavaScript
+            rathausImageEl.style.maxWidth = '100%';
+            rathausImageEl.style.maxHeight = '80vh';
+            rathausImageEl.style.width = 'auto';
+            rathausImageEl.style.height = 'auto';
+            rathausImageEl.style.objectFit = 'contain';
+            rathausImageEl.style.objectPosition = 'center';
+            rathausImageEl.style.display = 'block';
+            rathausImageEl.style.margin = '0 auto';
+            
             resultsEl.style.display = 'block';
             
             // Set total shown Rathäuser
@@ -1131,6 +1152,16 @@
                 rathausImageEl.style.display = 'block';
                 rathausImageEl.src = './start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
+                
+                // FORCE proper image scaling via JavaScript
+                rathausImageEl.style.maxWidth = '100%';
+                rathausImageEl.style.maxHeight = '80vh';
+                rathausImageEl.style.width = 'auto';
+                rathausImageEl.style.height = 'auto';
+                rathausImageEl.style.objectFit = 'contain';
+                rathausImageEl.style.objectPosition = 'center';
+                rathausImageEl.style.display = 'block';
+                rathausImageEl.style.margin = '0 auto';
             } else {
                 rathausImageEl.src = '';
             }
