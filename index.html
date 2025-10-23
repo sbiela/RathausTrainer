@@ -2468,6 +2468,10 @@
                         // Update timer display for candidate
                         timerEl.textContent = timeLeft;
                         
+                        // Start timer for candidate
+                        timerInterval = setInterval(updateTimer, 1000);
+                        console.log('Started timer for candidate');
+                        
                         if (data.currentRathaus) {
                             showRathaus(data.currentRathaus);
                         }
