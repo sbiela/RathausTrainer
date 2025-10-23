@@ -999,6 +999,12 @@
             
             // Update UI
             startBtn.disabled = true;
+            
+            // Hide game settings during game
+            const gameSettings = document.getElementById('gameSettings');
+            if (gameSettings) {
+                gameSettings.style.display = 'none';
+            }
         }
         
         // Start game after room creation (for Regie mode)
@@ -1070,6 +1076,12 @@
             nextBtn.disabled = false;
             showCityBtn.style.display = 'inline-block';
             nextBtn.style.display = 'inline-block';
+            
+            // Hide game settings during game
+            const gameSettings = document.getElementById('gameSettings');
+            if (gameSettings) {
+                gameSettings.style.display = 'none';
+            }
             resultsEl.style.display = 'none';
             cityNameEl.textContent = '?';
         }
@@ -1266,6 +1278,12 @@
             rathausImageEl.style.display = 'block';
             rathausImageEl.src = 'https://rathaus-trainer.vercel.app/start.jpeg';
             rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
+            
+            // Show game settings again when restarting
+            const gameSettings = document.getElementById('gameSettings');
+            if (gameSettings) {
+                gameSettings.style.display = 'block';
+            }
             
             // Reset Regie UI
             const regieStartBtn = document.getElementById('regieStartBtn');
@@ -2274,6 +2292,12 @@
                     currentRoomId = data.roomId;
                     document.getElementById('roomId').value = data.roomId;
                     
+                    // Update Regie button text to show room ID
+                    const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
+                    if (regieLabel) {
+                        regieLabel.textContent = `🎛️ Regie (${data.roomId})`;
+                    }
+                    
                     // Don't start game automatically - Regie should click "Spiel starten" button
                     console.log('Room created successfully, waiting for Regie to start game');
                 });
@@ -2349,7 +2373,7 @@
                 selectionArea.style.display = 'block'; // Keep selection area visible
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'flex';
-                roomConnection.style.display = 'block';
+                roomConnection.style.display = 'none'; // Hide room connection UI for Candidate
                 connectSocket();
                 regieRoomControls.style.display = 'none';
                 candidateRoomControls.style.display = 'block';
@@ -2380,7 +2404,7 @@
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                roomConnection.style.display = 'block';
+                roomConnection.style.display = 'none'; // Hide room connection UI for Regie
                 connectSocket();
                 regieRoomControls.style.display = 'block';
                 candidateRoomControls.style.display = 'none';
@@ -2425,7 +2449,7 @@
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'none';
-                roomConnection.style.display = 'none';
+                roomConnection.style.display = 'block'; // Show room connection UI for SinglePlayer
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
                 // Show apply selection button for singleplayer
