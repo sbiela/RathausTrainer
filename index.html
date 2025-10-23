@@ -2258,6 +2258,13 @@
         // Force visibility of critical elements
         document.getElementById('selectionArea').style.display = 'block';
         document.getElementById('roomSettings').style.display = 'block';
+        document.getElementById('gameSettings').style.display = 'block';
+        
+        // Force visibility of role selection
+        const roleSelection = document.querySelector('.role-selection');
+        if (roleSelection) {
+            roleSelection.style.display = 'block';
+        }
         
         updateRole();
         
@@ -2276,6 +2283,8 @@
         } else {
             // No URL parameters, keep default SinglePlayer mode
             console.log('No URL parameters, using default SinglePlayer mode');
+            // Start the game in SinglePlayer mode
+            restartGame();
         }
         restartGame();
     </script>
