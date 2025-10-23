@@ -17,6 +17,17 @@ const PORT = process.env.PORT || 4000;
 // Serve static files
 app.use(express.static('.'));
 
+// Basic route for testing
+app.get('/', (req, res) => {
+  console.log('GET / request received');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Store room data
 const rooms = new Map();
 
