@@ -2535,7 +2535,8 @@
                 const mainContainer = document.querySelector('.main-container');
                 if (mainContainer) {
                     mainContainer.style.setProperty('display', 'block', 'important');
-                    console.log('Force showing main container for candidate');
+                    mainContainer.classList.add('candidate-mode');
+                    console.log('Force showing main container for candidate and added candidate-mode class');
                 }
                 connectSocket();
                 if (regieRoomControls) {
@@ -2547,12 +2548,6 @@
                     candidateRoomControls.style.setProperty('opacity', '1', 'important');
                     candidateRoomControls.classList.add('candidate-mode');
                     console.log('Force showing candidateRoomControls with !important');
-                }
-                // Also add candidate-mode class to the main container
-                const mainContainer = document.querySelector('.main-container');
-                if (mainContainer) {
-                    mainContainer.classList.add('candidate-mode');
-                    console.log('Added candidate-mode class to main container');
                 }
                 // Hide all controls for candidate
                 const controlsElement = document.querySelector('.controls');
