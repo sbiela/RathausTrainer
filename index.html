@@ -537,9 +537,12 @@
             margin-bottom: 1rem;
         }
         
-        .regie-room-controls,
+        .regie-room-controls {
+            display: none; /* Hidden by default */
+        }
+        
         .candidate-room-controls {
-            display: block !important; /* Always visible */
+            display: none; /* Hidden by default */
         }
         
         .regie-controls {
@@ -2627,7 +2630,14 @@
                     regieStartBtn.style.setProperty('display', 'none', 'important');
                     console.log('Hidden regieStartBtn for candidate with !important');
                 }
-                // roomConnection removed - candidate room controls are handled directly
+                // Show candidate room controls for Candidate
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.display = 'block';
+                }
+                // Hide regie room controls for Candidate
+                if (regieRoomControls) {
+                    regieRoomControls.style.display = 'none';
+                }
                 // Also ensure the parent elements are visible
                 const mainContainer = document.querySelector('.main-container');
                 if (mainContainer) {
@@ -2675,6 +2685,16 @@
                     selectionArea.style.setProperty('display', 'block', 'important');
                     console.log('Keeping selectionArea visible for candidate (room selection needed)');
                 }
+                
+                // Show candidate room controls for Candidate (second location)
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.display = 'block';
+                }
+                // Hide regie room controls for Candidate (second location)
+                if (regieRoomControls) {
+                    regieRoomControls.style.display = 'none';
+                }
+                
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
@@ -2781,6 +2801,10 @@
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
+                // Show regie room controls for Regie
+                if (regieRoomControls) {
+                    regieRoomControls.style.display = 'block';
+                }
                 // Hide candidate room controls for Regie
                 if (candidateRoomControls) {
                     candidateRoomControls.style.display = 'none';
