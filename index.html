@@ -852,7 +852,7 @@
         let timerInterval;
         let currentRole = 'singleplayer'; // 'candidate', 'regie', or 'singleplayer'
         let socket = null;
-        let syncInterval;
+        // Removed syncInterval - not needed for static deployment
         let currentRoomId = null;
         let roomData = {};
         let loadedRathausData = [];
@@ -1788,8 +1788,7 @@
                 document.getElementById('currentRoomId').textContent = params.room;
                 document.getElementById('roomInfo').style.display = 'block';
                 
-                // Start polling
-                startRoomPolling();
+                // Polling removed for static deployment
                 
                 // Try to sync immediately
                 syncFromRoom();
@@ -1865,8 +1864,7 @@
                 updateUrlForCandidate(roomId);
             }
             
-            // Start room polling
-            startRoomPolling();
+            // Room polling removed for static deployment
             
             // If this is a candidate, try to sync immediately
             if (currentRole === 'candidate') {
@@ -1878,24 +1876,16 @@
         
         function startRoomPolling() {
             if (currentRoomId) {
-                // For GitHub Pages, we need a different approach
-                // We'll use a combination of localStorage and URL parameters
-                syncInterval = setInterval(syncFromRoom, 500); // Check every 500ms for real-time updates
-                console.log('Started room polling for room:', currentRoomId);
+                // Polling removed for static deployment
+                console.log('Room polling disabled for static deployment');
             }
             
-            // Also refresh available rooms for candidates
-            if (currentRole === 'candidate') {
-                setInterval(loadAvailableRooms, 3000); // Refresh every 3 seconds
-            }
+            // Auto-refresh disabled for static deployment
         }
         
         function stopRoomPolling() {
-            if (syncInterval) {
-                clearInterval(syncInterval);
-                syncInterval = null;
-                console.log('Stopped room polling');
-            }
+            // Polling removed for static deployment
+            console.log('Room polling disabled for static deployment');
         }
         
         function syncFromRoom() {
@@ -2094,8 +2084,7 @@
                 cityName.style.display = 'block';
                 // Load available rooms
                 loadAvailableRooms();
-                // Also refresh every 3 seconds
-                setInterval(loadAvailableRooms, 3000);
+            // Auto-refresh disabled for static deployment
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
                 gameSettings.style.display = 'block';
@@ -2126,8 +2115,7 @@
                 document.querySelector('.key-hint').style.display = 'block';
                 // Hide city name for singleplayer (use toggle)
                 cityName.style.display = 'block';
-                // Stop polling for other modes
-                stopRoomPolling();
+                // Polling disabled for static deployment
             }
         }
         
@@ -2145,17 +2133,14 @@
         
         function startUrlPolling() {
             if (currentRole === 'candidate') {
-                syncInterval = setInterval(syncFromUrl, 1000); // Check every second
-                console.log('Started URL polling for candidate');
+                // URL polling removed for static deployment
+                console.log('URL polling disabled for static deployment');
             }
         }
         
         function stopUrlPolling() {
-            if (syncInterval) {
-                clearInterval(syncInterval);
-                syncInterval = null;
-                console.log('Stopped URL polling');
-            }
+            // URL polling removed for static deployment
+            console.log('URL polling disabled for static deployment');
         }
         
         function updateUrlForCandidate() {
