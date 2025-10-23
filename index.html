@@ -80,6 +80,16 @@
         .rathaus-image:hover {
             transform: scale(1.02);
         }
+        
+        /* Start and end images should fill the full height */
+        .rathaus-image[src*="start.jpeg"],
+        .rathaus-image[src*="ende.gif"] {
+            height: 100% !important;
+            width: auto !important;
+            max-width: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
 
         .city-name {
             font-size: 2rem;

@@ -55,6 +55,16 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         
+        /* Start and end images should fill the full height */
+        .test-image[src*="start.jpeg"],
+        .test-image[src*="ende.gif"] {
+            height: 100% !important;
+            width: auto !important;
+            max-width: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+        
 
         .image-info {
             position: absolute;
