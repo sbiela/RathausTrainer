@@ -95,6 +95,13 @@
             object-position: center;
         }
         
+        /* Force start and end images to be larger */
+        .rathaus-image[src*="start.jpeg"],
+        .rathaus-image[src*="ende.gif"] {
+            max-width: 80% !important;
+            height: auto !important;
+        }
+        
 
         .rathaus-image:hover {
             transform: scale(1.02);
