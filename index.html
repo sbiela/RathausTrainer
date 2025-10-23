@@ -2666,7 +2666,7 @@
                     }
                 }
             // Auto-refresh disabled for static deployment
-            } else if (singleplayerRadio.checked) {
+            } else if (document.getElementById('roleSinglePlayer').checked) {
                 currentRole = 'singleplayer';
                 // Hide room connection for SinglePlayer
                 roomConnection.style.setProperty('display', 'none', 'important');
