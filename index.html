@@ -2454,7 +2454,8 @@
                 // Show available rooms for candidate
                 const availableRoomsDiv = document.getElementById('availableRooms');
                 if (availableRoomsDiv) {
-                    availableRoomsDiv.style.display = 'block';
+                    availableRoomsDiv.style.display = 'block !important';
+                    availableRoomsDiv.style.setProperty('display', 'block', 'important');
                     console.log('Available rooms div shown for candidate');
                 }
                 // Load available rooms after Socket.io connection
