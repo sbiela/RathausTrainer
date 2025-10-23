@@ -721,7 +721,7 @@
             </div>
             
             <div class="controls">
-                <button class="btn" id="startBtn">Training starten</button>
+                <button class="btn" id="startBtn">🚀 Spiel starten</button>
                 <button class="btn" id="showCityBtn" disabled style="display: none;">Stadt anzeigen (Enter)</button>
                 <button class="btn" id="nextBtn" disabled style="display: none;">Nächstes Rathaus (Leertaste)</button>
             </div>
@@ -729,13 +729,15 @@
             <!-- Regie Controls (only visible in Regie mode) -->
             <div class="regie-controls" id="regieControls" style="display: none;">
                 <button class="btn regie-btn start" id="regieStartBtn">🚀 Spiel starten</button>
-                <button class="btn regie-btn correct" id="correctBtn" disabled>✅ Richtig</button>
-                <button class="btn regie-btn incorrect" id="incorrectBtn" disabled>❌ Falsch</button>
+                <div class="regie-game-controls" id="regieGameControls" style="display: none;">
+                    <button class="btn regie-btn correct" id="correctBtn">✅ Richtig</button>
+                    <button class="btn regie-btn incorrect" id="incorrectBtn">❌ Falsch</button>
+                </div>
             </div>
             
             <!-- Candidate Controls (only visible in Candidate mode) -->
             <div class="candidate-controls" id="candidateControls" style="display: none;">
-                <button class="btn candidate-btn back" id="candidateBackBtn">🔙 Zurück zum Hauptmenü</button>
+                <!-- No controls needed for candidate mode -->
             </div>
             
             <div class="instructions">
@@ -1620,11 +1622,12 @@
             regieStartBtn.addEventListener('click', () => {
             if (currentRole === 'regie') {
                 startGame();
-                // Enable correct/incorrect buttons
-                document.getElementById('correctBtn').disabled = false;
-                document.getElementById('incorrectBtn').disabled = false;
-                // Disable start button
-                regieStartBtn.disabled = true;
+                // Show game controls and hide start button
+                const regieGameControls = document.getElementById('regieGameControls');
+                if (regieGameControls) {
+                    regieGameControls.style.display = 'block';
+                }
+                regieStartBtn.style.display = 'none';
             }
             });
         }
