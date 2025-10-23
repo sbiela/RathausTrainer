@@ -749,7 +749,7 @@
                 <h3>📋 Anleitung:</h3>
                 <p><strong>Leertaste:</strong> Nächstes Rathaus anzeigen</p>
                 <p><strong>Enter-Taste:</strong> Stadtnamen anzeigen/verstecken</p>
-                <p><strong>Ziel:</strong> So viele Rathäuser wie möglich in 90 Sekunden erkennen!</p>
+                <p><strong>Ziel:</strong> So viele Rathäuser wie möglich in <span id="gameTimeDisplay">90</span> Sekunden erkennen!</p>
             </div>
         </div>
         
@@ -1390,6 +1390,12 @@
             const orderText = randomOrder ? 'Zufällige Reihenfolge' : 'Aufsteigende Reihenfolge';
             const infoEl = document.getElementById('selectionInfo');
             infoEl.innerHTML = `<p>${availableCount} Rathäuser verfügbar (${fromNumber}-${toNumber}) • ${gameTime} Sekunden Spielzeit • ${orderText}</p>`;
+            
+            // Update instruction text with current game time
+            const gameTimeDisplay = document.getElementById('gameTimeDisplay');
+            if (gameTimeDisplay) {
+                gameTimeDisplay.textContent = gameTime;
+            }
         }
         
         function applySelection() {
@@ -2437,7 +2443,6 @@
                     roomIdInput.style.display = 'none';
                 }
                 // Hide game settings for candidate (they don't need to see Regie settings)
-                const gameSettings = document.getElementById('gameSettings');
                 if (gameSettings) {
                     gameSettings.style.display = 'none';
                 }
@@ -2476,6 +2481,14 @@
                 connectSocket();
                 regieRoomControls.style.display = 'block';
                 candidateRoomControls.style.display = 'none';
+                
+                // Update Regie button text to show room ID if available
+                if (currentRoomId) {
+                    const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
+                    if (regieLabel) {
+                        regieLabel.textContent = `🎛️ Regie (${currentRoomId})`;
+                    }
+                }
                 // Hide normal controls for regie
                 document.querySelector('.controls').style.display = 'none';
                 const keyHint = document.querySelector('.key-hint');
