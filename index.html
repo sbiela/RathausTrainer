@@ -1677,6 +1677,10 @@
         document.getElementById('saveResult').addEventListener('click', saveManualResult);
 
         // Room management functions
+        function generateRoomId() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+        
         function generateRoomForRegie() {
             const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
             document.getElementById('regieRoomId').textContent = roomId;
