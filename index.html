@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathaus-Trainer für Max</title>
-    <script src="/socket.io/socket.io.js"></script>
+    <!-- Socket.io temporarily disabled for static deployment -->
     <style>
         * {
             margin: 0;
@@ -2051,25 +2051,8 @@
         // Role management functions
         // Socket.io connection
         function connectSocket() {
-            if (socket) {
-                socket.disconnect();
-            }
-            socket = io();
-            
-            socket.on('connect', () => {
-                console.log('Connected to server');
-            });
-            
-            socket.on('room-update', (data) => {
-                console.log('Received game state update:', data);
-                if (currentRole === 'candidate') {
-                    syncFromRoom(data);
-                }
-            });
-            
-            socket.on('disconnect', () => {
-                console.log('Disconnected from server');
-            });
+            // Socket.io disabled for static deployment
+            console.log('Socket.io disabled for static deployment');
         }
 
         function updateRole() {
