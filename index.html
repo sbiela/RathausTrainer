@@ -2532,6 +2532,19 @@
             }
         }
 
+        // Helper function to ensure start button is visible for singleplayer
+        function ensureStartButtonVisible() {
+            if (currentRole === 'singleplayer') {
+                const startBtn = document.getElementById('startBtn');
+                if (startBtn) {
+                    startBtn.style.setProperty('display', 'inline-block', 'important');
+                    startBtn.textContent = '🚀 Spiel starten';
+                    startBtn.disabled = false;
+                    console.log('Ensuring startBtn is visible for SinglePlayer');
+                }
+            }
+        }
+
         function updateRole() {
             console.log('updateRole called');
             const candidateRadio = document.getElementById('roleCandidate');
@@ -2831,6 +2844,28 @@
                 roomConnection.style.display = 'none'; // Hide room connection UI for SinglePlayer (no room needed)
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
+                
+                // Ensure start button is visible for singleplayer
+                const startBtn = document.getElementById('startBtn');
+                if (startBtn) {
+                    startBtn.style.setProperty('display', 'inline-block', 'important');
+                    startBtn.textContent = '🚀 Spiel starten';
+                    startBtn.disabled = false;
+                    console.log('Force showing startBtn for SinglePlayer in second location');
+                }
+                
+                // Hide game buttons for SinglePlayer (they should only show during gameplay)
+                const showCityBtn = document.getElementById('showCityBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                if (showCityBtn) {
+                    showCityBtn.style.setProperty('display', 'none', 'important');
+                    showCityBtn.disabled = true;
+                }
+                if (nextBtn) {
+                    nextBtn.style.setProperty('display', 'none', 'important');
+                    nextBtn.disabled = true;
+                }
+                
                 // Hide room ID input for singleplayer (no room needed for solo play)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
@@ -2843,6 +2878,9 @@
                 cityName.style.display = 'block';
                 // Polling disabled for static deployment
             }
+            
+            // Ensure start button is visible after role change
+            setTimeout(ensureStartButtonVisible, 100);
         }
         
         // URL Sync functions
