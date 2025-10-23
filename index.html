@@ -2566,15 +2566,15 @@
                     applySelectionBtn.style.display = 'none';
                     console.log('Hidden apply selection button for candidate');
                 }
-                // Hide the entire game settings section for candidate
+                // Keep game settings visible for candidate (for debugging)
                 if (gameSettings) {
-                    gameSettings.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden entire gameSettings for candidate with !important');
+                    gameSettings.style.setProperty('display', 'block', 'important');
+                    console.log('Keeping gameSettings visible for candidate');
                 }
-                // Hide the entire selection area for candidate
+                // Keep selection area visible for candidate (for debugging)
                 if (selectionArea) {
-                    selectionArea.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden entire selectionArea for candidate with !important');
+                    selectionArea.style.setProperty('display', 'block', 'important');
+                    console.log('Keeping selectionArea visible for candidate');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
