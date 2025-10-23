@@ -974,6 +974,15 @@
             rathausImageEl.src = rathaus.image;
             rathausImageEl.alt = `Rathaus von ${rathaus.name}`;
             
+            // FORCE proper image scaling with JavaScript
+            rathausImageEl.style.maxWidth = '100%';
+            rathausImageEl.style.maxHeight = '600px';
+            rathausImageEl.style.width = 'auto';
+            rathausImageEl.style.height = 'auto';
+            rathausImageEl.style.objectFit = 'contain';
+            rathausImageEl.style.objectPosition = 'center';
+            rathausImageEl.style.display = 'block';
+            rathausImageEl.style.margin = '0 auto';
             
             console.log('showRathaus called with role:', currentRole, 'rathaus:', rathaus.name);
             
@@ -1087,6 +1096,16 @@
             rathausImageEl.src = './ende.gif';
             rathausImageEl.alt = 'Applaus!';
             
+            // FORCE proper image scaling via JavaScript
+            rathausImageEl.style.maxWidth = '100%';
+            rathausImageEl.style.maxHeight = '600px';
+            rathausImageEl.style.width = 'auto';
+            rathausImageEl.style.height = 'auto';
+            rathausImageEl.style.objectFit = 'contain';
+            rathausImageEl.style.objectPosition = 'center';
+            rathausImageEl.style.display = 'block';
+            rathausImageEl.style.margin = '0 auto';
+            
             // Hide city name
             cityNameEl.textContent = 'Training beendet!';
             
@@ -1123,7 +1142,7 @@
                 
                 // FORCE proper image scaling via JavaScript
                 rathausImageEl.style.maxWidth = '100%';
-                rathausImageEl.style.maxHeight = '80vh';
+                rathausImageEl.style.maxHeight = '600px';
                 rathausImageEl.style.width = 'auto';
                 rathausImageEl.style.height = 'auto';
                 rathausImageEl.style.objectFit = 'contain';
