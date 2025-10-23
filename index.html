@@ -1278,8 +1278,8 @@
             document.body.classList.remove('game-active');
             console.log('Removed game-active class to re-enable UI after game');
             
-            // Calculate total shown Rathäuser
-            const totalShown = currentIndex + 1; // +1 because currentIndex is 0-based
+            // Calculate total shown Rathäuser (currentIndex was already incremented, so use it directly)
+            const totalShown = currentIndex; // currentIndex is already the correct count
             
             // Show end image and results
             rathausImageEl.src = 'https://rathaus-trainer.vercel.app/ende.gif';
@@ -2322,21 +2322,25 @@
         }
         
         function startGameFromRoom(data) {
-            gameActive = true;
-            timeLeft = data.timeLeft;
-            currentIndex = data.currentIndex;
-            recognizedCount = data.recognizedCount;
-            // Don't set cityNameVisible = false for candidates
-            
-            console.log('Starting game from room:', data);
-            
-            // Show rathaus
-            if (data.currentRathaus) {
-                showRathaus(data.currentRathaus);
-            }
-            
-            // Start timer
-            startTimer();
+            // Start countdown for candidates too
+            startCountdown(() => {
+                console.log('Countdown finished for candidate, starting game');
+                gameActive = true;
+                timeLeft = data.timeLeft;
+                currentIndex = data.currentIndex;
+                recognizedCount = data.recognizedCount;
+                // Don't set cityNameVisible = false for candidates
+                
+                console.log('Starting game from room:', data);
+                
+                // Show rathaus
+                if (data.currentRathaus) {
+                    showRathaus(data.currentRathaus);
+                }
+                
+                // Start timer
+                startTimer();
+            });
         }
         
         function endGameFromRoom() {
@@ -2530,6 +2534,12 @@
                 }
                 if (candidateControls) {
                     candidateControls.style.display = 'flex';
+                }
+                // Hide startBtn for candidates (they don't start games)
+                const startBtn = document.getElementById('startBtn');
+                if (startBtn) {
+                    startBtn.style.display = 'none';
+                    console.log('Hidden startBtn for candidate');
                 }
                 if (roomConnection) {
                     roomConnection.style.setProperty('display', 'block', 'important'); // Show room connection for Candidate
