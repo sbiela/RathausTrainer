@@ -1062,8 +1062,11 @@
             // Update buttons
             startBtn.disabled = false;
             startBtn.style.display = 'inline-block';
+            startBtn.textContent = 'Training neu starten';
             showCityBtn.disabled = true;
+            showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
+            nextBtn.style.display = 'none';
             
             // Reset regie buttons
             if (currentRole === 'regie') {
@@ -1127,8 +1130,11 @@
             
             startBtn.disabled = false;
             startBtn.style.display = 'inline-block';
+            startBtn.textContent = 'Training starten';
             showCityBtn.disabled = true;
+            showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
+            nextBtn.style.display = 'none';
         }
 
         // Label storage in localStorage
