@@ -2106,10 +2106,8 @@
                 socket.disconnect();
             }
             
-            // Connect to external Socket.io server (Railway/Heroku)
-            // For now, use localhost for development
-            const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaus-trainer-socket.railway.app';
-            socket = io(socketUrl);
+            // Connect to Socket.io server
+            socket = io();
             
             socket.on('connect', () => {
                 console.log('Connected to server');

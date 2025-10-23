@@ -91,7 +91,7 @@ setInterval(() => {
 }, 300000);
 
 // For Vercel deployment
-if (process.env.NODE_ENV === 'production') {
+if (process.env.VERCEL) {
   // Export for Vercel
   module.exports = app;
 } else {
