@@ -2090,32 +2090,10 @@
         let socket = null;
         
         function connectSocket() {
-            if (socket) {
-                socket.disconnect();
-            }
-            
-            // Connect to Socket.io server
-            socket = io();
-            
-            socket.on('connect', () => {
-                console.log('Connected to server');
-            });
-            
-            socket.on('room-state', (data) => {
-                console.log('Received room state:', data);
-                if (currentRole === 'candidate') {
-                    // Update game state for candidate
-                    if (data.gameActive && data.currentIndex !== undefined) {
-                        gameActive = data.gameActive;
-                        currentIndex = data.currentIndex;
-                        recognizedCount = data.recognizedCount || 0;
-                        
-                        if (data.currentRathaus) {
-                            showRathaus(data.currentRathaus);
-                        }
-                    }
-                }
-            });
+            console.log('Socket.io temporarily disabled for static deployment');
+            // Socket.io connection temporarily disabled
+            // Will be re-enabled when we have a proper Socket.io server
+        }
             
             socket.on('room-update', (data) => {
                 console.log('Room updated:', data);
