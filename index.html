@@ -552,6 +552,22 @@
             color: #ffd93d;
         }
         
+        /* Disable role selection during game */
+        .game-active .role-selection {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .game-active .game-settings {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .game-active .room-connection {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
         .room-list {
             display: flex;
             flex-direction: column;
@@ -949,6 +965,10 @@
             recognizedCount = 0;
             // Don't set cityNameVisible here - let showRathaus handle it based on role
             
+            // Disable role selection and settings during game
+            document.body.classList.add('game-active');
+            console.log('Added game-active class to disable UI during game');
+            
             // Debug current dataset
             debugDataset();
             
@@ -1020,6 +1040,10 @@
             timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
             currentIndex = 0;
             recognizedCount = 0;
+            
+            // Disable role selection and settings during game
+            document.body.classList.add('game-active');
+            console.log('Added game-active class to disable UI during game');
             
             // Debug current dataset
             debugDataset();
@@ -1195,6 +1219,10 @@
         function endGame() {
             gameActive = false;
             clearInterval(timerInterval);
+            
+            // Re-enable role selection and settings after game
+            document.body.classList.remove('game-active');
+            console.log('Removed game-active class to re-enable UI after game');
             
             // Calculate total shown Rathäuser
             const totalShown = currentIndex + 1; // +1 because currentIndex is 0-based
@@ -2513,23 +2541,21 @@
                     applySelectionBtn.style.display = 'none';
                     console.log('Hidden apply selection button for candidate');
                 }
-                // Hide game settings for candidate - force with !important
-                if (gameSettings) {
-                    gameSettings.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden game settings for candidate with !important');
+                // Hide only the selection controls for candidate, not the entire gameSettings
+                const selectionControls = document.querySelector('.selection-controls');
+                if (selectionControls) {
+                    selectionControls.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden selection controls for candidate with !important');
                 }
-                // Hide selection area for candidate - force with !important
-                if (selectionArea) {
-                    selectionArea.style.setProperty('display', 'none', 'important');
-                    console.log('Hidden selection area for candidate with !important');
+                // Hide only the specific selection area content, not the entire area
+                const selectionContent = document.querySelector('.selection-area .selection-group');
+                if (selectionContent) {
+                    selectionContent.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden selection content for candidate with !important');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
                     roomIdInput.style.display = 'none';
-                }
-                // Hide game settings for candidate (they don't need to see Regie settings)
-                if (gameSettings) {
-                    gameSettings.style.display = 'none';
                 }
                 // Show city name directly for candidate
                 if (cityName) {
