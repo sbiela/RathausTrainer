@@ -54,26 +54,15 @@
         .image-container {
             margin: 2rem 0;
             position: relative;
-            min-height: 500px;
-            display: block;
-            text-align: center;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
-            padding: 20px;
+            overflow: hidden;
         }
         
-        /* Force proper image scaling - prevent stretching */
-        .image-container img {
-            max-width: 100% !important;
-            max-height: 80vh !important;
-            width: auto !important;
-            height: auto !important;
-            object-fit: contain !important;
-            object-position: center !important;
-            display: block !important;
-            margin: 0 auto !important;
-        }
-
         .rathaus-image {
             max-width: 100%;
             max-height: 100%;
@@ -86,8 +75,6 @@
             display: block;
             margin: 0 auto;
             flex-shrink: 0;
-            /* Force aspect ratio preservation */
-            image-rendering: auto;
         }
         
         /* Start and end images should fill the container better */
@@ -988,15 +975,6 @@
             rathausImageEl.src = rathaus.image;
             rathausImageEl.alt = `Rathaus von ${rathaus.name}`;
             
-            // FORCE proper image scaling via JavaScript
-            rathausImageEl.style.maxWidth = '100%';
-            rathausImageEl.style.maxHeight = '80vh';
-            rathausImageEl.style.width = 'auto';
-            rathausImageEl.style.height = 'auto';
-            rathausImageEl.style.objectFit = 'contain';
-            rathausImageEl.style.objectPosition = 'center';
-            rathausImageEl.style.display = 'block';
-            rathausImageEl.style.margin = '0 auto';
             
             console.log('showRathaus called with role:', currentRole, 'rathaus:', rathaus.name);
             
@@ -1078,15 +1056,6 @@
             rathausImageEl.alt = 'Training beendet!';
             rathausImageEl.style.display = 'block';
             
-            // FORCE proper image scaling via JavaScript
-            rathausImageEl.style.maxWidth = '100%';
-            rathausImageEl.style.maxHeight = '80vh';
-            rathausImageEl.style.width = 'auto';
-            rathausImageEl.style.height = 'auto';
-            rathausImageEl.style.objectFit = 'contain';
-            rathausImageEl.style.objectPosition = 'center';
-            rathausImageEl.style.display = 'block';
-            rathausImageEl.style.margin = '0 auto';
             
             resultsEl.style.display = 'block';
             
