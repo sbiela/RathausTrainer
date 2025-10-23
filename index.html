@@ -713,7 +713,7 @@
             <div class="timer" id="timer">Rathaus-Duell</div>
             
             <div class="image-container">
-                <img id="rathausImage" class="rathaus-image" src="./start.jpeg" alt="Klein gegen Groß - Rathaus Trainer">
+                <img id="rathausImage" class="rathaus-image" src="/start.jpeg" alt="Klein gegen Groß - Rathaus Trainer">
             </div>
             
             <div class="city-name" id="cityName">
@@ -1088,7 +1088,7 @@
             const totalShown = currentIndex + 1; // +1 because currentIndex is 0-based
             
             // Show end image and results
-            rathausImageEl.src = './ende.gif';
+            rathausImageEl.src = '/ende.gif';
             rathausImageEl.alt = 'Training beendet!';
             rathausImageEl.style.display = 'block';
             
@@ -1136,7 +1136,7 @@
             
             // Show applauding giphy in the image area
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = './ende.gif';
+            rathausImageEl.src = '/ende.gif';
             rathausImageEl.alt = 'Applaus!';
             
             
@@ -1170,7 +1170,7 @@
             
             // Show start image when restarting
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = './start.jpeg';
+            rathausImageEl.src = '/start.jpeg';
             rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             
             startBtn.disabled = false;
@@ -1563,7 +1563,7 @@
                 cityNameEl.textContent = `Viel Erfolg!`;
                 // Show start image
                 rathausImageEl.style.display = 'block';
-                rathausImageEl.src = './start.jpeg';
+                rathausImageEl.src = '/start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
                 
                 // IMPORTANT: Set the loaded data as the active data
