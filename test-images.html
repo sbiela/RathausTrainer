@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bild-Test - Rathaus Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .image-test {
+            margin: 2rem 0;
+            width: 100%;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-image {
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
+            width: auto;
+            object-fit: contain;
+            object-position: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .image-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .image-name {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .image-test {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .image-test {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Bild-Test - Rathaus Trainer</h1>
+        
+        <div class="image-test">
+            <div class="image-info">Test 1: Startbild</div>
+            <img class="test-image" src="./start.jpeg" alt="Startbild">
+            <div class="image-name">Startbild</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 2: Endbild</div>
+            <img class="test-image" src="./ende.gif" alt="Endbild">
+            <div class="image-name">Endbild</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 3: Querformat (Berlin)</div>
+            <img class="test-image" src="./webp_images/001_Rathaus_Seite_1.webp" alt="Berlin">
+            <div class="image-name">Berlin (Querformat)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 4: Hochkant (Braunschweig)</div>
+            <img class="test-image" src="./webp_images/027_Rathaus_Seite_27.webp" alt="Braunschweig">
+            <div class="image-name">Braunschweig (Hochkant)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 5: Hochkant (Kiel)</div>
+            <img class="test-image" src="./webp_images/029_Rathaus_Seite_29.webp" alt="Kiel">
+            <div class="image-name">Kiel (Hochkant)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 6: Querformat (München)</div>
+            <img class="test-image" src="./webp_images/003_Rathaus_Seite_3.webp" alt="München">
+            <div class="image-name">München (Querformat)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 7: Hochkant (Aachen)</div>
+            <img class="test-image" src="./webp_images/030_Rathaus_Seite_30.webp" alt="Aachen">
+            <div class="image-name">Aachen (Hochkant)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 8: Querformat (Hamburg)</div>
+            <img class="test-image" src="./webp_images/002_Rathaus_Seite_2.webp" alt="Hamburg">
+            <div class="image-name">Hamburg (Querformat)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 9: Hochkant (Halle)</div>
+            <img class="test-image" src="./webp_images/031_Rathaus_Seite_31.webp" alt="Halle">
+            <div class="image-name">Halle (Hochkant)</div>
+        </div>
+
+        <div class="image-test">
+            <div class="image-info">Test 10: Querformat (Köln)</div>
+            <img class="test-image" src="./webp_images/004_Rathaus_Seite_4.webp" alt="Köln">
+            <div class="image-name">Köln (Querformat)</div>
+        </div>
+
+        <div style="margin: 2rem 0; text-align: center; background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px;">
+            <h2>🔍 Test-Ergebnisse</h2>
+            <p><strong>Erwartetes Verhalten:</strong></p>
+            <ul style="text-align: left; margin: 1rem 0;">
+                <li>✅ <strong>Querformatbilder:</strong> Sollen die Breite der Box ausfüllen</li>
+                <li>✅ <strong>Hochkantbilder:</strong> Sollen schmaler sein und die Höhe der Box ausfüllen</li>
+                <li>✅ <strong>Start-/Endbilder:</strong> Sollen proportional skaliert werden</li>
+                <li>❌ <strong>Problem:</strong> Hochkantbilder füllen immer noch die ganze Breite aus!</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
