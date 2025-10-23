@@ -1655,16 +1655,7 @@
             }
         });
         
-        // Candidate button event listeners
-        document.getElementById('candidateBackBtn').addEventListener('click', () => {
-            if (currentRole === 'candidate') {
-                // Switch to singleplayer mode
-                document.getElementById('roleSinglePlayer').checked = true;
-                updateRole();
-                // Clear URL parameters
-                window.history.replaceState({}, '', window.location.pathname);
-            }
-        });
+        // Candidate button event listeners - removed since candidateBackBtn was removed
         
         // History event listeners
         document.getElementById('clearHistory').addEventListener('click', clearHistory);
@@ -1703,18 +1694,13 @@
         function loadAvailableRooms() {
             console.log('Loading available rooms...');
             
-            // Request room list from server
-            if (socket) {
-                socket.emit('get-rooms');
-            } else {
-                console.log('Socket not connected, showing fallback message');
-                const roomList = document.getElementById('roomList');
-                const availableRoomsDiv = document.getElementById('availableRooms');
-                
-                if (roomList && availableRoomsDiv) {
-                    roomList.innerHTML = '<div class="room-item">Verbindung zum Server...<br><small>Bitte warten</small></div>';
-                    availableRoomsDiv.style.display = 'block';
-                }
+            // Socket.io server not available - show fallback message
+            const roomList = document.getElementById('roomList');
+            const availableRoomsDiv = document.getElementById('availableRooms');
+            
+            if (roomList && availableRoomsDiv) {
+                roomList.innerHTML = '<div class="room-item">Socket.io Server nicht verfügbar<br><small>Regie/Kandidat Modi funktionieren im SinglePlayer-Modus</small></div>';
+                availableRoomsDiv.style.display = 'block';
             }
         }
         
@@ -2138,13 +2124,10 @@
             
             // Only connect to Socket.io for Regie/Kandidat modes
             if (currentRole === 'regie' || currentRole === 'candidate') {
-                // Connect to Socket.io server (local for development, external for production)
-                const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaus-trainer.vercel.app';
-                socket = io(socketUrl, {
-                    transports: ['websocket', 'polling'],
-                    timeout: 20000,
-                    forceNew: true
-                });
+                // For now, use fallback mode since Vercel doesn't have Socket.io server
+                console.log('Socket.io server not available on Vercel - using fallback mode');
+                console.log('Regie/Kandidat modes will work in SinglePlayer mode');
+                socket = null; // Disable socket connection
             } else {
                 console.log('SinglePlayer mode - no Socket.io connection needed');
             }
