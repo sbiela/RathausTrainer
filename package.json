@@ -2,10 +2,14 @@
   "name": "rathaus-trainer",
   "version": "1.0.0",
   "description": "Rathaus Trainer - Interactive German Town Hall Learning Game",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "python3 -m http.server 8000",
-    "dev": "python3 -m http.server 8000"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
   },
   "keywords": ["rathaus", "germany", "learning", "game", "webp"],
   "author": "Simon Biela",
