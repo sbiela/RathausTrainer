@@ -2744,12 +2744,27 @@
             // Auto-refresh disabled for static deployment
             } else if (document.getElementById('roleSinglePlayer').checked) {
                 currentRole = 'singleplayer';
-                // Hide room controls for SinglePlayer
+                // Hide room controls for SinglePlayer - force hide with multiple properties
                 if (regieRoomControls) {
-                    regieRoomControls.style.display = 'none';
+                    regieRoomControls.style.setProperty('display', 'none', 'important');
+                    regieRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    regieRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Force hiding regie room controls for SinglePlayer (first location)');
                 }
                 if (candidateRoomControls) {
-                    candidateRoomControls.style.display = 'none';
+                    candidateRoomControls.style.setProperty('display', 'none', 'important');
+                    candidateRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    candidateRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Force hiding candidate room controls for SinglePlayer (first location)');
+                }
+                
+                // Also hide the available rooms div specifically for SinglePlayer
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                if (availableRoomsDiv) {
+                    availableRoomsDiv.style.setProperty('display', 'none', 'important');
+                    availableRoomsDiv.style.setProperty('visibility', 'hidden', 'important');
+                    availableRoomsDiv.style.setProperty('opacity', '0', 'important');
+                    console.log('Force hiding available rooms div for SinglePlayer (first location)');
                 }
                 // Show game settings for SinglePlayer
                 gameSettings.style.setProperty('display', 'block', 'important');
@@ -2908,12 +2923,27 @@
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'none';
-                // Hide room controls for SinglePlayer (no room needed)
+                // Hide room controls for SinglePlayer (no room needed) - force hide with multiple properties
                 if (regieRoomControls) {
-                    regieRoomControls.style.display = 'none';
+                    regieRoomControls.style.setProperty('display', 'none', 'important');
+                    regieRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    regieRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Force hiding regie room controls for SinglePlayer');
                 }
                 if (candidateRoomControls) {
-                    candidateRoomControls.style.display = 'none';
+                    candidateRoomControls.style.setProperty('display', 'none', 'important');
+                    candidateRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    candidateRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Force hiding candidate room controls for SinglePlayer');
+                }
+                
+                // Also hide the available rooms div specifically for SinglePlayer
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                if (availableRoomsDiv) {
+                    availableRoomsDiv.style.setProperty('display', 'none', 'important');
+                    availableRoomsDiv.style.setProperty('visibility', 'hidden', 'important');
+                    availableRoomsDiv.style.setProperty('opacity', '0', 'important');
+                    console.log('Force hiding available rooms div for SinglePlayer');
                 }
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
