@@ -54,11 +54,13 @@
         .image-container {
             margin: 2rem 0;
             position: relative;
-            min-height: 400px;
+            height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
         }
 
         .rathaus-image {
@@ -73,6 +75,8 @@
             display: block;
             margin: 0 auto;
             flex-shrink: 0;
+            /* Ensure images maintain their aspect ratio */
+            aspect-ratio: auto;
         }
         
 
@@ -255,11 +259,11 @@
         /* Extra small screens (phones in portrait) */
         @media (max-width: 480px) {
             .image-container {
-                min-height: 300px;
+                height: 300px;
             }
             
             .rathaus-image {
-                max-height: 50vh;
+                max-height: 250px;
                 width: auto;
                 height: auto;
             }
@@ -1103,6 +1107,7 @@
             
             // Show start image when restarting
             if (loadedRathausData.length > 0) {
+                rathausImageEl.style.display = 'block';
                 rathausImageEl.src = './start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             } else {
@@ -1489,6 +1494,7 @@
                 console.log(`Auto-loaded ${loadedRathausData.length} Rathaus images`);
                 cityNameEl.textContent = `Los geht's!`;
                 // Show start image
+                rathausImageEl.style.display = 'block';
                 rathausImageEl.src = './start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
                 
