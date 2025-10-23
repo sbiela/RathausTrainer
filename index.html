@@ -1601,7 +1601,11 @@
         document.getElementById('roleSinglePlayer').addEventListener('change', updateRole);
         
         // Room event listeners
-        document.getElementById('joinRoomBtn').addEventListener('click', joinRoom);
+        // Check if joinRoomBtn exists before adding event listener
+        const joinRoomBtn = document.getElementById('joinRoomBtn');
+        if (joinRoomBtn) {
+            joinRoomBtn.addEventListener('click', joinRoom);
+        }
         
         // Selection event listeners
         document.getElementById('fromNumber').addEventListener('input', updateSelectionInfo);
@@ -1611,16 +1615,19 @@
         document.getElementById('applySelection').addEventListener('click', applySelection);
         
         // Regie button event listeners
-        document.getElementById('regieStartBtn').addEventListener('click', () => {
+        const regieStartBtn = document.getElementById('regieStartBtn');
+        if (regieStartBtn) {
+            regieStartBtn.addEventListener('click', () => {
             if (currentRole === 'regie') {
                 startGame();
                 // Enable correct/incorrect buttons
                 document.getElementById('correctBtn').disabled = false;
                 document.getElementById('incorrectBtn').disabled = false;
                 // Disable start button
-                document.getElementById('regieStartBtn').disabled = true;
+                regieStartBtn.disabled = true;
             }
-        });
+            });
+        }
         
         document.getElementById('correctBtn').addEventListener('click', () => {
             if (currentRole === 'regie' && gameActive) {
