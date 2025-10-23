@@ -15,19 +15,12 @@ const io = socketIo(server, {
     }
 });
 
-// Statische Dateien servieren (nur für Entwicklung)
-if (process.env.NODE_ENV !== 'production') {
-    app.use(express.static('.'));
-}
+// Statische Dateien servieren (immer)
+app.use(express.static('.'));
 
-// Root route für Railway
+// Root route für Railway - serviert die HTML-Seite
 app.get('/', (req, res) => {
-    res.json({
-        message: 'Rathaus Trainer Socket.io Server',
-        status: 'running',
-        socketio: 'available',
-        timestamp: new Date().toISOString()
-    });
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // CORS für Express
