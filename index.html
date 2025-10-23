@@ -1026,8 +1026,10 @@
             // Calculate total shown Rathäuser
             const totalShown = currentIndex + 1; // +1 because currentIndex is 0-based
             
-            // Show results in place of the image
-            rathausImageEl.style.display = 'none';
+            // Show end image and results
+            rathausImageEl.src = './giphy.gif';
+            rathausImageEl.alt = 'Training beendet!';
+            rathausImageEl.style.display = 'block';
             resultsEl.style.display = 'block';
             
             // Set total shown Rathäuser
@@ -1088,9 +1090,9 @@
             timerEl.textContent = 'Rathaus-Duell';
             cityNameEl.textContent = 'Los geht\'s!';
             
-            // Show Klein gegen Groß logo when restarting
+            // Show start image when restarting
             if (loadedRathausData.length > 0) {
-                rathausImageEl.src = './Unknown.jpeg';
+                rathausImageEl.src = './unknown.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             } else {
                 rathausImageEl.src = '';
@@ -1492,8 +1494,8 @@
                 
                 console.log(`Auto-loaded ${loadedRathausData.length} Rathaus images`);
                 cityNameEl.textContent = `Los geht's!`;
-                // Show Klein gegen Groß logo
-                rathausImageEl.src = './Unknown.jpeg';
+                // Show start image
+                rathausImageEl.src = './unknown.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
                 
                 // IMPORTANT: Set the loaded data as the active data
@@ -2253,24 +2255,9 @@
         
         updateRole();
         
-        // Check for URL sync on page load
-        const urlParams = getUrlParams();
-        if (urlParams.role === 'candidate') {
-            // Set role to candidate
-            document.getElementById('roleCandidate').checked = true;
-            updateRole();
-            // Sync from URL
-            syncFromUrl();
-        } else if (urlParams.role === 'regie') {
-            // Set role to regie
-            document.getElementById('roleRegie').checked = true;
-            updateRole();
-        } else {
-            // No URL parameters, keep default SinglePlayer mode
-            console.log('No URL parameters, using default SinglePlayer mode');
-            // Start the game in SinglePlayer mode
-            restartGame();
-        }
+        // Always start in SinglePlayer mode for static deployment
+        console.log('Starting in SinglePlayer mode');
+        // Start the game in SinglePlayer mode
         restartGame();
     </script>
 </body>
