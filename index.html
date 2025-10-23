@@ -2438,8 +2438,12 @@
                 candidateControls.style.display = 'flex';
                 roomConnection.style.display = 'none'; // Hide room connection UI for Candidate
                 connectSocket();
-                regieRoomControls.style.display = 'none';
-                candidateRoomControls.style.display = 'block';
+                if (regieRoomControls) {
+                    regieRoomControls.style.display = 'none';
+                }
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.display = 'block';
+                }
                 // Hide all controls for candidate
                 document.querySelector('.controls').style.display = 'none';
                 const keyHint = document.querySelector('.key-hint');
@@ -2460,9 +2464,10 @@
                     gameSettings.style.display = 'none';
                 }
                 // Show city name directly for candidate
-                cityName.style.display = 'block';
+                if (cityName) {
+                    cityName.style.display = 'block';
+                }
                 // Show available rooms for candidate using CSS class
-                const candidateRoomControls = document.getElementById('candidateRoomControls');
                 if (candidateRoomControls) {
                     candidateRoomControls.classList.add('candidate-mode');
                     console.log('Added candidate-mode class for room list visibility');
