@@ -54,25 +54,14 @@
         .image-container {
             margin: 2rem 0;
             position: relative;
+            width: 100%;
             height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
             overflow: hidden;
-        }
-        
-        /* CRITICAL FIX: Force proper image scaling */
-        .image-container img {
-            max-width: 100% !important;
-            max-height: 100% !important;
-            width: auto !important;
-            height: auto !important;
-            object-fit: contain !important;
-            object-position: center !important;
-            display: block !important;
-            margin: 0 auto !important;
         }
         
         .rathaus-image {
@@ -84,9 +73,6 @@
             object-position: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
-            display: block;
-            margin: 0 auto;
-            flex-shrink: 0;
         }
         
         /* Start and end images should fill the container better */
@@ -171,10 +157,6 @@
             
             .image-container {
                 height: 400px;
-            }
-            
-            .image-container img {
-                max-height: 100% !important;
             }
         }
 
@@ -284,11 +266,6 @@
         @media (max-width: 480px) {
             .image-container {
                 height: 300px;
-                padding: 10px;
-            }
-            
-            .image-container img {
-                max-height: 100% !important;
             }
             
             .timer {
