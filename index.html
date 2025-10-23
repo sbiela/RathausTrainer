@@ -548,7 +548,7 @@
         
         .candidate-room-controls {
             text-align: center;
-            /* No default display rule - let JavaScript handle it */
+            display: block !important; /* Always visible for candidates */
         }
         
         .available-rooms {
@@ -556,7 +556,7 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            /* No default display rule - let JavaScript handle it */
+            display: block !important; /* Always visible - never hide */
         }
         
         .available-rooms h5 {
