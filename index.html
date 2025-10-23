@@ -2673,7 +2673,14 @@
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                roomConnection.style.display = 'none'; // Hide room connection UI for Regie
+                roomConnection.style.setProperty('display', 'none', 'important'); // Hide room connection UI for Regie
+                
+                // Show regieStartBtn for Regie mode
+                const regieStartBtn = document.getElementById('regieStartBtn');
+                if (regieStartBtn) {
+                    regieStartBtn.style.setProperty('display', 'inline-block', 'important');
+                    console.log('Showing regieStartBtn for Regie');
+                }
                 // Hide available rooms for Regie (they create rooms, don't join them)
                 const availableRoomsDiv = document.getElementById('availableRooms');
                 if (availableRoomsDiv) {
