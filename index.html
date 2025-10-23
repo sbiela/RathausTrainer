@@ -2580,7 +2580,6 @@
                 
                 // Create room for Regie (wait for connection if needed)
                 if (socket && socket.connected) {
-                    const roomId = generateRoomId();
                     console.log('Creating room for Regie:', roomId);
                     // Use default data if shuffledData is empty
                     const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
@@ -2595,7 +2594,6 @@
                     if (socket) {
                         socket.once('connect', () => {
                             console.log('Socket connected, now creating room for Regie');
-                            const roomId = generateRoomId();
                             console.log('Creating room for Regie after connection:', roomId);
                             // Use default data if shuffledData is empty
                             const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
