@@ -571,6 +571,11 @@
             background: rgba(255, 255, 255, 0.2);
         }
         
+        .room-item.selected {
+            background: rgba(0, 123, 255, 0.3);
+            border: 2px solid rgba(0, 123, 255, 0.6);
+        }
+        
         .room-item .room-id {
             font-weight: bold;
             color: #007bff;
@@ -805,10 +810,7 @@
                     
                     <!-- Candidate Room Controls -->
                     <div class="candidate-room-controls" id="candidateRoomControls" style="display: none;">
-                        <div class="room-input">
-                            <input type="text" id="roomId" placeholder="Raum-ID eingeben" maxlength="6" style="text-transform: uppercase;">
-                            <button class="btn" onclick="joinRoom()">🔗 Beitreten</button>
-                        </div>
+                        <!-- Room input removed for candidates - they select from list -->
                         
                         <div class="room-info" id="roomInfo" style="display: none;">
                             <p>📡 Verbunden mit Raum: <span id="currentRoomId"></span></p>
@@ -1203,6 +1205,10 @@
             
             // Set total shown Rathäuser
             document.getElementById('totalShown').value = totalShown;
+            
+            // Calculate and set error count (total shown - correct answers)
+            const errorCount = totalShown - recognizedCount;
+            document.getElementById('wrongInput').value = errorCount;
             
             // Update buttons
             startBtn.disabled = false;
@@ -1909,6 +1915,16 @@
         
         function selectRoom(roomId) {
             document.getElementById('roomId').value = roomId;
+            
+            // Remove selection from other rooms
+            document.querySelectorAll('.room-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add selection to clicked room
+            event.target.closest('.room-item').classList.add('selected');
+            
+            // Auto-join room
             joinRoom();
         }
         
