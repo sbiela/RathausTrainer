@@ -413,7 +413,7 @@
         .regie-btn {
             min-width: 150px;
             font-size: 1.2rem;
-            padding: 15px 25px;
+            padding: 12px 20px;
         }
         
         .regie-btn.correct {
@@ -2592,10 +2592,18 @@
             
             if (candidateRadio.checked) {
                 currentRole = 'candidate';
-                // Hide game settings for candidates (they should not be able to choose settings)
+                // Show game settings for candidates in read-only mode (so they can see what regie configured)
                 if (gameSettings) {
-                    gameSettings.style.setProperty('display', 'none', 'important');
-                    console.log('Hiding gameSettings for candidate');
+                    gameSettings.style.setProperty('display', 'block', 'important');
+                    console.log('Showing gameSettings for candidate in read-only mode');
+                    
+                    // Disable all input fields in game settings for candidate
+                    const inputs = gameSettings.querySelectorAll('input, select, button');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        input.style.opacity = '0.6';
+                        input.style.cursor = 'not-allowed';
+                    });
                 }
                 // Keep selection area visible for candidate (they need room selection)
                 if (selectionArea) {
@@ -2653,10 +2661,18 @@
                     keyHint.style.display = 'none';
                     console.log('Hidden key hint for candidate');
                 }
-                // Hide game settings for candidate (they should not be able to choose settings)
+                // Show game settings for candidates in read-only mode (so they can see what regie configured)
                 if (gameSettings) {
-                    gameSettings.style.setProperty('display', 'none', 'important');
-                    console.log('Hiding gameSettings for candidate in second location');
+                    gameSettings.style.setProperty('display', 'block', 'important');
+                    console.log('Showing gameSettings for candidate in read-only mode in second location');
+                    
+                    // Disable all input fields in game settings for candidate
+                    const inputs = gameSettings.querySelectorAll('input, select, button');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        input.style.opacity = '0.6';
+                        input.style.cursor = 'not-allowed';
+                    });
                 }
                 // Keep selection area visible for candidate (they need room selection)
                 if (selectionArea) {
