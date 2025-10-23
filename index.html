@@ -999,6 +999,72 @@
             
             // Update UI
             startBtn.disabled = true;
+        }
+        
+        // Start game after room creation (for Regie mode)
+        function startGameAfterRoomCreation() {
+            console.log('startGameAfterRoomCreation called');
+            gameActive = true;
+            timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
+            currentIndex = 0;
+            recognizedCount = 0;
+            
+            // Debug current dataset
+            debugDataset();
+            
+            // Check if random order is enabled
+            const randomOrder = document.getElementById('randomOrder').checked;
+            let activeData;
+            
+            if (loadedRathausData && loadedRathausData.length > 0) {
+                activeData = loadedRathausData;
+            } else {
+                // Use default data if no loaded data
+                activeData = defaultRathausData;
+            }
+            
+            // Shuffle rathaus data only if random order is enabled
+            if (randomOrder) {
+                shuffledData = shuffleArray(activeData);
+                console.log("Shuffled data:", shuffledData.length, "items");
+            } else {
+                shuffledData = activeData;
+                console.log("Ordered data:", shuffledData.length, "items");
+            }
+            
+            // Show first rathaus
+            console.log("Showing rathaus:", shuffledData[currentIndex]);
+            showRathaus(shuffledData[currentIndex]);
+            
+            // Send start game event to server
+            if (socket && currentRoomId) {
+                socket.emit('start-game', { 
+                    roomId: currentRoomId,
+                    gameActive: true,
+                    currentIndex: currentIndex,
+                    timeLeft: timeLeft,
+                    shuffledData: shuffledData
+                });
+            }
+            
+            // Update room data
+            updateRoomData({
+                gameActive: true,
+                timeLeft: timeLeft,
+                currentIndex: currentIndex,
+                currentRathaus: shuffledData[currentIndex],
+                recognizedCount: recognizedCount,
+                shuffledData: shuffledData
+            });
+            
+            // Start timer
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Update UI
+            const startBtn = document.getElementById('startBtn');
+            if (startBtn) {
+                startBtn.disabled = true;
+            }
             startBtn.style.display = 'none';
             showCityBtn.disabled = false;
             nextBtn.disabled = false;
