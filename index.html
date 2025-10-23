@@ -456,7 +456,8 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
         
-        .room-connection {
+        .regie-room-controls,
+        .candidate-room-controls {
             margin-top: 1.5rem;
             padding: 1rem;
             background: rgba(0, 123, 255, 0.1);
@@ -464,13 +465,15 @@
             border: 1px solid rgba(0, 123, 255, 0.3);
         }
         
-        .room-connection h5 {
+        .regie-room-controls h5,
+        .candidate-room-controls h5 {
             margin: 0 0 1rem 0;
             color: #007bff;
             font-size: 1rem;
         }
         
-        .room-connection h6 {
+        .regie-room-controls h6,
+        .candidate-room-controls h6 {
             margin: 0.5rem 0;
             color: #007bff;
             font-size: 0.9rem;
@@ -534,7 +537,8 @@
             margin-bottom: 1rem;
         }
         
-        .room-connection {
+        .regie-room-controls,
+        .candidate-room-controls {
             display: block !important; /* Always visible */
         }
         
@@ -837,31 +841,26 @@
                     </label>
                 </div>
                 
-                <!-- Room Connection (only visible for Regie/Candidate) -->
-                <div class="room-connection" id="roomConnection">
-                    <h5>🏠 Raum-Verbindung</h5>
-                    
-                    <!-- Regie Room Controls -->
-                    <div class="regie-room-controls" id="regieRoomControls" style="display: none;">
-                        <div class="room-info">
-                            <p>📡 Dein Raum: <span id="regieRoomId"></span></p>
-                            <p>💡 Gib diese ID dem Kandidaten weiter!</p>
-                        </div>
+                <!-- Regie Room Controls -->
+                <div class="regie-room-controls" id="regieRoomControls" style="display: none;">
+                    <div class="room-info">
+                        <h5>🏠 Raum-Verbindung</h5>
+                        <p>📡 Dein Raum: <span id="regieRoomId"></span></p>
+                        <p>💡 Gib diese ID dem Kandidaten weiter!</p>
+                    </div>
+                </div>
+                
+                <!-- Candidate Room Controls -->
+                <div class="candidate-room-controls" id="candidateRoomControls">
+                    <div class="room-info" id="roomInfo" style="display: none;">
+                        <h5>🏠 Raum-Verbindung</h5>
+                        <p>📡 Verbunden mit Raum: <span id="currentRoomId"></span></p>
                     </div>
                     
-                    <!-- Candidate Room Controls -->
-                    <div class="candidate-room-controls" id="candidateRoomControls">
-                        <!-- Room input removed for candidates - they select from list -->
-                        
-                        <div class="room-info" id="roomInfo" style="display: none;">
-                            <p>📡 Verbunden mit Raum: <span id="currentRoomId"></span></p>
-                        </div>
-                        
-                        <!-- Available Rooms -->
-                        <div class="available-rooms" id="availableRooms">
-                            <h6>📋 Verfügbare Räume:</h6>
-                            <div class="room-list" id="roomList"></div>
-                        </div>
+                    <!-- Available Rooms -->
+                    <div class="available-rooms" id="availableRooms">
+                        <h5>📋 Verfügbare Räume</h5>
+                        <div class="room-list" id="roomList"></div>
                     </div>
                 </div>
             </div>
@@ -2563,7 +2562,7 @@
             const regieControls = document.getElementById('regieControls');
             const candidateControls = document.getElementById('candidateControls');
             const cityName = document.getElementById('cityName');
-            const roomConnection = document.getElementById('roomConnection');
+            // roomConnection removed - using direct controls now
             const regieRoomControls = document.getElementById('regieRoomControls');
             const candidateRoomControls = document.getElementById('candidateRoomControls');
             const roomIdInput = document.getElementById('roomId');
@@ -2573,7 +2572,7 @@
                 regieControls: !!regieControls,
                 candidateControls: !!candidateControls,
                 cityName: !!cityName,
-                roomConnection: !!roomConnection,
+                // roomConnection removed
                 regieRoomControls: !!regieRoomControls,
                 candidateRoomControls: !!candidateRoomControls,
                 roomIdInput: !!roomIdInput
@@ -2628,10 +2627,7 @@
                     regieStartBtn.style.setProperty('display', 'none', 'important');
                     console.log('Hidden regieStartBtn for candidate with !important');
                 }
-                if (roomConnection) {
-                    roomConnection.style.setProperty('display', 'block', 'important'); // Show room connection for Candidate
-                    console.log('Force showing roomConnection for candidate with !important');
-                }
+                // roomConnection removed - candidate room controls are handled directly
                 // Also ensure the parent elements are visible
                 const mainContainer = document.querySelector('.main-container');
                 if (mainContainer) {
@@ -2728,8 +2724,13 @@
             // Auto-refresh disabled for static deployment
             } else if (document.getElementById('roleSinglePlayer').checked) {
                 currentRole = 'singleplayer';
-                // Hide room connection for SinglePlayer
-                roomConnection.style.setProperty('display', 'none', 'important');
+                // Hide room controls for SinglePlayer
+                if (regieRoomControls) {
+                    regieRoomControls.style.display = 'none';
+                }
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.display = 'none';
+                }
                 // Show game settings for SinglePlayer
                 gameSettings.style.setProperty('display', 'block', 'important');
                 selectionArea.style.setProperty('display', 'block', 'important');
@@ -2780,7 +2781,10 @@
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                roomConnection.style.setProperty('display', 'none', 'important'); // Hide room connection UI for Regie
+                // Hide candidate room controls for Regie
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.display = 'none';
+                }
                 
                 // Show regieStartBtn for Regie mode
                 const regieStartBtn = document.getElementById('regieStartBtn');
@@ -2872,7 +2876,13 @@
                 selectionArea.style.display = 'block';
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'none';
-                roomConnection.style.display = 'none'; // Hide room connection UI for SinglePlayer (no room needed)
+                // Hide room controls for SinglePlayer (no room needed)
+                if (regieRoomControls) {
+                    regieRoomControls.style.display = 'none';
+                }
+                if (candidateRoomControls) {
+                    candidateRoomControls.style.display = 'none';
+                }
                 // Show all controls for singleplayer
                 document.querySelector('.controls').style.display = 'flex';
                 
@@ -3045,7 +3055,7 @@
         
         // Force visibility of critical elements
         document.getElementById('selectionArea').style.display = 'block';
-        document.getElementById('roomConnection').style.display = 'block';
+        // roomConnection removed - using direct controls now
         document.getElementById('gameSettings').style.display = 'block';
         
         // Force visibility of role selection
