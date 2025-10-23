@@ -12,6 +12,18 @@
       "dest": "/api/index.js"
     },
     {
+      "src": "/extracted_images/(.*)",
+      "dest": "/public/extracted_images/$1"
+    },
+    {
+      "src": "/start.jpeg",
+      "dest": "/public/start.jpeg"
+    },
+    {
+      "src": "/ende.gif",
+      "dest": "/public/ende.gif"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.js"
     }
