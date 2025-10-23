@@ -534,9 +534,21 @@
             margin-bottom: 1rem;
         }
         
+        .room-connection {
+            display: none; /* Hidden by default, shown by JavaScript */
+        }
+        
+        .regie-controls {
+            display: none; /* Hidden by default, shown by JavaScript */
+        }
+        
+        .candidate-controls {
+            display: none; /* Hidden by default, shown by JavaScript */
+        }
+        
         .candidate-room-controls {
             text-align: center;
-            /* No default display rule - let JavaScript handle it */
+            display: none; /* Hidden by default, shown by JavaScript */
         }
         
         .available-rooms {
@@ -544,7 +556,7 @@
             padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            /* No default display rule - let JavaScript handle it */
+            display: none; /* Hidden by default, shown by JavaScript */
         }
         
         .available-rooms h5 {
@@ -750,7 +762,7 @@
             </div>
             
             <!-- Regie Controls (only visible in Regie mode) -->
-            <div class="regie-controls" id="regieControls" style="display: none;">
+            <div class="regie-controls" id="regieControls">
                 <button class="btn regie-btn start" id="regieStartBtn">🚀 Spiel starten</button>
                 <div class="regie-game-controls" id="regieGameControls" style="display: none;">
                     <button class="btn regie-btn correct" id="correctBtn">✅ Richtig</button>
@@ -759,7 +771,7 @@
             </div>
             
             <!-- Candidate Controls (only visible in Candidate mode) -->
-            <div class="candidate-controls" id="candidateControls" style="display: none;">
+            <div class="candidate-controls" id="candidateControls">
                 <!-- No controls needed for candidate mode -->
             </div>
             
@@ -815,7 +827,7 @@
                 </div>
                 
                 <!-- Room Connection (only visible for Regie/Candidate) -->
-                <div class="room-connection" id="roomConnection" style="display: none;">
+                <div class="room-connection" id="roomConnection">
                     <h5>🏠 Raum-Verbindung</h5>
                     
                     <!-- Regie Room Controls -->
