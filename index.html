@@ -2168,6 +2168,16 @@
             if (socket) {
                 socket.on('connect', () => {
                     console.log('Connected to server');
+                    
+                    // Create room for Regie if not already created
+                    if (currentRole === 'regie' && !currentRoomId) {
+                        const roomId = generateRoomId();
+                        console.log('Creating room for Regie after connection:', roomId);
+                        socket.emit('create-room', { 
+                            roomId: roomId, 
+                            shuffledData: shuffledData 
+                        });
+                    }
                 });
                 
                 socket.on('disconnect', () => {
@@ -2182,6 +2192,12 @@
                     console.log('Room created:', data);
                     currentRoomId = data.roomId;
                     document.getElementById('roomId').value = data.roomId;
+                    
+                    // Start the game after room is created
+                    if (currentRole === 'regie') {
+                        console.log('Starting game after room creation');
+                        startGameAfterRoomCreation();
+                    }
                 });
                 
                 socket.on('room-joined', (data) => {
@@ -2285,6 +2301,18 @@
                 const keyHint = document.querySelector('.key-hint');
                 if (keyHint) {
                     keyHint.style.display = 'none';
+                }
+                
+                // Create room immediately for Regie
+                if (socket && socket.connected) {
+                    const roomId = generateRoomId();
+                    console.log('Creating room for Regie:', roomId);
+                    socket.emit('create-room', { 
+                        roomId: roomId, 
+                        shuffledData: shuffledData 
+                    });
+                } else {
+                    console.log('Socket not connected yet, will create room when connected');
                 }
                 // Show city name directly for regie
                 cityName.style.display = 'block';
