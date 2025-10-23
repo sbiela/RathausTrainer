@@ -65,7 +65,9 @@
         }
         
         .rathaus-image {
-            height: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
             width: auto;
             object-fit: contain;
             object-position: center;
@@ -73,10 +75,21 @@
             transition: transform 0.3s ease;
         }
         
+        /* Force portrait images to be narrower */
+        .rathaus-image[src*="027_Rathaus_Seite_27.webp"],
+        .rathaus-image[src*="029_Rathaus_Seite_29.webp"],
+        .rathaus-image[src*="030_Rathaus_Seite_30.webp"],
+        .rathaus-image[src*="031_Rathaus_Seite_31.webp"] {
+            max-width: 50% !important;
+            height: auto !important;
+        }
+        
         /* Start and end images use same rules as other images */
         .rathaus-image[src*="start.jpeg"],
         .rathaus-image[src*="ende.gif"] {
-            height: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
             width: auto;
             object-fit: contain;
             object-position: center;
@@ -156,8 +169,17 @@
             }
             
             .rathaus-image {
-                height: 100%;
+                max-height: 100%;
+                max-width: 100%;
+                height: auto;
                 width: auto;
+            }
+            
+            .rathaus-image[src*="027_Rathaus_Seite_27.webp"],
+            .rathaus-image[src*="029_Rathaus_Seite_29.webp"],
+            .rathaus-image[src*="030_Rathaus_Seite_30.webp"],
+            .rathaus-image[src*="031_Rathaus_Seite_31.webp"] {
+                max-width: 60% !important;
             }
         }
 
@@ -270,8 +292,17 @@
             }
             
             .rathaus-image {
-                height: 100%;
+                max-height: 100%;
+                max-width: 100%;
+                height: auto;
                 width: auto;
+            }
+            
+            .rathaus-image[src*="027_Rathaus_Seite_27.webp"],
+            .rathaus-image[src*="029_Rathaus_Seite_29.webp"],
+            .rathaus-image[src*="030_Rathaus_Seite_30.webp"],
+            .rathaus-image[src*="031_Rathaus_Seite_31.webp"] {
+                max-width: 60% !important;
             }
             
             .timer {
