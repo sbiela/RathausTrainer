@@ -1430,7 +1430,7 @@
                 if (!testResponse.ok) {
                     console.log('Compressed images not found, trying original folder');
                     // Fallback to original folder
-                    const fallbackTestUrl = './export_rathaeuser/001_Rathaus_Seite_1.png';
+                    const fallbackTestUrl = './extracted_images/001_Rathaus_Seite_1.jpg';
                     const fallbackTestResponse = await fetch(fallbackTestUrl);
                     if (!fallbackTestResponse.ok) {
                         console.log('Export folder not found, using default data');
