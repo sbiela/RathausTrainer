@@ -1298,8 +1298,13 @@
             
             // Update buttons
             startBtn.disabled = false;
-            startBtn.style.display = 'inline-block';
-            startBtn.textContent = 'Spiel neu starten';
+            // Only show startBtn for SinglePlayer mode
+            if (currentRole === 'singleplayer') {
+                startBtn.style.display = 'inline-block';
+                startBtn.textContent = 'Spiel neu starten';
+            } else {
+                startBtn.style.display = 'none';
+            }
             showCityBtn.disabled = true;
             showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
@@ -1401,8 +1406,13 @@
             }
             
             startBtn.disabled = false;
-            startBtn.style.display = 'inline-block';
-            startBtn.textContent = '🚀 Spiel starten';
+            // Only show startBtn for SinglePlayer mode
+            if (currentRole === 'singleplayer') {
+                startBtn.style.display = 'inline-block';
+                startBtn.textContent = '🚀 Spiel starten';
+            } else {
+                startBtn.style.display = 'none';
+            }
             showCityBtn.disabled = true;
             showCityBtn.style.display = 'none';
             nextBtn.disabled = true;
