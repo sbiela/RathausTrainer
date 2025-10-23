@@ -559,6 +559,12 @@
             display: none; /* Hidden by default */
         }
         
+        /* Hide room list for Regie and SinglePlayer */
+        .regie-mode .available-rooms,
+        .singleplayer-mode .available-rooms {
+            display: none !important;
+        }
+        
         /* Show room list only for candidates */
         .candidate-mode .available-rooms {
             display: block !important;
