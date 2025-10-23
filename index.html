@@ -2521,14 +2521,14 @@
             
             if (candidateRadio.checked) {
                 currentRole = 'candidate';
+                // Keep game settings visible for candidates (they need to see them)
                 if (gameSettings) {
-                    gameSettings.style.display = 'none';
+                    gameSettings.style.setProperty('display', 'block', 'important');
+                    console.log('Keeping gameSettings visible for candidate');
                 }
                 if (selectionArea) {
-                    selectionArea.style.display = 'none'; // Hide selection area for candidate (no game settings needed)
-                    console.log('Hidden selection area for candidate');
-                } else {
-                    console.log('Selection area not found');
+                    selectionArea.style.setProperty('display', 'block', 'important');
+                    console.log('Keeping selectionArea visible for candidate');
                 }
                 if (regieControls) {
                     regieControls.style.display = 'none';
@@ -2539,8 +2539,14 @@
                 // Hide startBtn for candidates (they don't start games)
                 const startBtn = document.getElementById('startBtn');
                 if (startBtn) {
-                    startBtn.style.display = 'none';
-                    console.log('Hidden startBtn for candidate');
+                    startBtn.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden startBtn for candidate with !important');
+                }
+                // Also hide regieStartBtn for candidates
+                const regieStartBtn = document.getElementById('regieStartBtn');
+                if (regieStartBtn) {
+                    regieStartBtn.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden regieStartBtn for candidate with !important');
                 }
                 if (roomConnection) {
                     roomConnection.style.setProperty('display', 'block', 'important'); // Show room connection for Candidate
@@ -2643,6 +2649,12 @@
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
                 roomConnection.style.display = 'none'; // Hide room connection UI for Regie
+                // Hide available rooms for Regie (they create rooms, don't join them)
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                if (availableRoomsDiv) {
+                    availableRoomsDiv.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden available rooms for Regie');
+                }
                 console.log('Force showing gameSettings and selectionArea for Regie with !important');
                 // Hide room ID input for Regie (they create rooms, don't join them)
                 if (roomIdInput) {
