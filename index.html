@@ -536,6 +536,7 @@
         
         .candidate-room-controls {
             text-align: center;
+            display: none; /* Hidden by default */
         }
         
         .available-rooms {
@@ -810,7 +811,7 @@
                     </div>
                     
                     <!-- Candidate Room Controls -->
-                    <div class="candidate-room-controls" id="candidateRoomControls" style="display: none;">
+                    <div class="candidate-room-controls" id="candidateRoomControls">
                         <!-- Room input removed for candidates - they select from list -->
                         
                         <div class="room-info" id="roomInfo" style="display: none;">
@@ -2413,6 +2414,17 @@
             const regieRoomControls = document.getElementById('regieRoomControls');
             const candidateRoomControls = document.getElementById('candidateRoomControls');
             const roomIdInput = document.getElementById('roomId');
+            
+            // Debug: Check if all elements exist
+            console.log('DOM Elements check:', {
+                regieControls: !!regieControls,
+                candidateControls: !!candidateControls,
+                cityName: !!cityName,
+                roomConnection: !!roomConnection,
+                regieRoomControls: !!regieRoomControls,
+                candidateRoomControls: !!candidateRoomControls,
+                roomIdInput: !!roomIdInput
+            });
             
             console.log('Elements found:', {
                 candidateRadio: !!candidateRadio,
