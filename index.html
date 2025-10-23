@@ -2453,25 +2453,24 @@
                 socket.on('game-started', (data) => {
                     console.log('Game started:', data);
                     if (currentRole === 'candidate') {
-                        // Start countdown for candidates
-                        startCountdown(() => {
-                            console.log('Countdown finished for candidate, starting game');
-                            gameActive = data.roomData.gameActive;
-                            currentIndex = data.roomData.currentIndex;
-                            recognizedCount = data.roomData.recognizedCount;
-                            timeLeft = data.roomData.timeLeft || 90;
-                            
-                            // Add game-active class for candidates too
-                            document.body.classList.add('game-active');
-                            console.log('Added game-active class for candidate');
-                            
-                            // Update timer display for candidate
-                            timerEl.textContent = timeLeft;
-                            
-                            if (data.currentRathaus) {
-                                showRathaus(data.currentRathaus);
-                            }
-                        });
+                        // Don't start countdown here - the candidate should start immediately
+                        // The Regie already did the countdown, so the candidate should start right away
+                        console.log('Starting game immediately for candidate (no countdown)');
+                        gameActive = data.roomData.gameActive;
+                        currentIndex = data.roomData.currentIndex;
+                        recognizedCount = data.roomData.recognizedCount;
+                        timeLeft = data.roomData.timeLeft || 90;
+                        
+                        // Add game-active class for candidates too
+                        document.body.classList.add('game-active');
+                        console.log('Added game-active class for candidate');
+                        
+                        // Update timer display for candidate
+                        timerEl.textContent = timeLeft;
+                        
+                        if (data.currentRathaus) {
+                            showRathaus(data.currentRathaus);
+                        }
                     }
                 });
                 
