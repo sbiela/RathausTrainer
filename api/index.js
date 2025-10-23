@@ -12,8 +12,20 @@ const io = socketIo(server, {
   }
 });
 
-// Serve static files
-app.use(express.static('.'));
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Serve images from extracted_images directory
+app.use('/extracted_images', express.static(path.join(__dirname, '../public/extracted_images')));
+
+// Serve start and end images
+app.get('/start.jpeg', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/start.jpeg'));
+});
+
+app.get('/ende.gif', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/ende.gif'));
+});
 
 // Basic route for testing
 app.get('/', (req, res) => {
@@ -21,7 +33,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// Force all routes to go through Node.js server
+// Force all other routes to go through Node.js server
 app.get('*', (req, res) => {
   console.log('GET * request received:', req.path);
   res.sendFile(path.join(__dirname, '../index.html'));

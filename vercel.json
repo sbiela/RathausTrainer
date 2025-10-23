@@ -12,27 +12,6 @@
       "dest": "/api/index.js"
     },
     {
-      "src": "/extracted_images/(.*)",
-      "dest": "/public/extracted_images/$1",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/start.jpeg",
-      "dest": "/public/start.jpeg",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/ende.gif",
-      "dest": "/public/ende.gif",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
       "src": "/(.*)",
       "dest": "/api/index.js"
     }
