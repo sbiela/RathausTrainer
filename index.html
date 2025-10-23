@@ -2652,15 +2652,15 @@
                     keyHint.style.display = 'none';
                     console.log('Hidden key hint for candidate');
                 }
-                // Keep game settings visible for candidate (for debugging)
+                // Hide game settings for candidate (they should not be able to choose settings)
                 if (gameSettings) {
-                    gameSettings.style.setProperty('display', 'block', 'important');
-                    console.log('Keeping gameSettings visible for candidate');
+                    gameSettings.style.setProperty('display', 'none', 'important');
+                    console.log('Hiding gameSettings for candidate in second location');
                 }
-                // Keep selection area visible for candidate (for debugging)
+                // Hide selection area for candidate (they should not be able to choose settings)
                 if (selectionArea) {
-                    selectionArea.style.setProperty('display', 'block', 'important');
-                    console.log('Keeping selectionArea visible for candidate');
+                    selectionArea.style.setProperty('display', 'none', 'important');
+                    console.log('Hiding selectionArea for candidate in second location');
                 }
                 // Hide room ID input for candidate (they select from list)
                 if (roomIdInput) {
@@ -3036,6 +3036,11 @@
         if (roleSelection) {
             roleSelection.style.display = 'block';
         }
+        
+        // Ensure role-specific visibility is applied after initialization
+        setTimeout(() => {
+            updateRole();
+        }, 100);
         
         updateRole();
         
