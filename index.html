@@ -2314,6 +2314,7 @@
                     console.log('Creating room for Regie:', roomId);
                     // Use default data if shuffledData is empty
                     const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
+                    console.log('Sending create-room event with data:', { roomId, dataLength: dataToSend.length });
                     socket.emit('create-room', { 
                         roomId: roomId, 
                         shuffledData: dataToSend 
