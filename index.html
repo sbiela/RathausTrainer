@@ -1703,13 +1703,18 @@
         function loadAvailableRooms() {
             console.log('Loading available rooms...');
             
-            // Socket.io disabled - show fallback message
-            const roomList = document.getElementById('roomList');
-            const availableRoomsDiv = document.getElementById('availableRooms');
-            
-            if (roomList && availableRoomsDiv) {
-                roomList.innerHTML = '<div class="room-item">Socket.io deaktiviert<br><small>Regie/Kandidat Modi funktionieren im SinglePlayer-Modus</small></div>';
-                availableRoomsDiv.style.display = 'block';
+            // Request room list from server
+            if (socket) {
+                socket.emit('get-rooms');
+            } else {
+                console.log('Socket not connected, showing fallback message');
+                const roomList = document.getElementById('roomList');
+                const availableRoomsDiv = document.getElementById('availableRooms');
+                
+                if (roomList && availableRoomsDiv) {
+                    roomList.innerHTML = '<div class="room-item">Verbindung zum Server...<br><small>Bitte warten</small></div>';
+                    availableRoomsDiv.style.display = 'block';
+                }
             }
         }
         
@@ -2131,59 +2136,66 @@
                 socket.disconnect();
             }
             
-            // Socket.io temporarily disabled for Regie/Kandidat modes
-            // TODO: Set up proper Socket.io server for multi-user functionality
-            console.log('Socket.io disabled - using SinglePlayer mode for all roles');
-            console.log('Regie/Kandidat modes will work in SinglePlayer mode until Socket.io server is set up');
+            // Only connect to Socket.io for Regie/Kandidat modes
+            if (currentRole === 'regie' || currentRole === 'candidate') {
+                // Connect to Socket.io server (local for development, external for production)
+                const socketUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://rathaus-trainer.vercel.app';
+                socket = io(socketUrl, {
+                    transports: ['websocket', 'polling'],
+                    timeout: 20000,
+                    forceNew: true
+                });
+            } else {
+                console.log('SinglePlayer mode - no Socket.io connection needed');
+            }
             
-            // Socket.io event listeners completely disabled to prevent syntax errors
-            // TODO: Re-enable when Socket.io server is properly set up
-            /*
-            socket.on('connect', () => {
-                console.log('Connected to server');
-            });
-            
-            socket.on('disconnect', () => {
-                console.log('Disconnected from server');
-            });
-            
-            socket.on('room-state', (data) => {
-                console.log('Received room state:', data);
-                if (currentRole === 'candidate') {
-                    // Update game state for candidate
-                    if (data.gameActive && data.currentIndex !== undefined) {
-                        gameActive = data.gameActive;
-                        currentIndex = data.currentIndex;
-                        recognizedCount = data.recognizedCount || 0;
-                        
-                        if (data.currentRathaus) {
-                            showRathaus(data.currentRathaus);
+            // Socket.io event listeners
+            if (socket) {
+                socket.on('connect', () => {
+                    console.log('Connected to server');
+                });
+                
+                socket.on('disconnect', () => {
+                    console.log('Disconnected from server');
+                });
+                
+                socket.on('room-state', (data) => {
+                    console.log('Received room state:', data);
+                    if (currentRole === 'candidate') {
+                        // Update game state for candidate
+                        if (data.gameActive && data.currentIndex !== undefined) {
+                            gameActive = data.gameActive;
+                            currentIndex = data.currentIndex;
+                            recognizedCount = data.recognizedCount || 0;
+                            
+                            if (data.currentRathaus) {
+                                showRathaus(data.currentRathaus);
+                            }
                         }
                     }
-                }
-            });
-            
-            socket.on('room-update', (data) => {
-                console.log('Room updated:', data);
-                if (currentRole === 'candidate') {
-                    // Update game state for candidate
-                    if (data.gameActive && data.currentIndex !== undefined) {
-                        gameActive = data.gameActive;
-                        currentIndex = data.currentIndex;
-                        recognizedCount = data.recognizedCount || 0;
-                        
-                        if (data.currentRathaus) {
-                            showRathaus(data.currentRathaus);
+                });
+                
+                socket.on('room-update', (data) => {
+                    console.log('Room updated:', data);
+                    if (currentRole === 'candidate') {
+                        // Update game state for candidate
+                        if (data.gameActive && data.currentIndex !== undefined) {
+                            gameActive = data.gameActive;
+                            currentIndex = data.currentIndex;
+                            recognizedCount = data.recognizedCount || 0;
+                            
+                            if (data.currentRathaus) {
+                                showRathaus(data.currentRathaus);
+                            }
                         }
                     }
-                }
-            });
-            
-            socket.on('room-list', (rooms) => {
-                console.log('Received room list:', rooms);
-                updateRoomList(rooms);
-            });
-            */
+                });
+                
+                socket.on('room-list', (rooms) => {
+                    console.log('Received room list:', rooms);
+                    updateRoomList(rooms);
+                });
+            }
         }
 
         function updateRole() {
