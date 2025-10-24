@@ -899,7 +899,6 @@
         <div class="history-list" id="historyList">
             <p>Noch keine Ergebnisse</p>
         </div>
-        <button class="btn" id="clearHistory">Bestenliste löschen</button>
     </div>
 
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
@@ -1022,6 +1021,25 @@
             }
         }
 
+        // Enable/disable game settings based on role
+        function updateGameSettingsAccess() {
+            const gameSettings = document.getElementById('gameSettings');
+            if (gameSettings) {
+                const inputs = gameSettings.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (currentRole === 'candidate') {
+                        input.disabled = true;
+                        input.style.opacity = '0.6';
+                        input.style.cursor = 'not-allowed';
+                    } else {
+                        input.disabled = false;
+                        input.style.opacity = '1';
+                        input.style.cursor = 'default';
+                    }
+                });
+            }
+        }
+
         // Disable all game controls during gameplay
         function disableAllGameControls() {
             // Disable all buttons
@@ -1031,9 +1049,9 @@
                 button.style.opacity = '0.5';
             });
             
-            // Disable all inputs in game settings
+            // Disable all inputs in game settings only for candidates
             const gameSettings = document.getElementById('gameSettings');
-            if (gameSettings) {
+            if (gameSettings && currentRole === 'candidate') {
                 const inputs = gameSettings.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     input.disabled = true;
@@ -1060,9 +1078,9 @@
                 button.style.opacity = '1';
             });
             
-            // Re-enable all inputs in game settings
+            // Re-enable all inputs in game settings only for non-candidates
             const gameSettings = document.getElementById('gameSettings');
-            if (gameSettings) {
+            if (gameSettings && currentRole !== 'candidate') {
                 const inputs = gameSettings.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     input.disabled = false;
@@ -1945,7 +1963,6 @@
         // Candidate button event listeners - removed since candidateBackBtn was removed
         
         // History event listeners
-        document.getElementById('clearHistory').addEventListener('click', clearHistory);
         document.getElementById('saveResult').addEventListener('click', saveManualResult);
 
         // Room management functions
@@ -2912,6 +2929,9 @@
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
+                
+                // Enable game settings for Regie mode
+                updateGameSettingsAccess();
                 // Hide regie room controls for Regie (redundant with main controls)
                 if (regieRoomControls) {
                     regieRoomControls.style.setProperty('display', 'none', 'important');
