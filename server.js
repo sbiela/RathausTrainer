@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
                 gameTime: 90,
                 fromNumber: 1,
                 toNumber: 90,
-                randomOrder: false
+                randomOrder: true
             }
         };
         
@@ -187,7 +187,7 @@ io.on('connection', (socket) => {
                 gameTime: data.gameTime || 90,
                 fromNumber: data.fromNumber || 1,
                 toNumber: data.toNumber || 90,
-                randomOrder: data.randomOrder || false
+                randomOrder: data.randomOrder !== undefined ? data.randomOrder : true
             };
             
             // Alle Kandidaten über neue Einstellungen informieren

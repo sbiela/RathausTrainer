@@ -915,7 +915,7 @@
                     </div>
                     <div class="selection-group">
                         <label for="randomOrder">Zufällige Reihenfolge:</label>
-                        <input type="checkbox" id="randomOrder">
+                        <input type="checkbox" id="randomOrder" checked>
                     </div>
                 </div>
             </div>
@@ -1222,6 +1222,22 @@
                 }
                 
                 console.log('Regie game controls enabled after countdown');
+            } else if (currentRole === 'singleplayer') {
+                // Enable SinglePlayer game controls after countdown
+                const showCityBtn = document.getElementById('showCityBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                if (showCityBtn) {
+                    showCityBtn.disabled = false;
+                    showCityBtn.style.opacity = '1';
+                    showCityBtn.style.cursor = 'pointer';
+                }
+                if (nextBtn) {
+                    nextBtn.disabled = false;
+                    nextBtn.style.opacity = '1';
+                    nextBtn.style.cursor = 'pointer';
+                }
+                
+                console.log('SinglePlayer game controls enabled after countdown');
             }
         }
         
