@@ -962,6 +962,8 @@
         let recognizedCount = 0;
         let cityNameVisible = false;
         let timerInterval;
+        let gameStartTime = null; // Track when game started
+        let gameDuration = 90; // Total game duration in seconds
         let currentRole = 'singleplayer'; // 'candidate', 'regie', or 'singleplayer'
         let socket = null;
         let gameStarted = false; // Track if game has been started before
@@ -1223,7 +1225,9 @@
         function startGameLogic() {
             console.log('Starting game logic');
             gameActive = true;
-            timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
+            gameDuration = parseInt(document.getElementById('gameTime').value) || 90;
+            timeLeft = gameDuration;
+            gameStartTime = new Date().getTime(); // Set start time for robust timer
             currentIndex = 0;
             recognizedCount = 0;
             // Don't set cityNameVisible here - let showRathaus handle it based on role
@@ -1316,7 +1320,9 @@
         function startGameAfterRoomCreation() {
             console.log('startGameAfterRoomCreation called');
             gameActive = true;
-            timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
+            gameDuration = parseInt(document.getElementById('gameTime').value) || 90;
+            timeLeft = gameDuration;
+            gameStartTime = new Date().getTime(); // Set start time for robust timer
             currentIndex = 0;
             recognizedCount = 0;
             
@@ -1436,33 +1442,43 @@
             }
         }
 
-        // Update timer
+        // Update timer - robust version that works even when tab is not active
         function updateTimer() {
-            timeLeft--;
-            timerEl.textContent = timeLeft;
+            if (!gameActive || !gameStartTime) return;
             
-            // Sync timer with other players via Socket.io
-            if (socket && currentRoomId && (currentRole === 'regie' || currentRole === 'candidate')) {
-                socket.emit('timer-sync', {
-                    roomId: currentRoomId,
+            // Calculate elapsed time since game started
+            const now = new Date().getTime();
+            const elapsed = Math.floor((now - gameStartTime) / 1000);
+            const remaining = Math.max(0, gameDuration - elapsed);
+            
+            // Update timeLeft only if it changed
+            if (remaining !== timeLeft) {
+                timeLeft = remaining;
+                timerEl.textContent = timeLeft;
+                
+                // Sync timer with other players via Socket.io
+                if (socket && currentRoomId && (currentRole === 'regie' || currentRole === 'candidate')) {
+                    socket.emit('timer-sync', {
+                        roomId: currentRoomId,
+                        timeLeft: timeLeft,
+                        currentIndex: currentIndex,
+                        recognizedCount: recognizedCount
+                    });
+                }
+                
+                // Update room data
+                updateRoomData({
+                    gameActive: true,
                     timeLeft: timeLeft,
                     currentIndex: currentIndex,
+                    currentRathaus: shuffledData[currentIndex],
                     recognizedCount: recognizedCount
                 });
-            }
-            
-            // Update room data
-            updateRoomData({
-                gameActive: true,
-                timeLeft: timeLeft,
-                currentIndex: currentIndex,
-                currentRathaus: shuffledData[currentIndex],
-                recognizedCount: recognizedCount
-            });
-            
-            if (timeLeft <= 0) {
-                timerEl.textContent = 'Ende';
-                endGame();
+                
+                if (timeLeft <= 0) {
+                    timerEl.textContent = 'Ende';
+                    endGame();
+                }
             }
         }
 
@@ -1511,6 +1527,10 @@
         function endGame() {
             gameActive = false;
             clearInterval(timerInterval);
+            
+            // Reset timer variables
+            gameStartTime = null;
+            gameDuration = 90;
             
             // Re-enable all game controls
             enableAllGameControls();
@@ -2599,7 +2619,9 @@
                 console.log('Countdown finished for candidate, starting game');
                 gameActive = true;
                 // Use gameTime from settings, not data.timeLeft
-                timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
+                gameDuration = parseInt(document.getElementById('gameTime').value) || 90;
+                timeLeft = gameDuration;
+                gameStartTime = new Date().getTime(); // Set start time for robust timer
                 currentIndex = data.currentIndex;
                 recognizedCount = data.recognizedCount;
                 // Don't set cityNameVisible = false for candidates
@@ -3154,22 +3176,22 @@
                 candidateRoomControls.style.display = 'none';
                 
                 // Use existing roomId (already generated above)
-                console.log('Using existing room ID for Regie:', roomId);
+                console.log('Using existing room ID for Regie:', currentRoomId);
                 
                 // Update Regie button text to show room ID
                 const regieLabel = document.querySelector('label[for="roleRegie"] .role-label');
                 console.log('Looking for Regie label, found:', regieLabel);
                 if (regieLabel) {
-                    regieLabel.textContent = `🎛️ Regie (${roomId})`;
-                    console.log('Updated Regie label with room ID:', roomId);
+                    regieLabel.textContent = `🎛️ Regie (${currentRoomId})`;
+                    console.log('Updated Regie label with room ID:', currentRoomId);
                 } else {
                     console.log('Regie label not found, trying alternative selector');
                     // Try alternative selector
                     const regieLabelAlt = document.querySelector('#roleRegie + .role-label');
                     console.log('Alternative selector found:', regieLabelAlt);
                     if (regieLabelAlt) {
-                        regieLabelAlt.textContent = `🎛️ Regie (${roomId})`;
-                        console.log('Updated Regie label with alternative selector:', roomId);
+                        regieLabelAlt.textContent = `🎛️ Regie (${currentRoomId})`;
+                        console.log('Updated Regie label with alternative selector:', currentRoomId);
                     } else {
                         console.log('No Regie label found with any selector');
                     }
@@ -3373,7 +3395,9 @@
         function startGameFromUrl(params) {
             gameActive = true;
             // Use gameTime from settings, not params.timeLeft
-            timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
+            gameDuration = parseInt(document.getElementById('gameTime').value) || 90;
+            timeLeft = gameDuration;
+            gameStartTime = new Date().getTime(); // Set start time for robust timer
             currentIndex = params.currentIndex;
             recognizedCount = 0;
             cityNameVisible = false;
