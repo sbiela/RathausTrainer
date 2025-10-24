@@ -1674,8 +1674,8 @@
             document.body.classList.remove('game-active');
             console.log('Removed game-active class to re-enable UI after game');
             
-            // Calculate total guessed Rathäuser (exclude the last displayed one that wasn't guessed)
-            const totalGuessed = Math.max(0, currentIndex - 1); // Subtract 1 because currentIndex includes the last displayed
+            // Calculate total guessed Rathäuser (currentIndex is the number of displayed Rathäuser)
+            const totalGuessed = currentIndex;
             
             // Show end image and results
             rathausImageEl.src = 'https://sbiela.github.io/RathausTrainer/ende.gif';
@@ -1688,8 +1688,15 @@
             // Set total guessed Rathäuser (read-only display)
             document.getElementById('totalShownDisplay').textContent = totalGuessed;
             
-            // Calculate and set error count (total guessed - correct answers, minimum 0)
-            const errorCount = Math.max(0, totalGuessed - recognizedCount);
+            // Calculate and set error count based on role
+            let errorCount;
+            if (currentRole === 'regie') {
+                // For Regie: use incorrectClicks count
+                errorCount = incorrectClicks;
+            } else {
+                // For SinglePlayer: default to 0 (user can adjust manually)
+                errorCount = 0;
+            }
             document.getElementById('wrongInput').value = errorCount;
             
             // Update buttons
@@ -1758,13 +1765,15 @@
             // Show result in history area
             const historyList = document.getElementById('historyList');
             const gameTime = parseInt(document.getElementById('gameTime').value) || 90;
-            const secondsPerCorrect = totalGuessed > 0 ? gameTime / totalGuessed : 0;
+            const correct = totalGuessed - (currentRole === 'regie' ? incorrectClicks : 0);
+            const percentage = totalGuessed > 0 ? Math.round((correct / totalGuessed) * 100) : 0;
+            const secondsPerCorrect = correct > 0 ? gameTime / correct : 0;
             const resultItem = document.createElement('div');
             resultItem.className = 'history-item best';
             resultItem.innerHTML = `
-                <span class="history-score">${totalGuessed}/${totalGuessed} (100%)</span>
+                <span class="history-score">${correct}/${totalGuessed} (${percentage}%)</span>
                 <span class="history-time">${gameTime}s</span>
-                <span class="history-speed">${secondsPerCorrect}s/R</span>
+                <span class="history-speed">${secondsPerCorrect.toFixed(1)}s/R</span>
                 <span class="history-date">Jetzt</span>
             `;
             historyList.insertBefore(resultItem, historyList.firstChild);
