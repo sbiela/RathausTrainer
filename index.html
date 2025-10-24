@@ -915,7 +915,7 @@
                     </div>
                     <div class="selection-group">
                         <label for="randomOrder">Zufällige Reihenfolge:</label>
-                        <input type="checkbox" id="randomOrder" checked>
+                        <input type="checkbox" id="randomOrder">
                     </div>
                 </div>
             </div>
@@ -1093,6 +1093,18 @@
             roleRadios.forEach(radio => {
                 radio.style.opacity = '1';
             });
+            
+            // Reset specific SinglePlayer buttons if they exist
+            const showCityBtn = document.getElementById('showCityBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            if (showCityBtn) {
+                showCityBtn.style.opacity = '1';
+                showCityBtn.style.cursor = 'pointer';
+            }
+            if (nextBtn) {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+            }
             
             console.log('Reset all visual states for role change');
         }
