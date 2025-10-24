@@ -766,7 +766,7 @@
             <div class="timer" id="timer">Rathaus-Duell</div>
             
             <div class="image-container">
-                <img id="rathausImage" class="rathaus-image" src="https://rathaustrainer-production.railway.app/start.jpeg" alt="Klein gegen Groß - Rathaus Trainer">
+                <img id="rathausImage" class="rathaus-image" src="https://sbiela.github.io/RathausTrainer/start.jpeg" alt="Klein gegen Groß - Rathaus Trainer">
             </div>
             
             <div class="city-name" id="cityName">
@@ -1363,7 +1363,7 @@
             const totalShown = currentIndex; // currentIndex is already the correct count
             
             // Show end image and results
-            rathausImageEl.src = 'https://rathaustrainer-production.railway.app/ende.gif';
+            rathausImageEl.src = 'https://sbiela.github.io/RathausTrainer/ende.gif';
             rathausImageEl.alt = 'Spiel beendet!';
             rathausImageEl.style.display = 'block';
             
@@ -1433,7 +1433,7 @@
             
             // Show applauding giphy in the image area
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = 'https://rathaustrainer-production.railway.app/ende.gif';
+            rathausImageEl.src = 'https://sbiela.github.io/RathausTrainer/ende.gif';
             rathausImageEl.alt = 'Applaus!';
             
             
@@ -1467,7 +1467,7 @@
             
             // Show start image when restarting
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = 'https://rathaustrainer-production.railway.app/start.jpeg';
+            rathausImageEl.src = 'https://sbiela.github.io/RathausTrainer/start.jpeg';
             rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             
             // Show game settings again when restarting
@@ -1830,7 +1830,7 @@
                 };
                 
                 loadedRathausData = imageFiles.map((filename, index) => {
-                    const imageUrl = `https://rathaustrainer-production.railway.app/extracted_images/${filename}`;
+                    const imageUrl = `https://sbiela.github.io/RathausTrainer/extracted_images/${filename}`;
                     const sourceKey = filename;
                     const cityName = manualCityMapping[filename] || cityNames[index] || `Rathaus ${index + 1}`;
                     const baseName = cityName;
@@ -1842,7 +1842,7 @@
                 cityNameEl.textContent = `Viel Erfolg!`;
                 // Show start image
                 rathausImageEl.style.display = 'block';
-                rathausImageEl.src = 'https://rathaustrainer-production.railway.app/start.jpeg';
+                rathausImageEl.src = 'https://sbiela.github.io/RathausTrainer/start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
                 
                 // IMPORTANT: Set the loaded data as the active data
