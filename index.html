@@ -1056,6 +1056,48 @@
                 });
             }
         }
+        
+        // Sync game settings to candidates in real-time
+        function syncGameSettings() {
+            if (currentRole === 'regie' && socket && currentRoomId) {
+                const gameTime = document.getElementById('gameTime').value;
+                const fromNumber = document.getElementById('fromNumber').value;
+                const toNumber = document.getElementById('toNumber').value;
+                const randomOrder = document.getElementById('randomOrder').checked;
+                
+                socket.emit('game-settings-update', {
+                    roomId: currentRoomId,
+                    gameTime: gameTime,
+                    fromNumber: fromNumber,
+                    toNumber: toNumber,
+                    randomOrder: randomOrder
+                });
+                
+                console.log('Synced game settings to candidates:', {
+                    gameTime, fromNumber, toNumber, randomOrder
+                });
+            }
+        }
+        
+        // Update game settings from Regie (for candidates)
+        function updateGameSettingsFromRegie(settings) {
+            if (currentRole === 'candidate') {
+                const gameTimeEl = document.getElementById('gameTime');
+                const fromNumberEl = document.getElementById('fromNumber');
+                const toNumberEl = document.getElementById('toNumber');
+                const randomOrderEl = document.getElementById('randomOrder');
+                
+                if (gameTimeEl) gameTimeEl.value = settings.gameTime;
+                if (fromNumberEl) fromNumberEl.value = settings.fromNumber;
+                if (toNumberEl) toNumberEl.value = settings.toNumber;
+                if (randomOrderEl) randomOrderEl.checked = settings.randomOrder;
+                
+                // Update selection info display
+                updateSelectionInfo();
+                
+                console.log('Updated game settings from Regie:', settings);
+            }
+        }
 
         // Disable all game controls during countdown
         function disableAllGameControls() {
@@ -1979,6 +2021,12 @@
         document.getElementById('gameTime').addEventListener('input', updateSelectionInfo);
         document.getElementById('randomOrder').addEventListener('change', updateSelectionInfo);
         
+        // Game settings event listeners for real-time sync
+        document.getElementById('gameTime').addEventListener('input', syncGameSettings);
+        document.getElementById('fromNumber').addEventListener('input', syncGameSettings);
+        document.getElementById('toNumber').addEventListener('input', syncGameSettings);
+        document.getElementById('randomOrder').addEventListener('change', syncGameSettings);
+        
         // Regie button event listeners
         const regieStartBtn = document.getElementById('regieStartBtn');
         if (regieStartBtn) {
@@ -2188,6 +2236,13 @@
             if (clickedRoom) {
                 clickedRoom.classList.add('selected');
                 console.log('Added selected class to room:', roomId);
+                
+                // Change status from "Verfügbar" to "Verbunden"
+                const statusElement = clickedRoom.querySelector('.room-status');
+                if (statusElement) {
+                    statusElement.textContent = '🔗 Verbunden';
+                    console.log('Changed room status to Verbunden for room:', roomId);
+                }
             }
             
             // Join room directly via Socket.io
@@ -2685,6 +2740,11 @@
                 socket.on('room-list', (rooms) => {
                     console.log('Received room list:', rooms);
                     updateRoomList(rooms);
+                });
+                
+                socket.on('game-settings-update', (settings) => {
+                    console.log('Received game settings update:', settings);
+                    updateGameSettingsFromRegie(settings);
                 });
             }
         }
