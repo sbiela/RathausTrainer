@@ -236,6 +236,19 @@
             background: rgba(255,255,255,0.9);
             color: #333;
         }
+        
+        .result-display {
+            display: inline-block;
+            padding: 8px;
+            background: rgba(255, 215, 61, 0.2);
+            border: 2px solid rgba(255, 215, 61, 0.5);
+            border-radius: 8px;
+            color: #ffd93d;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 3rem;
+            text-align: center;
+        }
 
         .score {
             font-size: 3rem;
@@ -824,8 +837,8 @@
             <div class="score-input">
                 <h3>Ergebnis eingeben:</h3>
                 <div class="input-group">
-                    <label for="totalShown">Angezeigte Rathäuser:</label>
-                    <input type="number" id="totalShown" min="1" max="90" readonly>
+                    <label for="totalShown">Geratene Rathäuser:</label>
+                    <span id="totalShownDisplay" class="result-display">0</span>
                 </div>
                 <div class="input-group">
                     <label for="wrongInput">Fehler:</label>
@@ -1087,7 +1100,15 @@
                 const toNumberEl = document.getElementById('toNumber');
                 const randomOrderEl = document.getElementById('randomOrder');
                 
-                if (gameTimeEl) gameTimeEl.value = settings.gameTime;
+                if (gameTimeEl) {
+                    gameTimeEl.value = settings.gameTime;
+                    // Update timer display if game is active
+                    if (gameActive) {
+                        timeLeft = parseInt(settings.gameTime) || 90;
+                        timerEl.textContent = timeLeft;
+                        console.log('Updated timer from Regie settings:', timeLeft);
+                    }
+                }
                 if (fromNumberEl) fromNumberEl.value = settings.fromNumber;
                 if (toNumberEl) toNumberEl.value = settings.toNumber;
                 if (randomOrderEl) randomOrderEl.checked = settings.randomOrder;
@@ -1420,6 +1441,16 @@
             timeLeft--;
             timerEl.textContent = timeLeft;
             
+            // Sync timer with other players via Socket.io
+            if (socket && currentRoomId && (currentRole === 'regie' || currentRole === 'candidate')) {
+                socket.emit('timer-sync', {
+                    roomId: currentRoomId,
+                    timeLeft: timeLeft,
+                    currentIndex: currentIndex,
+                    recognizedCount: recognizedCount
+                });
+            }
+            
             // Update room data
             updateRoomData({
                 gameActive: true,
@@ -1488,8 +1519,8 @@
             document.body.classList.remove('game-active');
             console.log('Removed game-active class to re-enable UI after game');
             
-            // Calculate total shown Rathäuser (currentIndex was already incremented, so use it directly)
-            const totalShown = currentIndex; // currentIndex is already the correct count
+            // Calculate total guessed Rathäuser (exclude the last displayed one that wasn't guessed)
+            const totalGuessed = Math.max(0, currentIndex - 1); // Subtract 1 because currentIndex includes the last displayed
             
             // Show end image and results
             rathausImageEl.src = 'https://sbiela.github.io/RathausTrainer/ende.gif';
@@ -1499,11 +1530,11 @@
             
             resultsEl.style.display = 'block';
             
-            // Set total shown Rathäuser
-            document.getElementById('totalShown').value = totalShown;
+            // Set total guessed Rathäuser (read-only display)
+            document.getElementById('totalShownDisplay').textContent = totalGuessed;
             
-            // Calculate and set error count (total shown - correct answers, minimum 0)
-            const errorCount = Math.max(0, totalShown - recognizedCount);
+            // Calculate and set error count (total guessed - correct answers, minimum 0)
+            const errorCount = Math.max(0, totalGuessed - recognizedCount);
             document.getElementById('wrongInput').value = errorCount;
             
             // Update buttons
@@ -1572,11 +1603,11 @@
             // Show result in history area
             const historyList = document.getElementById('historyList');
             const gameTime = parseInt(document.getElementById('gameTime').value) || 90;
-            const secondsPerCorrect = totalShown > 0 ? gameTime / totalShown : 0;
+            const secondsPerCorrect = totalGuessed > 0 ? gameTime / totalGuessed : 0;
             const resultItem = document.createElement('div');
             resultItem.className = 'history-item best';
             resultItem.innerHTML = `
-                <span class="history-score">${totalShown}/${totalShown} (100%)</span>
+                <span class="history-score">${totalGuessed}/${totalGuessed} (100%)</span>
                 <span class="history-time">${gameTime}s</span>
                 <span class="history-speed">${secondsPerCorrect}s/R</span>
                 <span class="history-date">Jetzt</span>
@@ -1772,10 +1803,10 @@
         }
         
         function saveManualResult() {
-            const totalShown = document.getElementById('totalShown');
+            const totalShownDisplay = document.getElementById('totalShownDisplay');
             const wrongInput = document.getElementById('wrongInput');
             
-            const total = parseInt(totalShown.value) || 0;
+            const total = parseInt(totalShownDisplay.textContent) || 0;
             const wrong = parseInt(wrongInput.value) || 0;
             const correct = total - wrong;
             
@@ -2745,6 +2776,17 @@
                 socket.on('game-settings-update', (settings) => {
                     console.log('Received game settings update:', settings);
                     updateGameSettingsFromRegie(settings);
+                });
+                
+                socket.on('timer-sync', (data) => {
+                    console.log('Received timer sync:', data);
+                    if (currentRole === 'candidate' && data.timeLeft !== timeLeft) {
+                        timeLeft = data.timeLeft;
+                        timerEl.textContent = timeLeft;
+                        currentIndex = data.currentIndex;
+                        recognizedCount = data.recognizedCount;
+                        console.log('Synced timer for candidate:', timeLeft);
+                    }
                 });
             }
         }
