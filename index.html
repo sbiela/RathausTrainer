@@ -1533,8 +1533,8 @@
                 timeLeft = remaining;
                 timerEl.textContent = timeLeft;
                 
-                // Sync timer with other players via Socket.io
-                if (socket && currentRoomId && (currentRole === 'regie' || currentRole === 'candidate')) {
+                // Sync timer with other players via Socket.io (only from Regie)
+                if (socket && currentRoomId && currentRole === 'regie') {
                     socket.emit('timer-sync', {
                         roomId: currentRoomId,
                         timeLeft: timeLeft,
@@ -1556,6 +1556,11 @@
                     timerEl.textContent = 'Ende';
                     endGame();
                 }
+            }
+            
+            // For candidates, always update the display to ensure smooth countdown
+            if (currentRole === 'candidate') {
+                timerEl.textContent = timeLeft;
             }
         }
 
@@ -2872,8 +2877,13 @@
                         // Update timer display for candidate
                         timerEl.textContent = timeLeft;
                         
-                        // Start timer for candidate
-                        timerInterval = setInterval(updateTimer, 1000);
+                        // Start timer for candidate - but rely on Regie sync for updates
+                        timerInterval = setInterval(() => {
+                            // Only update display, don't change timeLeft (let Regie control it)
+                            if (gameActive) {
+                                timerEl.textContent = timeLeft;
+                            }
+                        }, 100); // Update display every 100ms for smoother countdown
                         console.log('Started timer for candidate');
                         
                         if (data.currentRathaus) {
@@ -2918,12 +2928,19 @@
                 
                 socket.on('timer-sync', (data) => {
                     console.log('Received timer sync:', data);
-                    if (currentRole === 'candidate' && data.timeLeft !== timeLeft) {
+                    if (currentRole === 'candidate') {
+                        // Always update timer display for candidates
                         timeLeft = data.timeLeft;
                         timerEl.textContent = timeLeft;
                         currentIndex = data.currentIndex;
                         recognizedCount = data.recognizedCount;
                         console.log('Synced timer for candidate:', timeLeft);
+                        
+                        // Update game state for candidates
+                        if (timeLeft <= 0) {
+                            timerEl.textContent = 'Ende';
+                            endGame();
+                        }
                     }
                 });
             }
