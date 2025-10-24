@@ -805,8 +805,8 @@
             
             <div class="controls">
                 <button class="btn regie-btn start" id="startBtn">🚀 Spiel starten</button>
-                <button class="btn" id="showCityBtn" disabled style="display: none;">Stadt anzeigen (Enter)</button>
-                <button class="btn" id="nextBtn" disabled style="display: none;">Nächstes Rathaus (Leertaste)</button>
+                <button class="btn regie-btn" id="showCityBtn" disabled style="display: none;">👁️ Stadt anzeigen (Enter)</button>
+                <button class="btn regie-btn" id="nextBtn" disabled style="display: none;">➡️ Nächstes Rathaus (Leertaste)</button>
             </div>
             
             <!-- Regie Controls (only visible in Regie mode) -->
@@ -1133,7 +1133,18 @@
             // Update SinglePlayer button
             const nextBtn = document.getElementById('nextBtn');
             if (nextBtn) {
-                nextBtn.textContent = `Nächstes Rathaus (${nextClicks + 1}) (Leertaste)`;
+                nextBtn.textContent = `➡️ Nächstes Rathaus (${nextClicks + 1}) (Leertaste)`;
+            }
+        }
+        
+        // Update candidate display with counters
+        function updateCandidateDisplay() {
+            if (currentRole === 'candidate') {
+                const cityNameEl = document.getElementById('cityName');
+                if (cityNameEl) {
+                    cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
+                    console.log('Updated candidate display:', candidateCorrectCount, candidateIncorrectCount);
+                }
             }
         }
         
@@ -1346,6 +1357,7 @@
             candidateIncorrectCount = 0;
             
             updateButtonTexts();
+            updateCandidateDisplay();
             // Don't set cityNameVisible here - let showRathaus handle it based on role
             
             // Disable role selection and settings during game
@@ -1536,7 +1548,7 @@
             } else if (currentRole === 'candidate') {
                 // Hide city name for candidate (they should guess)
                 cityNameVisible = false;
-                cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
+                updateCandidateDisplay();
                 console.log('Showing candidate counters:', candidateCorrectCount, candidateIncorrectCount);
             } else {
                 // Hide city name for singleplayer (use toggle)
@@ -3022,11 +3034,8 @@
                             candidateIncorrectCount = data.candidateIncorrectCount;
                         }
                         
-                        // Update city name display with counters
-                        const cityNameEl = document.getElementById('cityName');
-                        if (cityNameEl) {
-                            cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
-                        }
+                        // Update candidate display
+                        updateCandidateDisplay();
                         
                         console.log('Synced timer for candidate:', timeLeft, 'counters:', candidateCorrectCount, candidateIncorrectCount);
                         
@@ -3044,11 +3053,8 @@
                         candidateCorrectCount = data.candidateCorrectCount;
                         candidateIncorrectCount = data.candidateIncorrectCount;
                         
-                        // Update city name display with counters
-                        const cityNameEl = document.getElementById('cityName');
-                        if (cityNameEl) {
-                            cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
-                        }
+                        // Update candidate display
+                        updateCandidateDisplay();
                         
                         console.log('Updated candidate counters:', candidateCorrectCount, candidateIncorrectCount);
                     }
@@ -3649,6 +3655,7 @@
             candidateIncorrectCount = 0;
             
             updateButtonTexts();
+            updateCandidateDisplay();
             
             console.log('Starting game from URL:', params);
             
