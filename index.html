@@ -1059,11 +1059,17 @@
 
         // Disable all game controls during gameplay
         function disableAllGameControls() {
-            // Disable all buttons
+            // Disable all buttons except Regie game controls
             const allButtons = document.querySelectorAll('button');
             allButtons.forEach(button => {
-                button.disabled = true;
-                button.style.opacity = '0.5';
+                // Keep Regie game controls (Richtig/Falsch) enabled during gameplay
+                if (button.id === 'correctBtn' || button.id === 'incorrectBtn') {
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                } else {
+                    button.disabled = true;
+                    button.style.opacity = '0.5';
+                }
             });
             
             // Hide game settings during countdown/gameplay
@@ -1079,7 +1085,15 @@
                 radio.style.opacity = '0.5';
             });
             
-            console.log('All game controls disabled and game settings hidden');
+            // Show Regie game controls during gameplay
+            if (currentRole === 'regie') {
+                const regieGameControls = document.getElementById('regieGameControls');
+                if (regieGameControls) {
+                    regieGameControls.style.display = 'block';
+                }
+            }
+            
+            console.log('Game controls disabled except Regie game buttons');
         }
         
         // Re-enable game controls after game ends
