@@ -218,6 +218,22 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Kandidaten-Zähler aktualisieren
+    socket.on('candidate-counter-update', (data) => {
+        const roomId = data.roomId;
+        const room = rooms.get(roomId);
+        
+        if (room && room.regie === socket.id) {
+            // An alle Kandidaten im Raum weiterleiten
+            io.to(roomId).emit('candidate-counter-update', {
+                candidateCorrectCount: data.candidateCorrectCount,
+                candidateIncorrectCount: data.candidateIncorrectCount
+            });
+            
+            console.log('Candidate counters updated in room:', roomId, data.candidateCorrectCount, data.candidateIncorrectCount);
+        }
+    });
+
     // Raum-Liste anfordern
     socket.on('get-rooms', () => {
         const roomList = Array.from(rooms.values()).map(room => ({

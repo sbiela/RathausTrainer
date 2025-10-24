@@ -2267,6 +2267,16 @@
                 recognizedCount++;
                 console.log('Regie marked as correct, recognizedCount:', recognizedCount, 'correctClicks:', correctClicks);
                 updateButtonTexts();
+                
+                // Send candidate counter update immediately
+                if (socket && currentRoomId) {
+                    socket.emit('candidate-counter-update', {
+                        roomId: currentRoomId,
+                        candidateCorrectCount: correctClicks,
+                        candidateIncorrectCount: incorrectClicks
+                    });
+                }
+                
                 nextRathaus();
             }
         });
@@ -2276,6 +2286,16 @@
                 incorrectClicks++;
                 console.log('Regie marked as incorrect, incorrectClicks:', incorrectClicks);
                 updateButtonTexts();
+                
+                // Send candidate counter update immediately
+                if (socket && currentRoomId) {
+                    socket.emit('candidate-counter-update', {
+                        roomId: currentRoomId,
+                        candidateCorrectCount: correctClicks,
+                        candidateIncorrectCount: incorrectClicks
+                    });
+                }
+                
                 nextRathaus();
             }
         });
@@ -3015,6 +3035,22 @@
                             timerEl.textContent = 'Ende';
                             endGame();
                         }
+                    }
+                });
+                
+                socket.on('candidate-counter-update', (data) => {
+                    console.log('Received candidate counter update:', data);
+                    if (currentRole === 'candidate') {
+                        candidateCorrectCount = data.candidateCorrectCount;
+                        candidateIncorrectCount = data.candidateIncorrectCount;
+                        
+                        // Update city name display with counters
+                        const cityNameEl = document.getElementById('cityName');
+                        if (cityNameEl) {
+                            cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
+                        }
+                        
+                        console.log('Updated candidate counters:', candidateCorrectCount, candidateIncorrectCount);
                     }
                 });
             }
