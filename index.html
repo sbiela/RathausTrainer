@@ -334,8 +334,8 @@
         }
         
         .role-selection {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             border: 2px solid rgba(255, 215, 61, 0.3);
@@ -936,6 +936,7 @@
         let currentRole = 'singleplayer'; // 'candidate', 'regie', or 'singleplayer'
         let socket = null;
         let gameStarted = false; // Track if game has been started before
+        let roomIdGenerated = false; // Track if room ID has been generated
         // Removed syncInterval - not needed for static deployment
         let currentRoomId = null;
         let roomData = {};
@@ -2892,20 +2893,31 @@
                 console.log('SinglePlayer mode configured');
             } else if (regieRadio.checked) {
                 currentRole = 'regie';
-                // Generate room ID immediately for Regie mode
-                const roomId = generateRoomId();
-                currentRoomId = roomId;
-                console.log('Generated room ID for Regie:', roomId);
+                // Generate room ID only if not already generated
+                if (!roomIdGenerated) {
+                    const roomId = generateRoomId();
+                    currentRoomId = roomId;
+                    roomIdGenerated = true;
+                    console.log('Generated new room ID for Regie:', roomId);
+                } else {
+                    console.log('Reusing existing room ID for Regie:', currentRoomId);
+                }
+                
+                // Update room ID display
+                const currentRoomIdEl = document.getElementById('currentRoomId');
+                if (currentRoomIdEl) {
+                    currentRoomIdEl.textContent = currentRoomId;
+                }
                 gameSettings.style.setProperty('display', 'block', 'important');
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                // Show regie room controls for Regie
+                // Hide regie room controls for Regie (redundant with main controls)
                 if (regieRoomControls) {
-                    regieRoomControls.style.setProperty('display', 'block', 'important');
-                    regieRoomControls.style.setProperty('visibility', 'visible', 'important');
-                    regieRoomControls.style.setProperty('opacity', '1', 'important');
-                    console.log('Showing regie room controls for Regie');
+                    regieRoomControls.style.setProperty('display', 'none', 'important');
+                    regieRoomControls.style.setProperty('visibility', 'hidden', 'important');
+                    regieRoomControls.style.setProperty('opacity', '0', 'important');
+                    console.log('Hidden regie room controls for Regie - redundant with main controls');
                 }
                 // Hide candidate room controls for Regie (they contain available rooms)
                 if (candidateRoomControls) {
