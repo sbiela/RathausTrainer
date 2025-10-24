@@ -935,6 +935,7 @@
         let timerInterval;
         let currentRole = 'singleplayer'; // 'candidate', 'regie', or 'singleplayer'
         let socket = null;
+        let gameStarted = false; // Track if game has been started before
         // Removed syncInterval - not needed for static deployment
         let currentRoomId = null;
         let roomData = {};
@@ -1011,12 +1012,22 @@
             }, 1000);
         }
 
+        // Set correct button text based on game state
+        function setButtonText(button, isRegie = false) {
+            if (gameStarted) {
+                button.textContent = isRegie ? '🔄 Spiel neustarten' : '🔄 Spiel neu starten';
+            } else {
+                button.textContent = isRegie ? '🚀 Spiel starten' : '🚀 Spiel starten';
+            }
+        }
+
         // Disable all game controls during gameplay
         function disableAllGameControls() {
             // Disable all buttons
             const allButtons = document.querySelectorAll('button');
             allButtons.forEach(button => {
                 button.disabled = true;
+                button.style.opacity = '0.5';
             });
             
             // Disable all inputs in game settings
@@ -1025,6 +1036,7 @@
                 const inputs = gameSettings.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     input.disabled = true;
+                    input.style.opacity = '0.5';
                 });
             }
             
@@ -1032,9 +1044,10 @@
             const roleRadios = document.querySelectorAll('input[name="role"]');
             roleRadios.forEach(radio => {
                 radio.disabled = true;
+                radio.style.opacity = '0.5';
             });
             
-            console.log('All game controls disabled');
+            console.log('All game controls disabled with opacity');
         }
         
         // Re-enable game controls after game ends
@@ -1043,6 +1056,7 @@
             const allButtons = document.querySelectorAll('button');
             allButtons.forEach(button => {
                 button.disabled = false;
+                button.style.opacity = '1';
             });
             
             // Re-enable all inputs in game settings
@@ -1051,6 +1065,7 @@
                 const inputs = gameSettings.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     input.disabled = false;
+                    input.style.opacity = '1';
                 });
             }
             
@@ -1058,14 +1073,18 @@
             const roleRadios = document.querySelectorAll('input[name="role"]');
             roleRadios.forEach(radio => {
                 radio.disabled = false;
+                radio.style.opacity = '1';
             });
             
-            console.log('All game controls re-enabled');
+            console.log('All game controls re-enabled with full opacity');
         }
 
         // Start game with countdown
         function startGame() {
             console.log('startGame called - starting countdown');
+            
+            // Mark game as started
+            gameStarted = true;
             
             // Disable all buttons and inputs during game
             disableAllGameControls();
@@ -1382,7 +1401,7 @@
             // Only show startBtn for SinglePlayer mode
             if (currentRole === 'singleplayer') {
                 startBtn.style.display = 'inline-block';
-                startBtn.textContent = '🔄 Spiel neu starten';
+                setButtonText(startBtn);
             } else {
                 startBtn.style.display = 'none';
             }
@@ -1411,7 +1430,7 @@
                 
                 // Show start button with new text
                 regieStartBtn.disabled = false;
-                regieStartBtn.textContent = '🔄 Spiel neustarten';
+                setButtonText(regieStartBtn, true);
                 regieStartBtn.style.display = 'inline-block';
                 
                 // Hide game controls (Richtig/Falsch buttons)
@@ -1490,7 +1509,7 @@
             // Only show startBtn for SinglePlayer mode
             if (currentRole === 'singleplayer') {
                 startBtn.style.display = 'inline-block';
-                startBtn.textContent = '🔄 Spiel neu starten';
+                setButtonText(startBtn);
                 // Hide regieStartBtn for SinglePlayer
                 regieStartBtn.style.display = 'none';
             } else {
@@ -2605,7 +2624,7 @@
                 const startBtn = document.getElementById('startBtn');
                 if (startBtn) {
                     startBtn.style.setProperty('display', 'inline-block', 'important');
-                    startBtn.textContent = '🔄 Spiel neu starten';
+                    setButtonText(startBtn);
                     startBtn.disabled = false;
                     console.log('Ensuring startBtn is visible for SinglePlayer');
                     
@@ -2841,7 +2860,7 @@
                 const startBtn = document.getElementById('startBtn');
                 if (startBtn) {
                     startBtn.style.setProperty('display', 'inline-block', 'important');
-                    startBtn.textContent = '🔄 Spiel neu starten';
+                    setButtonText(startBtn);
                     startBtn.disabled = false;
                     console.log('Showing startBtn for SinglePlayer with !important');
                 }
@@ -2881,12 +2900,12 @@
                 selectionArea.style.setProperty('display', 'block', 'important');
                 regieControls.style.display = 'flex';
                 candidateControls.style.display = 'none';
-                // Hide regie room controls for Regie (they already see room ID in their main controls)
+                // Show regie room controls for Regie
                 if (regieRoomControls) {
-                    regieRoomControls.style.setProperty('display', 'none', 'important');
-                    regieRoomControls.style.setProperty('visibility', 'hidden', 'important');
-                    regieRoomControls.style.setProperty('opacity', '0', 'important');
-                    console.log('Hidden regie room controls for Regie - redundant with main controls');
+                    regieRoomControls.style.setProperty('display', 'block', 'important');
+                    regieRoomControls.style.setProperty('visibility', 'visible', 'important');
+                    regieRoomControls.style.setProperty('opacity', '1', 'important');
+                    console.log('Showing regie room controls for Regie');
                 }
                 // Hide candidate room controls for Regie (they contain available rooms)
                 if (candidateRoomControls) {
@@ -2900,6 +2919,7 @@
                 const regieStartBtn = document.getElementById('regieStartBtn');
                 if (regieStartBtn) {
                     regieStartBtn.style.setProperty('display', 'inline-block', 'important');
+                    setButtonText(regieStartBtn, true);
                     console.log('Showing regieStartBtn for Regie');
                 }
                 // Hide available rooms for Regie (they create rooms, don't join them)
@@ -3017,7 +3037,7 @@
                 const startBtn = document.getElementById('startBtn');
                 if (startBtn) {
                     startBtn.style.setProperty('display', 'inline-block', 'important');
-                    startBtn.textContent = '🔄 Spiel neu starten';
+                    setButtonText(startBtn);
                     startBtn.disabled = false;
                     console.log('Force showing startBtn for SinglePlayer in second location');
                 }
