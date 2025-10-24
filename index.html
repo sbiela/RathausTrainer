@@ -335,11 +335,14 @@
         
         .role-selection {
             margin-bottom: 1rem;
-            padding: 1rem;
+            padding: 0.75rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             border: 2px solid rgba(255, 215, 61, 0.3);
             display: block !important;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .role-selection h4 {
@@ -935,9 +938,9 @@
         let currentRole = 'singleplayer'; // 'candidate', 'regie', or 'singleplayer'
         let socket = null;
         let gameStarted = false; // Track if game has been started before
-        let roomIdGenerated = false; // Track if room ID has been generated
+        let roomIdGenerated = localStorage.getItem('roomIdGenerated') === 'true'; // Track if room ID has been generated
         // Removed syncInterval - not needed for static deployment
-        let currentRoomId = null;
+        let currentRoomId = localStorage.getItem('currentRoomId') || null;
         let roomData = {};
         let loadedRathausData = [];
         let shuffledData = [];
@@ -2915,8 +2918,15 @@
                     const roomId = generateRoomId();
                     currentRoomId = roomId;
                     roomIdGenerated = true;
+                    localStorage.setItem('roomIdGenerated', 'true');
+                    localStorage.setItem('currentRoomId', roomId);
                     console.log('Generated new room ID for Regie:', roomId);
                 } else {
+                    // Load existing room ID from localStorage
+                    const savedRoomId = localStorage.getItem('currentRoomId');
+                    if (savedRoomId) {
+                        currentRoomId = savedRoomId;
+                    }
                     console.log('Reusing existing room ID for Regie:', currentRoomId);
                 }
                 
