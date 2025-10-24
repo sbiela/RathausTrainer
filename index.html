@@ -972,6 +972,11 @@
         let currentRoomId = localStorage.getItem('currentRoomId') || null;
         let roomData = {};
         let loadedRathausData = [];
+        
+        // Button click counters
+        let correctClicks = 0;
+        let incorrectClicks = 0;
+        let nextClicks = 0;
         let shuffledData = [];
         let rathausData = []; // Add missing rathausData variable
 
@@ -1107,6 +1112,25 @@
             }
             
             console.log('Reset all visual states for role change');
+        }
+        
+        // Update button texts with click counters
+        function updateButtonTexts() {
+            // Update Regie buttons
+            const correctBtn = document.getElementById('correctBtn');
+            const incorrectBtn = document.getElementById('incorrectBtn');
+            if (correctBtn) {
+                correctBtn.textContent = `✅ Richtig (${correctClicks})`;
+            }
+            if (incorrectBtn) {
+                incorrectBtn.textContent = `❌ Falsch (${incorrectClicks})`;
+            }
+            
+            // Update SinglePlayer button
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.textContent = `Nächstes Rathaus (${nextClicks}) (Leertaste)`;
+            }
         }
         
         // Sync game settings to candidates in real-time
@@ -1307,6 +1331,12 @@
             gameStartTime = new Date().getTime(); // Set start time for robust timer
             currentIndex = 0;
             recognizedCount = 0;
+            
+            // Reset button click counters
+            correctClicks = 0;
+            incorrectClicks = 0;
+            nextClicks = 0;
+            updateButtonTexts();
             // Don't set cityNameVisible here - let showRathaus handle it based on role
             
             // Disable role selection and settings during game
@@ -1810,7 +1840,14 @@
         // Event Listeners
         startBtn.addEventListener('click', startGame);
         showCityBtn.addEventListener('click', toggleCityName);
-        nextBtn.addEventListener('click', nextRathaus);
+        nextBtn.addEventListener('click', () => {
+            if (currentRole === 'singleplayer' && gameActive) {
+                nextClicks++;
+                console.log('SinglePlayer next button clicked, nextClicks:', nextClicks);
+                updateButtonTexts();
+            }
+            nextRathaus();
+        });
 
         // Selection functionality
         let selectedRathausData = [];
@@ -2215,14 +2252,19 @@
         
         document.getElementById('correctBtn').addEventListener('click', () => {
             if (currentRole === 'regie' && gameActive) {
+                correctClicks++;
                 recognizedCount++;
-                console.log('Regie marked as correct, recognizedCount:', recognizedCount);
+                console.log('Regie marked as correct, recognizedCount:', recognizedCount, 'correctClicks:', correctClicks);
+                updateButtonTexts();
                 nextRathaus();
             }
         });
         
         document.getElementById('incorrectBtn').addEventListener('click', () => {
             if (currentRole === 'regie' && gameActive) {
+                incorrectClicks++;
+                console.log('Regie marked as incorrect, incorrectClicks:', incorrectClicks);
+                updateButtonTexts();
                 nextRathaus();
             }
         });
@@ -2732,6 +2774,12 @@
                 gameStartTime = new Date().getTime(); // Set start time for robust timer
                 currentIndex = data.currentIndex;
                 recognizedCount = data.recognizedCount;
+                
+                // Reset button click counters
+                correctClicks = 0;
+                incorrectClicks = 0;
+                nextClicks = 0;
+                updateButtonTexts();
                 // Don't set cityNameVisible = false for candidates
                 
                 console.log('Starting game from room:', data);
@@ -3528,6 +3576,12 @@
             currentIndex = params.currentIndex;
             recognizedCount = 0;
             cityNameVisible = false;
+            
+            // Reset button click counters
+            correctClicks = 0;
+            incorrectClicks = 0;
+            nextClicks = 0;
+            updateButtonTexts();
             
             console.log('Starting game from URL:', params);
             
