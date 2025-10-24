@@ -1057,14 +1057,10 @@
                 button.style.opacity = '0.5';
             });
             
-            // Disable all inputs in game settings only for candidates
+            // Hide game settings during countdown/gameplay
             const gameSettings = document.getElementById('gameSettings');
-            if (gameSettings && currentRole === 'candidate') {
-                const inputs = gameSettings.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    input.disabled = true;
-                    input.style.opacity = '0.5';
-                });
+            if (gameSettings) {
+                gameSettings.style.display = 'none';
             }
             
             // Disable role selection
@@ -1074,7 +1070,7 @@
                 radio.style.opacity = '0.5';
             });
             
-            console.log('All game controls disabled with opacity');
+            console.log('All game controls disabled and game settings hidden');
         }
         
         // Re-enable game controls after game ends
@@ -1086,14 +1082,12 @@
                 button.style.opacity = '1';
             });
             
-            // Re-enable all inputs in game settings only for non-candidates
+            // Show game settings again after game ends
             const gameSettings = document.getElementById('gameSettings');
-            if (gameSettings && currentRole !== 'candidate') {
-                const inputs = gameSettings.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.style.opacity = '1';
-                });
+            if (gameSettings) {
+                gameSettings.style.display = 'block';
+                // Update access based on current role
+                updateGameSettingsAccess();
             }
             
             // Re-enable role selection
@@ -1103,7 +1097,7 @@
                 radio.style.opacity = '1';
             });
             
-            console.log('All game controls re-enabled with full opacity');
+            console.log('All game controls re-enabled and game settings shown');
         }
 
         // Start game with countdown
