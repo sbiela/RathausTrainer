@@ -3104,6 +3104,10 @@
                 // Show game settings for SinglePlayer
                 gameSettings.style.setProperty('display', 'block', 'important');
                 selectionArea.style.setProperty('display', 'block', 'important');
+                
+                // Enable game settings for SinglePlayer mode
+                updateGameSettingsAccess();
+                
                 // Hide regie and candidate controls
                 regieControls.style.display = 'none';
                 candidateControls.style.display = 'none';
