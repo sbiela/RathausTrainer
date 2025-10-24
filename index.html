@@ -1072,6 +1072,31 @@
             }
         }
         
+        // Reset all visual states (opacity, cursor, etc.)
+        function resetAllVisualStates() {
+            // Reset all buttons
+            const allButtons = document.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.style.opacity = '1';
+                button.style.cursor = 'pointer';
+            });
+            
+            // Reset all inputs and selects
+            const allInputs = document.querySelectorAll('input, select');
+            allInputs.forEach(input => {
+                input.style.opacity = '1';
+                input.style.cursor = 'default';
+            });
+            
+            // Reset role selection
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            roleRadios.forEach(radio => {
+                radio.style.opacity = '1';
+            });
+            
+            console.log('Reset all visual states for role change');
+        }
+        
         // Sync game settings to candidates in real-time
         function syncGameSettings() {
             if (currentRole === 'regie' && socket && currentRoomId) {
@@ -1195,6 +1220,13 @@
             allButtons.forEach(button => {
                 button.disabled = false;
                 button.style.opacity = '1';
+            });
+            
+            // Re-enable all inputs and selects
+            const allInputs = document.querySelectorAll('input, select');
+            allInputs.forEach(input => {
+                input.style.opacity = '1';
+                input.style.cursor = 'default';
             });
             
             // Show game settings again after game ends
@@ -3107,6 +3139,9 @@
                 
                 // Enable game settings for SinglePlayer mode
                 updateGameSettingsAccess();
+                
+                // Reset all visual states for SinglePlayer mode
+                resetAllVisualStates();
                 
                 // Hide regie and candidate controls
                 regieControls.style.display = 'none';
