@@ -340,11 +340,20 @@
             border-radius: 15px;
             border: 2px solid rgba(255, 215, 61, 0.3);
             display: block !important;
-            width: fit-content;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
             min-height: auto;
             height: auto;
+        }
+        
+        /* Hide room controls that are taking up space */
+        .role-selection .regie-room-controls,
+        .role-selection .candidate-room-controls {
+            display: none !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
         
         .role-selection h4 {
@@ -2513,7 +2522,11 @@
                     
                     // Create room for Regie if not already created
                     if (currentRole === 'regie') {
-                        const roomId = generateRoomId();
+                        const roomId = currentRoomId || generateRoomId();
+                        if (!currentRoomId) {
+                            currentRoomId = roomId;
+                            localStorage.setItem('currentRoomId', roomId);
+                        }
                         console.log('Creating room for Regie after connection:', roomId);
                         // Use default data if shuffledData is empty
                         const dataToSend = shuffledData.length > 0 ? shuffledData : defaultRathausData;
