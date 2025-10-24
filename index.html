@@ -766,7 +766,7 @@
             <div class="timer" id="timer">Rathaus-Duell</div>
             
             <div class="image-container">
-                <img id="rathausImage" class="rathaus-image" src="https://rathaus-trainer.vercel.app/start.jpeg" alt="Klein gegen Groß - Rathaus Trainer">
+                <img id="rathausImage" class="rathaus-image" src="https://rathaus-trainer-socket.railway.app/start.jpeg" alt="Klein gegen Groß - Rathaus Trainer">
             </div>
             
             <div class="city-name" id="cityName">
@@ -817,7 +817,6 @@
                 <button class="btn" id="saveResult">Ergebnis speichern</button>
             </div>
             
-            <button class="btn" id="restartBtn">Neues Training</button>
         </div>
     </div>
     
@@ -904,6 +903,9 @@
     </div>
 
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- UI Debugging Tool -->
+    <script src="debug-ui.js"></script>
+    
     <script>
         // Rathaus-Daten (Beispieldaten; können durch geladene Bilder ersetzt werden)
         const defaultRathausData = [
@@ -948,7 +950,6 @@
         const showCityBtn = document.getElementById('showCityBtn');
         const nextBtn = document.getElementById('nextBtn');
         const resultsEl = document.getElementById('results');
-        const restartBtn = document.getElementById('restartBtn');
 
         // Shuffle array function
         function shuffleArray(array) {
@@ -1010,9 +1011,64 @@
             }, 1000);
         }
 
+        // Disable all game controls during gameplay
+        function disableAllGameControls() {
+            // Disable all buttons
+            const allButtons = document.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.disabled = true;
+            });
+            
+            // Disable all inputs in game settings
+            const gameSettings = document.getElementById('gameSettings');
+            if (gameSettings) {
+                const inputs = gameSettings.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    input.disabled = true;
+                });
+            }
+            
+            // Disable role selection
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            roleRadios.forEach(radio => {
+                radio.disabled = true;
+            });
+            
+            console.log('All game controls disabled');
+        }
+        
+        // Re-enable game controls after game ends
+        function enableAllGameControls() {
+            // Re-enable all buttons
+            const allButtons = document.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.disabled = false;
+            });
+            
+            // Re-enable all inputs in game settings
+            const gameSettings = document.getElementById('gameSettings');
+            if (gameSettings) {
+                const inputs = gameSettings.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    input.disabled = false;
+                });
+            }
+            
+            // Re-enable role selection
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            roleRadios.forEach(radio => {
+                radio.disabled = false;
+            });
+            
+            console.log('All game controls re-enabled');
+        }
+
         // Start game with countdown
         function startGame() {
             console.log('startGame called - starting countdown');
+            
+            // Disable all buttons and inputs during game
+            disableAllGameControls();
             
             // Send countdown start event to server for candidates
             if (socket && currentRoomId) {
@@ -1296,6 +1352,9 @@
             gameActive = false;
             clearInterval(timerInterval);
             
+            // Re-enable all game controls
+            enableAllGameControls();
+            
             // Re-enable role selection and settings after game
             document.body.classList.remove('game-active');
             console.log('Removed game-active class to re-enable UI after game');
@@ -1304,7 +1363,7 @@
             const totalShown = currentIndex; // currentIndex is already the correct count
             
             // Show end image and results
-            rathausImageEl.src = 'https://rathaus-trainer.vercel.app/ende.gif';
+            rathausImageEl.src = 'https://rathaus-trainer-socket.railway.app/ende.gif';
             rathausImageEl.alt = 'Spiel beendet!';
             rathausImageEl.style.display = 'block';
             
@@ -1323,7 +1382,7 @@
             // Only show startBtn for SinglePlayer mode
             if (currentRole === 'singleplayer') {
                 startBtn.style.display = 'inline-block';
-                startBtn.textContent = 'Spiel neu starten';
+                startBtn.textContent = '🔄 Spiel neu starten';
             } else {
                 startBtn.style.display = 'none';
             }
@@ -1374,7 +1433,7 @@
             
             // Show applauding giphy in the image area
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = 'https://rathaus-trainer.vercel.app/ende.gif';
+            rathausImageEl.src = 'https://rathaus-trainer-socket.railway.app/ende.gif';
             rathausImageEl.alt = 'Applaus!';
             
             
@@ -1408,7 +1467,7 @@
             
             // Show start image when restarting
             rathausImageEl.style.display = 'block';
-            rathausImageEl.src = 'https://rathaus-trainer.vercel.app/start.jpeg';
+            rathausImageEl.src = 'https://rathaus-trainer-socket.railway.app/start.jpeg';
             rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
             
             // Show game settings again when restarting
@@ -1490,7 +1549,6 @@
         startBtn.addEventListener('click', startGame);
         showCityBtn.addEventListener('click', toggleCityName);
         nextBtn.addEventListener('click', nextRathaus);
-        restartBtn.addEventListener('click', restartGame);
 
         // Selection functionality
         let selectedRathausData = [];
@@ -1507,7 +1565,14 @@
             const availableCount = Math.max(0, toNumber - fromNumber + 1);
             const orderText = randomOrder ? 'Zufällige Reihenfolge' : 'Aufsteigende Reihenfolge';
             const infoEl = document.getElementById('selectionInfo');
-            infoEl.innerHTML = `<p>${availableCount} Rathäuser verfügbar (${fromNumber}-${toNumber}) • ${gameTime} Sekunden Spielzeit • ${orderText}</p>`;
+            
+            // Hide selection info for SinglePlayer and Regie modes
+            if (currentRole === 'singleplayer' || currentRole === 'regie') {
+                infoEl.style.display = 'none';
+            } else {
+                infoEl.style.display = 'block';
+                infoEl.innerHTML = `<p>${availableCount} Rathäuser verfügbar (${fromNumber}-${toNumber}) • ${gameTime} Sekunden Spielzeit • ${orderText}</p>`;
+            }
             
             // Update instruction text with current game time
             const gameTimeDisplay = document.getElementById('gameTimeDisplay');
@@ -1765,7 +1830,7 @@
                 };
                 
                 loadedRathausData = imageFiles.map((filename, index) => {
-                    const imageUrl = `https://rathaus-trainer.vercel.app/extracted_images/${filename}`;
+                    const imageUrl = `https://rathaus-trainer-socket.railway.app/extracted_images/${filename}`;
                     const sourceKey = filename;
                     const cityName = manualCityMapping[filename] || cityNames[index] || `Rathaus ${index + 1}`;
                     const baseName = cityName;
@@ -1777,7 +1842,7 @@
                 cityNameEl.textContent = `Viel Erfolg!`;
                 // Show start image
                 rathausImageEl.style.display = 'block';
-                rathausImageEl.src = 'https://rathaus-trainer.vercel.app/start.jpeg';
+                rathausImageEl.src = 'https://rathaus-trainer-socket.railway.app/start.jpeg';
                 rathausImageEl.alt = 'Klein gegen Groß - Rathaus Trainer';
                 
                 // IMPORTANT: Set the loaded data as the active data
@@ -3140,11 +3205,3 @@
     </script>
 </body>
 </html>
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
-<!-- Force Vercel deployment -->
