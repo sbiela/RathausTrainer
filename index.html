@@ -977,6 +977,10 @@
         let correctClicks = 0;
         let incorrectClicks = 0;
         let nextClicks = 0;
+        
+        // Candidate counters (received from Regie)
+        let candidateCorrectCount = 0;
+        let candidateIncorrectCount = 0;
         let shuffledData = [];
         let rathausData = []; // Add missing rathausData variable
 
@@ -1129,7 +1133,7 @@
             // Update SinglePlayer button
             const nextBtn = document.getElementById('nextBtn');
             if (nextBtn) {
-                nextBtn.textContent = `Nächstes Rathaus (${nextClicks}) (Leertaste)`;
+                nextBtn.textContent = `Nächstes Rathaus (${nextClicks + 1}) (Leertaste)`;
             }
         }
         
@@ -1336,6 +1340,11 @@
             correctClicks = 0;
             incorrectClicks = 0;
             nextClicks = 0;
+            
+            // Reset candidate counters
+            candidateCorrectCount = 0;
+            candidateIncorrectCount = 0;
+            
             updateButtonTexts();
             // Don't set cityNameVisible here - let showRathaus handle it based on role
             
@@ -1527,8 +1536,8 @@
             } else if (currentRole === 'candidate') {
                 // Hide city name for candidate (they should guess)
                 cityNameVisible = false;
-                cityNameEl.textContent = '?';
-                console.log('Hiding city name for candidate - they should guess');
+                cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
+                console.log('Showing candidate counters:', candidateCorrectCount, candidateIncorrectCount);
             } else {
                 // Hide city name for singleplayer (use toggle)
                 cityNameVisible = false;
@@ -1569,7 +1578,9 @@
                         roomId: currentRoomId,
                         timeLeft: timeLeft,
                         currentIndex: currentIndex,
-                        recognizedCount: recognizedCount
+                        recognizedCount: recognizedCount,
+                        candidateCorrectCount: correctClicks,
+                        candidateIncorrectCount: incorrectClicks
                     });
                 }
                 
@@ -2982,7 +2993,22 @@
                         timerEl.textContent = timeLeft;
                         currentIndex = data.currentIndex;
                         recognizedCount = data.recognizedCount;
-                        console.log('Synced timer for candidate:', timeLeft);
+                        
+                        // Update candidate counters if provided
+                        if (data.candidateCorrectCount !== undefined) {
+                            candidateCorrectCount = data.candidateCorrectCount;
+                        }
+                        if (data.candidateIncorrectCount !== undefined) {
+                            candidateIncorrectCount = data.candidateIncorrectCount;
+                        }
+                        
+                        // Update city name display with counters
+                        const cityNameEl = document.getElementById('cityName');
+                        if (cityNameEl) {
+                            cityNameEl.textContent = `✅ ${candidateCorrectCount} | ❌ ${candidateIncorrectCount}`;
+                        }
+                        
+                        console.log('Synced timer for candidate:', timeLeft, 'counters:', candidateCorrectCount, candidateIncorrectCount);
                         
                         // Update game state for candidates
                         if (timeLeft <= 0) {
@@ -3581,6 +3607,11 @@
             correctClicks = 0;
             incorrectClicks = 0;
             nextClicks = 0;
+            
+            // Reset candidate counters
+            candidateCorrectCount = 0;
+            candidateIncorrectCount = 0;
+            
             updateButtonTexts();
             
             console.log('Starting game from URL:', params);
