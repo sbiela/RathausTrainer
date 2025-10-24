@@ -1080,6 +1080,11 @@
                 const toNumber = document.getElementById('toNumber').value;
                 const randomOrder = document.getElementById('randomOrder').checked;
                 
+                console.log('syncGameSettings called from Regie:', {
+                    gameTime, fromNumber, toNumber, randomOrder,
+                    currentRoomId, socketConnected: socket.connected
+                });
+                
                 socket.emit('game-settings-update', {
                     roomId: currentRoomId,
                     gameTime: gameTime,
@@ -1097,6 +1102,8 @@
         // Update game settings from Regie (for candidates)
         function updateGameSettingsFromRegie(settings) {
             if (currentRole === 'candidate') {
+                console.log('updateGameSettingsFromRegie called with settings:', settings);
+                
                 const gameTimeEl = document.getElementById('gameTime');
                 const fromNumberEl = document.getElementById('fromNumber');
                 const toNumberEl = document.getElementById('toNumber');
@@ -1104,6 +1111,7 @@
                 
                 if (gameTimeEl) {
                     gameTimeEl.value = settings.gameTime;
+                    console.log('Updated gameTime to:', settings.gameTime);
                     // Update timer display if game is active
                     if (gameActive) {
                         timeLeft = parseInt(settings.gameTime) || 90;
@@ -1111,9 +1119,18 @@
                         console.log('Updated timer from Regie settings:', timeLeft);
                     }
                 }
-                if (fromNumberEl) fromNumberEl.value = settings.fromNumber;
-                if (toNumberEl) toNumberEl.value = settings.toNumber;
-                if (randomOrderEl) randomOrderEl.checked = settings.randomOrder;
+                if (fromNumberEl) {
+                    fromNumberEl.value = settings.fromNumber;
+                    console.log('Updated fromNumber to:', settings.fromNumber);
+                }
+                if (toNumberEl) {
+                    toNumberEl.value = settings.toNumber;
+                    console.log('Updated toNumber to:', settings.toNumber);
+                }
+                if (randomOrderEl) {
+                    randomOrderEl.checked = settings.randomOrder;
+                    console.log('Updated randomOrder to:', settings.randomOrder);
+                }
                 
                 // Update selection info display
                 updateSelectionInfo();
@@ -1741,6 +1758,16 @@
             const toNumber = parseInt(document.getElementById('toNumber').value) || 90;
             const gameTime = parseInt(document.getElementById('gameTime').value) || 90;
             const randomOrder = document.getElementById('randomOrder').checked;
+            
+            // Debug logging for candidate mode
+            if (currentRole === 'candidate') {
+                console.log('updateSelectionInfo for candidate:', {
+                    fromNumber, toNumber, gameTime, randomOrder,
+                    fromNumberValue: document.getElementById('fromNumber').value,
+                    toNumberValue: document.getElementById('toNumber').value,
+                    gameTimeValue: document.getElementById('gameTime').value
+                });
+            }
             
             const availableCount = Math.max(0, toNumber - fromNumber + 1);
             const orderText = randomOrder ? 'Zufällige Reihenfolge' : 'Aufsteigende Reihenfolge';
