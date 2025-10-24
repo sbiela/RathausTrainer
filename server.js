@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
             gameSettings: {
                 gameTime: 90,
                 fromNumber: 1,
-                toNumber: 10,
+                toNumber: 90,
                 randomOrder: false
             }
         };
@@ -186,7 +186,7 @@ io.on('connection', (socket) => {
             room.gameSettings = {
                 gameTime: data.gameTime || 90,
                 fromNumber: data.fromNumber || 1,
-                toNumber: data.toNumber || 10,
+                toNumber: data.toNumber || 90,
                 randomOrder: data.randomOrder || false
             };
             

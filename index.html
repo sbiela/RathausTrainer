@@ -2110,11 +2110,27 @@
         document.getElementById('gameTime').addEventListener('input', updateSelectionInfo);
         document.getElementById('randomOrder').addEventListener('change', updateSelectionInfo);
         
-        // Game settings event listeners for real-time sync
-        document.getElementById('gameTime').addEventListener('input', syncGameSettings);
-        document.getElementById('fromNumber').addEventListener('input', syncGameSettings);
-        document.getElementById('toNumber').addEventListener('input', syncGameSettings);
-        document.getElementById('randomOrder').addEventListener('change', syncGameSettings);
+        // Game settings event listeners for real-time sync (only for Regie)
+        document.getElementById('gameTime').addEventListener('input', () => {
+            if (currentRole === 'regie') {
+                syncGameSettings();
+            }
+        });
+        document.getElementById('fromNumber').addEventListener('input', () => {
+            if (currentRole === 'regie') {
+                syncGameSettings();
+            }
+        });
+        document.getElementById('toNumber').addEventListener('input', () => {
+            if (currentRole === 'regie') {
+                syncGameSettings();
+            }
+        });
+        document.getElementById('randomOrder').addEventListener('change', () => {
+            if (currentRole === 'regie') {
+                syncGameSettings();
+            }
+        });
         
         // Regie button event listeners
         const regieStartBtn = document.getElementById('regieStartBtn');
