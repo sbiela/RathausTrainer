@@ -656,7 +656,7 @@
         
         .room-item .room-id {
             font-weight: bold;
-            color: #007bff;
+            color: white;
         }
         
         .room-item .room-status {
@@ -1832,8 +1832,19 @@
             // Clear wrong input
             wrongInput.value = '';
             
-            // Show success message
-            alert(`Ergebnis gespeichert: ${correct}/${total} (${Math.round((correct/total)*100)}%)`);
+            // Show success message inline
+            const saveButton = document.getElementById('saveResult');
+            const originalText = saveButton.textContent;
+            saveButton.textContent = `✅ Gespeichert: ${correct}/${total} (${Math.round((correct/total)*100)}%)`;
+            saveButton.style.background = 'rgba(40, 167, 69, 0.8)';
+            saveButton.disabled = true;
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                saveButton.textContent = originalText;
+                saveButton.style.background = '';
+                saveButton.disabled = false;
+            }, 3000);
         }
 
         // Auto-load images from export_rathaeuser folder
@@ -2587,7 +2598,8 @@
             startCountdown(() => {
                 console.log('Countdown finished for candidate, starting game');
                 gameActive = true;
-                timeLeft = data.timeLeft;
+                // Use gameTime from settings, not data.timeLeft
+                timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
                 currentIndex = data.currentIndex;
                 recognizedCount = data.recognizedCount;
                 // Don't set cityNameVisible = false for candidates
@@ -2725,7 +2737,8 @@
                         gameActive = data.roomData.gameActive;
                         currentIndex = data.roomData.currentIndex;
                         recognizedCount = data.roomData.recognizedCount;
-                        timeLeft = data.roomData.timeLeft || 90;
+                        // Use gameTime from settings, not hardcoded 90
+                        timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
                         
                         // Add game-active class for candidates too
                         document.body.classList.add('game-active');
@@ -3359,7 +3372,8 @@
         
         function startGameFromUrl(params) {
             gameActive = true;
-            timeLeft = params.timeLeft;
+            // Use gameTime from settings, not params.timeLeft
+            timeLeft = parseInt(document.getElementById('gameTime').value) || 90;
             currentIndex = params.currentIndex;
             recognizedCount = 0;
             cityNameVisible = false;

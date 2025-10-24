@@ -46,7 +46,13 @@ io.on('connection', (socket) => {
             gameActive: false,
             currentIndex: 0,
             recognizedCount: 0,
-            shuffledData: data.shuffledData || []
+            shuffledData: data.shuffledData || [],
+            gameSettings: {
+                gameTime: 90,
+                fromNumber: 1,
+                toNumber: 10,
+                randomOrder: false
+            }
         };
         
         rooms.set(roomId, roomData);
@@ -73,6 +79,11 @@ io.on('connection', (socket) => {
             socket.join(roomId);
             room.candidates.push(socket.id);
             socket.emit('room-joined', { roomId, roomData: room });
+            
+            // Spiel-Einstellungen an neuen Kandidaten senden
+            if (room.gameSettings) {
+                socket.emit('game-settings-update', room.gameSettings);
+            }
             
             // Alle Kandidaten über neuen Teilnehmer informieren
             io.to(roomId).emit('candidate-joined', { 
@@ -163,6 +174,47 @@ io.on('connection', (socket) => {
             });
             
             console.log('Result saved in room:', roomId);
+        }
+    });
+
+    // Spiel-Einstellungen aktualisieren (Regie)
+    socket.on('game-settings-update', (data) => {
+        const roomId = data.roomId;
+        const room = rooms.get(roomId);
+        
+        if (room && room.regie === socket.id) {
+            room.gameSettings = {
+                gameTime: data.gameTime || 90,
+                fromNumber: data.fromNumber || 1,
+                toNumber: data.toNumber || 10,
+                randomOrder: data.randomOrder || false
+            };
+            
+            // Alle Kandidaten über neue Einstellungen informieren
+            io.to(roomId).emit('game-settings-update', room.gameSettings);
+            
+            console.log('Game settings updated in room:', roomId, room.gameSettings);
+        }
+    });
+
+    // Timer-Synchronisation
+    socket.on('timer-sync', (data) => {
+        const roomId = data.roomId;
+        const room = rooms.get(roomId);
+        
+        if (room && room.regie === socket.id) {
+            room.timeLeft = data.timeLeft;
+            room.currentIndex = data.currentIndex;
+            room.recognizedCount = data.recognizedCount;
+            
+            // Timer an alle Kandidaten weiterleiten
+            io.to(roomId).emit('timer-sync', {
+                timeLeft: data.timeLeft,
+                currentIndex: data.currentIndex,
+                recognizedCount: data.recognizedCount
+            });
+            
+            console.log('Timer synced in room:', roomId, data.timeLeft);
         }
     });
 
