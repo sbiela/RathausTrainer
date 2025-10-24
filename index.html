@@ -340,7 +340,6 @@
             border-radius: 15px;
             border: 2px solid rgba(255, 215, 61, 0.3);
             display: block !important;
-            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
             min-height: auto;
@@ -1057,19 +1056,13 @@
             }
         }
 
-        // Disable all game controls during gameplay
+        // Disable all game controls during countdown
         function disableAllGameControls() {
-            // Disable all buttons except Regie game controls
+            // Disable all buttons during countdown
             const allButtons = document.querySelectorAll('button');
             allButtons.forEach(button => {
-                // Keep Regie game controls (Richtig/Falsch) enabled during gameplay
-                if (button.id === 'correctBtn' || button.id === 'incorrectBtn') {
-                    button.disabled = false;
-                    button.style.opacity = '1';
-                } else {
-                    button.disabled = true;
-                    button.style.opacity = '0.5';
-                }
+                button.disabled = true;
+                button.style.opacity = '0.5';
             });
             
             // Hide game settings during countdown/gameplay
@@ -1085,15 +1078,31 @@
                 radio.style.opacity = '0.5';
             });
             
-            // Show Regie game controls during gameplay
+            console.log('All game controls disabled during countdown');
+        }
+        
+        // Enable Regie game controls after countdown
+        function enableRegieGameControls() {
             if (currentRole === 'regie') {
                 const regieGameControls = document.getElementById('regieGameControls');
                 if (regieGameControls) {
                     regieGameControls.style.display = 'block';
                 }
+                
+                // Enable Regie game controls (Richtig/Falsch buttons)
+                const correctBtn = document.getElementById('correctBtn');
+                const incorrectBtn = document.getElementById('incorrectBtn');
+                if (correctBtn) {
+                    correctBtn.disabled = false;
+                    correctBtn.style.opacity = '1';
+                }
+                if (incorrectBtn) {
+                    incorrectBtn.disabled = false;
+                    incorrectBtn.style.opacity = '1';
+                }
+                
+                console.log('Regie game controls enabled after countdown');
             }
-            
-            console.log('Game controls disabled except Regie game buttons');
         }
         
         // Re-enable game controls after game ends
@@ -1189,6 +1198,9 @@
             console.log("Showing rathaus:", shuffledData[currentIndex]);
             showRathaus(shuffledData[currentIndex]);
             
+            // Enable Regie game controls after countdown
+            enableRegieGameControls();
+            
             // Send start game event to server
             if (socket && currentRoomId) {
                 socket.emit('start-game', { 
@@ -1213,13 +1225,21 @@
             // Start timer
             timerInterval = setInterval(updateTimer, 1000);
             
-            // Update UI
-            startBtn.disabled = true;
-            startBtn.style.display = 'none';
-            showCityBtn.disabled = false;
-            nextBtn.disabled = false;
-            showCityBtn.style.display = 'inline-block';
-            nextBtn.style.display = 'inline-block';
+            // Update UI - only show SinglePlayer controls for SinglePlayer mode
+            if (currentRole === 'singleplayer') {
+                startBtn.disabled = true;
+                startBtn.style.display = 'none';
+                showCityBtn.disabled = false;
+                nextBtn.disabled = false;
+                showCityBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'inline-block';
+            } else {
+                // Hide SinglePlayer controls for Regie/Candidate modes
+                showCityBtn.disabled = true;
+                nextBtn.disabled = true;
+                showCityBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            }
             
             // Hide game settings during game
             const gameSettings = document.getElementById('gameSettings');
@@ -1266,6 +1286,9 @@
             // Show first rathaus
             console.log("Showing rathaus:", shuffledData[currentIndex]);
             showRathaus(shuffledData[currentIndex]);
+            
+            // Enable Regie game controls after countdown
+            enableRegieGameControls();
             
             // Send start game event to server
             if (socket && currentRoomId) {
@@ -2989,6 +3012,13 @@
                     regieStartBtn.style.setProperty('display', 'inline-block', 'important');
                     setButtonText(regieStartBtn, true);
                     console.log('Showing regieStartBtn for Regie');
+                }
+                
+                // Hide startBtn for Regie mode (use regieStartBtn instead)
+                const startBtn = document.getElementById('startBtn');
+                if (startBtn) {
+                    startBtn.style.setProperty('display', 'none', 'important');
+                    console.log('Hidden startBtn for Regie - using regieStartBtn instead');
                 }
                 // Hide available rooms for Regie (they create rooms, don't join them)
                 const availableRoomsDiv = document.getElementById('availableRooms');
