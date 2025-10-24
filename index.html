@@ -1884,8 +1884,68 @@
         // Selection functionality
         let selectedRathausData = [];
         
-        // History functionality
-        let gameHistory = JSON.parse(localStorage.getItem('rathausHistory')) || [];
+        // History functionality - now using server API
+        let gameHistory = [];
+        
+        // Load leaderboard from server
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch('/api/leaderboard');
+                if (response.ok) {
+                    const serverHistory = await response.json();
+                    // Convert server format to client format
+                    gameHistory = serverHistory.map(item => ({
+                        score: item.correct || 0,
+                        total: item.total || 0,
+                        percentage: Math.round(((item.correct || 0) / (item.total || 1)) * 100),
+                        gameTime: item.gameTime || 0,
+                        secondsPerCorrect: item.gameTime && item.correct ? item.gameTime / item.correct : 0,
+                        timestamp: new Date(item.timestamp).toLocaleString('de-DE')
+                    }));
+                    updateHistoryDisplay();
+                }
+            } catch (error) {
+                console.error('Failed to load leaderboard:', error);
+                // Fallback to localStorage if server fails
+                gameHistory = JSON.parse(localStorage.getItem('rathausHistory')) || [];
+                updateHistoryDisplay();
+            }
+        }
+        
+        // Save result to server
+        async function saveResultToServer(result) {
+            try {
+                const response = await fetch('/api/leaderboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        correct: result.score,
+                        total: result.total,
+                        gameTime: result.gameTime,
+                        percentage: result.percentage
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('Result saved to server');
+                    // Reload leaderboard from server
+                    await loadLeaderboard();
+                } else {
+                    throw new Error('Server response not ok');
+                }
+            } catch (error) {
+                console.error('Failed to save result to server:', error);
+                // Fallback to localStorage
+                gameHistory.unshift(result);
+                if (gameHistory.length > 100) {
+                    gameHistory = gameHistory.slice(0, 100);
+                }
+                localStorage.setItem('rathausHistory', JSON.stringify(gameHistory));
+                updateHistoryDisplay();
+            }
+        }
         
         function updateSelectionInfo() {
             const fromNumber = parseInt(document.getElementById('fromNumber').value) || 1;
@@ -1935,13 +1995,8 @@
                 timestamp: timestamp
             };
             
-            gameHistory.unshift(result);
-            if (gameHistory.length > 100) {
-                gameHistory = gameHistory.slice(0, 100); // Keep last 100 results (much more than 10)
-            }
-            
-            localStorage.setItem('rathausHistory', JSON.stringify(gameHistory));
-            updateHistoryDisplay();
+            // Save to server instead of localStorage
+            saveResultToServer(result);
         }
         
         function updateHistoryDisplay() {
@@ -1978,9 +2033,12 @@
         }
         
         function clearHistory() {
+            // Note: Server-side leaderboard cannot be cleared from client
+            // This only clears the local display
             gameHistory = [];
             localStorage.removeItem('rathausHistory');
             updateHistoryDisplay();
+            console.log('Local history cleared. Server leaderboard remains unchanged.');
         }
         
         function saveManualResult() {
@@ -3697,7 +3755,7 @@
         // Initialize
         loadRathausImages();
         updateSelectionInfo();
-        updateHistoryDisplay();
+        loadLeaderboard(); // Load from server instead of localStorage
         
         // Set default role to SinglePlayer
         document.getElementById('roleSinglePlayer').checked = true;
